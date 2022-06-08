@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.mapper.UploadMapper">
+
+	<select id="boardSelect" resultType="egovMap" parameterType="java.util.HashMap">
+		<![CDATA[
+		SELECT 
+			NO,
+			TITLE,
+			CONTENT,
+			CUSER,
+			TO_CHAR(CDATE,'YYYY-MM-DD') AS cdate,
+			FILEDATA,
+			DECODE(FILEDATA,'[]','','0') AS file_exist
+			FROM IBUPLOAD_BBS
+				WHERE TITLE LIKE '%'||#{frm_searchtitle}
+				ORDER BY NO DESC
+		]]>
+	</select>
+	
+	
+	<insert id="boardInsert" parameterType="map">
+		<![CDATA[
+			INSERT INTO IBUPLOAD_BBS(NO,TITLE,CONTENT,CUSER,CDATE,FILEDATA)
+	 			VALUES 
+			(
+			(SELECT NVL(MAX(NO),0)+1 FROM IBUPLOAD_BBS)
+			,#{frm_title},#{frm_content},#{frm_cuser},SYSDATE,#{db_save_data})
+		]]>
+	</insert>
+	<update id="boardUpdate" parameterType="map">
+		<![CDATA[
+		UPDATE IBUPLOAD_BBS
+		   SET TITLE = #{frm_title}
+		   ,CONTENT = #{frm_content}
+		   ,CUSER = #{frm_cuser}
+		   ,FILEDATA = #{db_save_data}
+		 where 1=1
+		   AND NO = #{frm_no}
+		]]>
+	</update>
+	<delete id="boardDelete" parameterType="map">
+		<![CDATA[
+		DELETE 
+		 FROM IBUPLOAD_BBS
+		WHERE 1=1
+		  AND NO = #{frm_no}
+		]]>
+	</delete>
+	
+</mapper>

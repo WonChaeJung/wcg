@@ -1,0 +1,5 @@
+<script>
+var title = $(".mainTitle").text();
+var navi = "TopMenu &gt; SubMenu &gt"+title;
+document.write(navi);
+</script>

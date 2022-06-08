@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.mapper.IBSheetMapper">
+
+
+	<select id="selectDeptLoc" resultType="egovMap" parameterType="java.util.HashMap">
+		<![CDATA[
+			SELECT
+				distinct loc
+			FROM DEPT
+			 WHERE 1=1
+		]]>
+	</select>
+	
+	<select id="selectDept" resultType="egovMap" parameterType="java.util.HashMap">
+		<![CDATA[
+			SELECT
+				*
+			FROM DEPT
+			 WHERE 1=1
+		]]>
+		
+		<if test="loc != null ">
+		 AND LOC LIKE '%'||#{loc}
+		 </if>
+		<if test="deptno != null ">
+		 AND DEPTNO = #{deptno}
+		</if>
+	</select>
+	
+	
+	<select id="selectProfit" resultType="egovMap" parameterType="java.util.HashMap">
+		<![CDATA[
+			    SELECT 
+		            TERM
+		          ,(SELECT MAX(PRICE) FROM PROFIT WHERE DEPTNO = 10 AND TERM = PP.TERM) AS "10"
+		          ,(SELECT MAX(PRICE) FROM PROFIT WHERE DEPTNO = 20 AND TERM = PP.TERM) AS "20"
+		          ,(SELECT MAX(PRICE) FROM PROFIT WHERE DEPTNO = 30 AND TERM = PP.TERM) AS "30"
+		          ,(SELECT MAX(PRICE) FROM PROFIT WHERE DEPTNO = 40 AND TERM = PP.TERM) AS "40"
+			    FROM PROFIT PP
+				GROUP BY TERM
+      			ORDER BY TERM
+		]]>
+	</select>
+	
+	
+
+	
+	
+	
+	
+	
+	<select id="selectPostNoCount" resultType="Integer" parameterType="java.util.HashMap">
+		<![CDATA[
+			SELECT
+				COUNT(1) AS CNT
+			FROM POSTNO
+		]]>
+	</select>
+	
+	
+		<select id="selectPostNoPage" resultType="egovMap" parameterType="java.util.HashMap">
+		<![CDATA[
+			SELECT * FROM 
+				(SELECT POSTNO,NO,SIDO,SIGUNGU,UBMYNDONG,LEE AS LEE,ADDRESS,ROWNUM RN
+			FROM POSTNO) 
+			WHERE RN BETWEEN #{start} and #{end}
+		]]>
+	</select>
+	
+	
+	
+	<select id="selectEmp" resultType="egovMap" parameterType="map">
+		<![CDATA[
+			SELECT
+				EMPNO,ENAME,JOB,MGR
+					,HIREDATE,SAL,COMM,DEPTNO
+					,CASE  
+						WHEN SAL>4500 THEN '#FF0000'
+						ELSE  '#0000FF'
+						END AS "sal#_font_color" 
+					,CASE
+						WHEN MGR IS NULL THEN '0'
+						ELSE '1'
+						END AS "_edit"
+			FROM EMP WHERE 1 = 1
+			]]>
+			<if test="frm_NameOrId != null and !frm_NameOrId.equals('')">
+				<if test="frm_NameOrId.equals('name')">
+				  AND ENAME LIKE '%'||#{frm_SearchText}
+				</if>
+				<if test="frm_NameOrId.equals('id')">  
+				  AND EMPNO = #{frm_SearchText}
+				</if>
+			</if>
+			<if test="deptno != null and !deptno.equals('')">
+				AND DEPTNO LIKE  '%'||#{deptno}
+			</if>
+	</select>
+	
+	
+	<insert id="insertEmp" parameterType="map">
+		<![CDATA[
+			INSERT INTO EMP(EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO)
+	 		VALUES 
+			(#{empno} 
+			,#{ename} 
+			,#{job} 
+			,#{mgr} 
+			,#{hiredate} 
+			,#{sal} 
+			,#{comm} 
+			,#{deptno} ) 
+		]]>
+	</insert>
+	<update id="updateEmp" parameterType="map">
+		<![CDATA[
+		UPDATE EMP
+		   SET DEPTNO = #{deptno}
+		     , COMM = #{comm}
+		     , HIREDATE = #{hiredate}
+		     , MGR = #{mgr}
+		     , SAL = #{sal}
+		     , JOB = #{job}
+		     , ENAME = #{ename}
+		 WHERE 1=1
+		   AND EMPNO = #{empno}
+		]]>
+	</update>
+	<delete id="deleteEmp" parameterType="map">
+		<![CDATA[
+		DELETE 
+		  FROM EMP
+		 WHERE 1=1
+   			AND EMPNO = #{empno} 
+		]]>
+	</delete>
+	
+	
+	<insert id="insertDept" parameterType="map">
+		<![CDATA[
+			INSERT INTO DEPT(DNAME,DEPTNO,LOC)
+	 		VALUES 
+			(#{dname} , #{deptno} , #{loc} ) 
+		]]>
+	</insert>
+	<update id="updateDept" parameterType="map">
+		<![CDATA[
+			UPDATE DEPT
+	   		SET DNAME = #{dname}
+	     		, LOC = #{loc}
+	 		WHERE 1=1
+	   		AND DEPTNO = #{deptno}
+		]]>
+	</update>
+	<delete id="deleteDept" parameterType="map">
+		<![CDATA[
+		DELETE 
+		  FROM DEPT
+		 WHERE 1=1
+		   AND DEPTNO = #{deptno} 
+		]]>
+	</delete>
+	
+	
+	
+	
+	
+	
+	<insert id="insertPostNo" parameterType="map">
+		<![CDATA[
+			INSERT INTO POSTNO(POSTNO,NO,SIDO,SIGUNGU,UBMYNDONG,LEE,ADDRESS)
+			 VALUES 
+			(#{postno},#{no},#{sido},#{sigungu},#{ubmyndong},#{lee},#{address}) 
+		]]>
+	</insert>
+	<update id="updatePostNo" parameterType="map">
+		<![CDATA[
+		UPDATE POSTNO
+		   SET SIDO = #{sido}
+		   ,SIGUNGU = #{sigungu}
+		   ,UBMYNDONG = #{ubmyndong}
+		   ,LEE = #{lee}
+		   ,ADDRESS = #{address}
+		    
+		 where 1=1
+		   AND POSTNO = #{postno}
+		   AND NO = #{no}
+		]]>
+	</update>
+	<delete id="deletePostNo" parameterType="map">
+		<![CDATA[
+		DELETE 
+		  FROM POSTNO
+		 WHERE 1=1
+		   AND POSTNO = #{postno}
+		   AND NO = #{no}
+		]]>
+	</delete>
+	
+	
+	
+	<select id="selectEmpTree" resultType="egovMap">
+		<![CDATA[
+			SELECT LEVEL,EMPNO,ENAME,JOB,MGR
+					,HIREDATE,SAL,COMM,DEPTNO
+					,DECODE(ENAME,'KING','#FF7799','') AS "ENAME#_back_color"
+			FROM EMP 
+			START WITH EMPNO = '7839' 
+			CONNECT BY MGR = PRIOR EMPNO
+			]]>
+	</select>
+	
+	<select id="selectEmpTreeRoot" resultType="egovMap" >
+		<![CDATA[
+	SELECT LEVEL,EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO
+	      ,(SELECT NVL2(SUM(MGR),1,0)
+	          FROM EMP SE 
+	            WHERE SE.MGR = EM.EMPNO    /*자식 노드가 있는 경우 */
+	                AND EM.MGR IS NOT  NULL /* 최상위 노드는 뺀다 */
+	            ) AS "HAVE_CHILD"
+				FROM EMP EM
+				START WITH EMPNO = '7839' 
+				CONNECT BY MGR = PRIOR EMPNO AND LEVEL < 3
+	]]>
+	</select>
+	
+		<select id="selectEmpTreeChild" resultType="egovMap" parameterType="map">
+		<![CDATA[
+			SELECT LEVEL,EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO 
+			FROM EMP
+				WHERE  EMPNO != #{empno}  /*최상위는 뺀다*/       
+				START WITH EMPNO = #{empno} 
+				CONNECT BY MGR = PRIOR EMPNO
+			]]>
+	</select>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

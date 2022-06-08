@@ -1,0 +1,30 @@
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="<c:url value='/common/css/new_sheetSample.css'/>">
+<script src="<c:url value='/common/jquery/js/jquery-1.9.1.js'/>"></script>
+<script src="<c:url value='/common/js/common.js'/>"></script>
+<script src="<c:url value='/common/js/json2.js'/>"></script>
+<script src="<c:url value='/common/IBSheet7/sheet/js/ibsheet_config.js'/>"></script>
+<script src="<c:url value='/common/IBSheet7/sheet/js/ibsheet.js'/>"></script>
+<script src="<c:url value='/common/IBSheet7/sheet/js/ibsheetinfo.js'/>"></script>
+
+<!--  ibupload include -->
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/upload/jquery/jquery-ui-1.10.4.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/upload/jquery/jquery.contextMenu.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/upload/jquery/jquery.blockUI.js'/>"></script>
+<link href="<c:url value='/common/IBSheet7/upload/jquery/jquery.contextMenu.min.css'/>" rel="stylesheet" type="text/css" />
+   
+
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/upload/js/ibupload.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/upload/js/ibuploadinfo.js'/>"></script>
+
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/chart/ibchart.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/chart/ibchartinfo.js'/>"></script>
+
+
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/mditab/ibmditab.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/mditab/ibmditabinfo.js'/>"></script>
+
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/combo/ibmulticombo.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/common/IBSheet7/combo/ibmulticomboinfo.js'/>"></script>

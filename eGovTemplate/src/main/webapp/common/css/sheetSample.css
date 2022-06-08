@@ -1,0 +1,74 @@
+@font-face {
+    font-family: 'franchise';
+	src: url('../font/Franchise-Bold-hinted.eot');/* EOT file for IE */
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'franchise';
+	src: url('../font/Franchise-Bold-hinted.ttf'); /* TTF file for CSS3 browsers */
+    font-weight: 700;
+    font-style: normal;
+}
+
+html,body{
+	margin:0px;padding:0px;
+	font-family: '돋움',Dotum,Helvetica,'Apple SD Gothic Neo',Sans-serif;
+	font-size:0.9em;
+	color:#333333;
+	width:100%;
+	height:100%;
+}
+
+/***** block image *****/
+.ib-progress {
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    background-color: rgba(0,0,0,.4);
+    z-index:10005;
+}
+.ib-progress > span {
+    display:block;
+    position:absolute;top:50%;left:50%;
+    width:163px;height:40px;
+    margin:-86.5px 0 0 -81.5px;
+    padding-top:108px;
+    border:3px solid #00bdff;
+    border-radius:10px;
+    text-align:center;
+    background:#fff url(/eGovTemplate/common/img/waiting.gif) center 14px no-repeat;
+}
+
+#navi>ol,#navi>ul {margin:0px;list-style: none;padding:0px;}
+#navi>li {display: list-item;text-align: -webkit-match-parent;}
+.ib_product{width:100%;padding:0px;margin:0px;border:0px;}
+#main {padding:5px;overflow:auto;background-color:#FFFFFF;width:100%;height:100%;box-sizing:border-box;}
+
+#navi {clear:both;width:100%;height:32px;background: #ecf3fe;border:1px solid #d4e4fc;box-sizing:border-box;float:left;padding:5px;}
+#navi>ul{width:50%;height:100%;float:left;}
+#navi>li{width:100%;height:100%;}
+
+#title {font-size:2.5em;font-weight:600;margin-top:5px;padding:10px 0 5px 10px;border-radius:10px 10px 0 0;border-width:1px 1px 0 1px;border-color:#999;border-style:solid;background-color:#D4E4FC;}
+
+#desc {padding:10px;border-radius:0 0 10px 10px;border-width:1px 1px 1px 1px;border-color:#999;border-style:solid;background-color:#FFFFFF;}
+#buttonArea {text-align:right;margin:5px 0 5px;}
+.buttonArea {text-align:right;margin:5px 0 5px;}
+.buttonAreaCenter {text-align:center;margin:5px 0 5px;}
+#functionArea {font-size:1.0em;border:2px solid #9cb6cf;padding:5px;margin:10px 0px;}
+#viewArea {margin:10px 0px;}
+.clear{clear:both;}
+
+.main_content {padding:20px; background:#fff; _background:none; height:100%; min-height:100%;}
+.main_title {width:100%;border-bottom:1px solid #c8cbd1; height:50px;_height:50px; font-family:Malgun Gothic,dotum, Arial, Helvetica, sans-serif;font-size:18px;}
+.main_btn {text-align:right;margin:5px 0 5px;}
+.sheet_title { FONT-FAMILY :  "돋움";
+ FONT-SIZE : 9pt;
+ BACKGROUND-COLOR : #D9DEF6;
+ TEXT-ALIGN :left;
+ padding-left: 7px;
+ line-height : 26px
+ }

@@ -1,0 +1,125 @@
+﻿<script>
+	$("#accordion").accordion({
+		collapsible : true,
+		heightStyle : "content"
+	});
+	
+	$( ".menu" ).menu({
+		  select: function( event, ui ) {
+			  //제품명
+			  document.hiddenForm.navi1.value = event.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.firstElementChild.innerText;
+			  //대메뉴명
+			  document.hiddenForm.navi2.value = event.currentTarget.parentNode.parentNode.firstElementChild.innerText;
+			  //선택 메뉴명
+			  document.hiddenForm.navi3.value = event.currentTarget.innerText;
+		  }
+	});
+	function movePage(product, page) {
+		
+		var base_path = "<c:url value='/'/>";
+		document.hiddenForm.action = base_path + product + "/" + page+".do";
+		document.hiddenForm.target = "contnetsIframe";
+		hiddenForm.submit();
+		
+	}
+</script>
+<div id="accordion">
+  <h3>ibsheet</h3>
+  <div>
+    <ul class="menu">
+	  <li>
+	    <a href="#">데이터 조회 / 저장</a>
+	    <ul>
+			<li><a href="javascript:movePage('sheet/SearchSave','basic')">01. 일반 조회/저장</a></li>
+			<li><a href="javascript:movePage('sheet/SearchSave','largeScroll')">02. 대용량(Scrolling) 조회</a></li>
+			<li><a href="javascript:movePage('sheet/SearchSave','largeIndex')">03. 대용량(smServerPaging2) 조회/저장  </a></li>
+			<li><a href="javascript:movePage('sheet/SearchSave','largeScrollAppend')">04. 대용량(ScrollAppend) 조회/저장 </a></li>
+			<li><a href="javascript:movePage('sheet/SearchSave','pageIndex')">05. 대용량(페이지 인덱스 사용) 조회/저장  </a></li>
+			<li><a href="javascript:movePage('sheet/SearchSave','masterDetail')">06. 마스터/디테일 구조 조회/저장</a></li>
+			<li><a href="javascript:movePage('sheet/SearchSave','double')">07. 서로 무관한 두개 시트 조회/저장</a></li>
+	    </ul>
+	  </li>
+	  
+	  
+	  <li>
+	    <a href="#">USE Tree</a>
+	    <ul>
+			<li><a href="javascript:movePage('sheet/Tree','01tree')">일반 트리 조회</a></li>
+			<li><a href="javascript:movePage('sheet/Tree','02dynamic')">트리 동적 확장</a></li>
+		</ul>
+	  </li>
+	  
+	  
+	  <li>
+	    <a href="#">시트 초기화</a>
+	    <ul>
+			<li><a href="javascript:movePage('sheet/InitSheet','initSheet')">시트 초기화(DB 저장방식)</a></li>
+			<li><a href="javascript:movePage('sheet/InitSheet','initSheetExp01')">시트 초기화(예제1)</a></li>
+			<li><a href="javascript:movePage('sheet/InitSheet','initSheetExp02')">시트 초기화(예제2)</a></li>
+			<li><a href="javascript:movePage('sheet/temp','testPage')">테스트 페이지</a></li>
+		</ul>
+	  </li>
+	 
+	  
+	</ul>
+  </div>
+  
+
+  <h3>ibchart</h3>
+  <div>
+    <ul class="menu">
+
+	  
+	  <li>
+	    <a href="#">기본기능</a>
+	    <ul>
+			<li><a href="javascript:movePage('chart/basic','01basicchart')">단일 시리즈 차트(파이)</a></li>
+			<li><a href="javascript:movePage('chart/basic','02multiseries')">다중 시리즈 차트(막대,꺽은선)</a></li>
+		</ul>
+	  </li>
+	  
+	 
+	  
+	</ul>
+  </div>
+  <h3>ibcontrol</h3>
+  <div>
+    <ul class="menu">
+
+	  
+	  <li>
+	    <a href="#">ibcombo</a>
+	    <ul>
+			<li><a href="javascript:movePage('control/combo','multiLevel')">대,중,소 분류 콤보(관계형 콤보)</a></li>
+			
+		</ul>
+	  </li>
+	  <li>
+	    <a href="#">ibtab</a>
+	    <ul>
+			<li><a href="javascript:movePage('control/tab','basicTab')">기본 텝</a></li>
+			
+		</ul>
+	  </li>
+	 
+	  
+	</ul>
+  </div>
+  <h3>ibupload</h3>
+  <div>
+    <ul class="menu">
+
+	  
+	  <li>
+	    <a href="#">응용</a>
+	    <ul>
+			<li><a href="javascript:movePage('upload/board','boardlist')">게시판(간단 예제)</a></li>
+			<li><a href="javascript:movePage('upload/board','boardlist2')">게시판2(list페이지 와 content 페이지 분리)</a></li>
+			<li><a href="javascript:movePage('upload/board','boardlist3')">게시판3(시트내 업로드)</a></li>
+			  
+		</ul>
+	  </li>
+	</ul>
+  </div>
+</div>
+  	

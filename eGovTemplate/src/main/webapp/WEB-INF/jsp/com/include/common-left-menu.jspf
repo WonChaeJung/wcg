@@ -1,0 +1,60 @@
+﻿<script>
+$(document).ready(function(){
+	createIBSheet2(document.getElementById("sheetDIV"),"mySheet","100%","100%");
+	mySheet.SetTheme("LGY2","LightGray2");
+	var ibdata = {};
+	ibdata.Cfg = {SizeMode:sizeNoVScroll,TreeNodeIcon:1,AutoFitColWidth:"",ToolTip:1};
+	ibdata.HeaderMode = {};
+	ibdata.Cols = [
+   					{Header:"상위메뉴코드",		Type:"AutoSum",			MinWidth:100,  SaveName:"menuParentCd", Align:"Center", Hidden:0, KeyField:1,FitColWidth:0,SumType:"Max",Hidden:1},
+   					{Header:"메뉴코드",		Type:"Text",			MinWidth:100,  SaveName:"menuCd",  	Align:"Center",  Hidden:0,  KeyField:1,FitColWidth:0,Hidden:1},
+   					{Header:"메뉴명",			Type:"Text",			MinWidth:200,  SaveName:"menuNm",  	Align:"Left", Edit:0,TreeCol:1,Ellipsis:1},
+   					{Header:"메뉴링크",		Type:"Text",			MinWidth:130,  SaveName:"menuUrl", 	Align:"Center",Hidden:1},
+   					{Header:"순서",			Type:"Text",			MinWidth:70,  SaveName:"menuSeqNo", Align:"Center",Hidden:1}
+   				];  
+	IBS_InitSheet(mySheet,ibdata);
+	mySheet.SetExtendLastCol(1);
+	mySheet.SetRowHidden(0,1);//헤더행을 감춘다.
+ 	mySheet.SetDataRowHeight(20);
+	mySheet.SetWaitImageVisible(0);//조회대기이미지도 감춘다.
+	mySheet.SetFocusAfterProcess(0);//조회 후 첫번째 행으로 포커스 이동을 막는다.
+	leftMenuSearch(selectMenu);
+});
+function leftMenuSearch(menuCd){
+	//조회
+	var param = {
+		url:"<c:url value='/sys/searchMenu.do'/>"	
+			,sheet:"mySheet"
+		};
+	if(menuCd!=null&&typeof(menuCd)!="undefined"){
+		param["subparam"] = "MENUCD="+menuCd;
+	}
+	DataSearch(param);
+}
+
+
+function mySheet_OnSearchEnd(code,msg){
+	mySheet.SetRowHidden(mySheet.LastRow(),1);//합계행을 감춘다.
+}
+
+function mySheet_OnSelectCell(or,oc,nr,nc){
+	if(or>0){
+		mySheet.SetCellFontBold(or,oc,0);
+	}
+	mySheet.SetCellFontBold(nr,nc,1);
+}
+
+function mySheet_OnClick(r,c,v){
+	if(mySheet.IsHaveChild(r)){
+		mySheet.SetRowExpanded(r  ,  !(mySheet.GetRowExpanded(r)));
+	}
+	if(mySheet.GetCellValue(r,"menuUrl")!=""){
+		var title = mySheet.GetCellValue(r,"menuNm");
+		var url = mySheet.GetCellValue(r,"menuUrl");
+		mainTab.InsertItem("&nbsp;"+title, "<c:url value=''/>"+url, "");
+	}
+}
+</script>
+<div id="sheetDIV"></div>
+
+  	
