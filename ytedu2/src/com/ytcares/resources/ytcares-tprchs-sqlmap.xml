@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="prchs">
+	<typeAlias alias="Prchs" type="com.ytcares.bean.TPrchsBean" />
+	<insert id="insertPrchsInfo" parameterClass="Prchs">
+	/*prchs.insertPrchsInfo 상품 구매할 시 구매테이블에 데이터 삽입*/		
+		INSERT INTO TPRCHS (
+			  PRCHS_SEQ_NO
+			, PRCHS_USER_ID
+			, PRCHS_DATE
+			, PRCHS_STAT_CD
+			, PRCHS_PRICE
+			, PAY_ACC
+			, DLVR_NAME
+			, DLVR_PHONE
+			, DLVR_ADDR
+			, DLVR_DATE
+			, DLVR_COMP_DATE
+			, PRCHS_COMP_DATE
+			, PRCHS_CNCL_DATE
+			, RMRKS
+			, DLT_FLG
+			, PRCHS_CNT
+		) VALUES (
+			  (SELECT
+				#prchs_seq_no#||'-'||TO_CHAR(SYSDATE, 'YYYYMMDD')||'-'||LPAD(NVL(MAX(SUBSTR(PRCHS_SEQ_NO, -5)), 0) + 1, 5, '0') AS PRCHS_ID
+			  FROM
+				TPRCHS
+			  WHERE
+				  PRCHS_SEQ_NO LIKE #prchs_seq_no#||'-'||TO_CHAR(SYSDATE, 'YYYYMMDD')||'-'||'%')
+			, #prchs_user_id#
+			, SYSDATE
+			, #prchs_stat_cd#
+			, #prchs_price#
+			, #pay_acc#
+			, #dlvr_name#
+			, #dlvr_phone#
+			, #dlvr_addr#
+			, #dlvr_date#
+			, #dlvr_comp_date#
+			, #prchs_comp_date#
+			, #prchs_cncl_date#
+			, #rmrks#
+			, #dlt_flg#
+			, #prchs_cnt#
+		)
+	</insert>
+	
+	<select id="selectPrchsSeqInfo" resultClass="string">
+		SELECT
+			PRCHS_SEQ_NO
+		FROM
+			TPRCHS
+	</select>
+	<update id="updateUserPrchsInfo" parameterClass="java.util.Map">
+		/*prchs.updateUserPrchsInfo 상품구매상태 변경내용 업데이트*/
+		UPDATE 
+			TPRCHS
+		SET 
+			PRCHS_STAT_CD = #prchs_stat_cd#
+			<dynamic>
+				<isNotEmpty property="dlvr_date">
+					,DLVR_DATE = SYSDATE
+				</isNotEmpty>
+				<isNotEmpty property="dlvr_comp_date">
+					,DLVR_COMP_DATE = SYSDATE
+				</isNotEmpty>
+				<isNotEmpty property="prchs_cncl_date">
+					,PRCHS_CNCL_DATE = SYSDATE
+				</isNotEmpty>
+				<isNotEmpty property="prchs_comp_date">
+					,PRCHS_COMP_DATE = SYSDATE
+				</isNotEmpty>
+			</dynamic>
+			
+		WHERE
+			PRCHS_SEQ_NO = #prchs_seq_no#
+	</update>
+	<select id="selectUserPrchsCount" parameterClass="java.util.Map" resultClass="int">
+		/*prchs.selectUserPrchsCount 상품구매테이블  건수 검색*/
+		SELECT
+			COUNT(*) AS TOTAL
+		FROM (
+			SELECT
+				PRCHS_SEQ_NO,
+				PRCHS_USER_ID,
+				USER_NAME,
+				AGENCY_NAME,
+				FAMILY_ID,
+				GRADE,
+				GRADE_NAME,
+				RCMMD_ID,
+				RCMMD_NAME,
+				RCMMD_AGENCY_NAME,
+				RCMMD_FAMILY_ID,
+				RCMMD_GRADE,
+				RCMMD_GRADE_NAME,
+				PRCHS_DATE,
+				PRCHS_STAT_CD,
+				PRCHS_STAT_NAME,
+				CSMT_ID,
+				CSMT_KIND_CD,
+				CSMT_NAME,
+				CSMT_IMG,
+				CSMT_DESC,
+				CSMT_REG_YMD,
+				PUB_COMP,
+				PUB_DATE,
+				CSMT_PRICE,
+				PRCHS_CNT,
+				PRCHS_PRICE,
+				PAY_ACC,
+				DLVR_NAME,
+				DLVR_PHONE,
+				DLVR_ADDR,
+				DLVR_DATE,
+				DLVR_COMP_DATE,
+				PRCHS_COMP_DATE,
+				PRCHS_CNCL_DATE,
+				RMRKS,
+				AGENCY_ACCM_PNT,
+				SUBAGENCY_ACCM_PNT,
+				SUPAGENCY_ACCM_PNT,
+				ROW_NUMBER() OVER(ORDER BY PRCHS_DATE DESC) AS RN
+			FROM
+			  VPRCHS_ACCM
+			WHERE
+			  1 = 1
+			  <dynamic>
+			  	<isNotEmpty property="prchs_seq_no">
+			  	AND PRCHS_SEQ_NO like '%'||#prchs_seq_no#||'%'
+			  	</isNotEmpty>
+			  	<isNotEmpty property="agency_name">
+			  	AND AGENCY_NAME = #agency_name#
+			  	</isNotEmpty>
+			  	<isNotEmpty property="grade">
+			  	AND GRADE = #grade#
+			  	</isNotEmpty>
+			  	<isNotEmpty property="prchs_stat_cd">
+			  	and PRCHS_STAT_CD = #prchs_stat_cd#
+			  	</isNotEmpty>
+			  </dynamic>
+			)
+	</select>
+	<select id="selectUserPrchsList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/*prchs.selectUserPrchsList 상품구매테이블  리스트 검색*/
+		SELECT
+			PRCHS_SEQ_NO,
+			PRCHS_USER_ID,
+			USER_NAME,
+			AGENCY_NAME,
+			FAMILY_ID,
+			GRADE,
+			GRADE_NAME,
+			RCMMD_ID,
+			RCMMD_NAME,
+			RCMMD_AGENCY_NAME,
+			RCMMD_FAMILY_ID,
+			RCMMD_GRADE,
+			RCMMD_GRADE_NAME,
+			PRCHS_DATE,
+			PRCHS_STAT_CD,
+			PRCHS_STAT_NAME,
+			CSMT_ID,
+			CSMT_KIND_CD,
+			CSMT_NAME,
+			CSMT_IMG,
+			CSMT_DESC,
+			CSMT_REG_YMD,
+			PUB_COMP,
+			PUB_DATE,
+			CSMT_PRICE,
+			PRCHS_CNT,
+			PRCHS_PRICE,
+			PRCHS_DET,
+			PAY_ACC,
+			DLVR_NAME,
+			DLVR_PHONE,
+			DLVR_ADDR,
+			DLVR_DATE,
+			DLVR_COMP_DATE,
+			PRCHS_COMP_DATE,
+			PRCHS_CNCL_DATE,
+			RMRKS,
+			AGENCY_ACCM_PNT,
+			SUBAGENCY_ACCM_PNT,
+			SUPAGENCY_ACCM_PNT,
+			ROW_NUMBER() OVER(ORDER BY PRCHS_DATE DESC) AS RN
+		FROM (
+			SELECT
+				PRCHS_SEQ_NO,
+				PRCHS_USER_ID,
+				USER_NAME,
+				AGENCY_NAME,
+				FAMILY_ID,
+				GRADE,
+				GRADE_NAME,
+				RCMMD_ID,
+				RCMMD_NAME,
+				RCMMD_AGENCY_NAME,
+				RCMMD_FAMILY_ID,
+				RCMMD_GRADE,
+				RCMMD_GRADE_NAME,
+				PRCHS_DATE,
+				PRCHS_STAT_CD,
+				PRCHS_STAT_NAME,
+				CSMT_ID,
+				CSMT_KIND_CD,
+				CSMT_NAME,
+				CSMT_IMG,
+				CSMT_DESC,
+				CSMT_REG_YMD,
+				PUB_COMP,
+				PUB_DATE,
+				CSMT_PRICE,
+				PRCHS_CNT,
+				PRCHS_PRICE,
+				CSMT_NAME||CHR(13)||REPLACE(PRCHS_DET, ':', CHR(13)) AS PRCHS_DET,
+				PAY_ACC,
+				DLVR_NAME,
+				DLVR_PHONE,
+				DLVR_ADDR,
+				DLVR_DATE,
+				DLVR_COMP_DATE,
+				PRCHS_COMP_DATE,
+				PRCHS_CNCL_DATE,
+				RMRKS,
+				AGENCY_ACCM_PNT,
+				SUBAGENCY_ACCM_PNT,
+				SUPAGENCY_ACCM_PNT,
+				ROW_NUMBER() OVER(ORDER BY PRCHS_DATE DESC) AS RN
+			FROM
+			  VPRCHS_ACCM
+			WHERE
+			  1 = 1
+			  <dynamic>
+			  	<isNotEmpty property="prchs_seq_no">
+			  	AND PRCHS_SEQ_NO like '%'||#prchs_seq_no#||'%'
+			  	</isNotEmpty>
+			  	<isNotEmpty property="agency_name">
+			  	AND AGENCY_NAME = #agency_name#
+			  	</isNotEmpty>
+			  	<isNotEmpty property="grade">
+			  	AND GRADE = #grade#
+			  	</isNotEmpty>
+			  	<isNotEmpty property="prchs_stat_cd">
+			  	and PRCHS_STAT_CD = #prchs_stat_cd#
+			  	</isNotEmpty>
+			  </dynamic>
+			)
+		WHERE
+			RN BETWEEN #start# AND #end#
+	</select>
+	<update id="mergeUserAccmPnt" parameterClass="java.util.Map">
+	/*prchs.mergeUserAccmPnt 구매완료한 유저에 대한 적립금 업데이트 및 삽입*/
+		MERGE INTO TACCM_PNT AC
+		USING (
+			SELECT
+				USER_ID,
+				TO_CHAR(SYSDATE, 'YYYYMM') AS ACCM_YM,
+				#accm_pnt# AS ACCM_PNT,
+				'0' AS STLMNT_YN,
+				NULL AS STLMNT_DATE,
+				DLT_FLG
+			FROM
+				TUSER
+			WHERE
+				FAMILY_ID = #family_id# AND
+				DLT_FLG = '0'
+			) UR
+			ON (
+				AC.USER_ID = UR.USER_ID AND
+				AC.ACCM_YM = UR.ACCM_YM
+			)
+			WHEN MATCHED THEN
+			UPDATE SET
+				AC.ACCM_PNT = (AC.ACCM_PNT + UR.ACCM_PNT)
+			WHEN NOT MATCHED THEN
+			INSERT (
+				USER_ID,
+				ACCM_YM,
+				ACCM_PNT,
+				STLMNT_YN,
+				STLMNT_DATE
+			) VALUES (
+				UR.USER_ID,
+				UR.ACCM_YM,
+				UR.ACCM_PNT,
+				UR.STLMNT_YN,
+				UR.STLMNT_DATE
+			)
+	</update>
+
+	<select id="selectSearchStatDetCount" parameterClass="java.util.Map" resultClass="int">
+	/*prchs.selectSearchStatDetCount 구매상태별 검색리스트 건수 취득*/
+	SELECT 
+		COUNT(*) AS TOTAL
+	FROM 
+		VPRCHS_ACCM
+	WHERE
+		PRCHS_STAT_CD = #prchs_stat_cd#
+		<dynamic>
+			<isNotEmpty property="prchs_seq_no">
+				AND PRCHS_SEQ_NO like '%'||#prchs_seq_no#||'%'
+			</isNotEmpty>
+			<isNotEmpty property="prchs_date_start">
+				AND PRCHS_DATE >= #prchs_date_start#
+			</isNotEmpty>
+			<isNotEmpty property="prchs_date_END">
+				AND PRCHS_DATE <![CDATA[<]]>= #prchs_date_end#
+			</isNotEmpty>
+			<isNotEmpty property="agency_name">
+				AND AGENCY_NAME LIKE '%'|| #agency_name# ||'%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="selectSearchStatDetList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/*prchs.selectSearchStatDetList 구매상태별 검색리스트 */
+		SELECT
+			PRCHS_SEQ_NO,
+			PRCHS_USER_ID,
+			PRCHS_CNT,
+			PRCHS_PRICE,
+			PRCHS_DATE,
+			PRCHS_DET,
+			PRCHS_STAT_CD,
+			AGENCY_NAME,
+			PRCHS_STAT_NAME,
+			ROW_NUMBER() OVER(ORDER BY PRCHS_DATE DESC) AS RN
+		FROM (
+			SELECT 
+				PRCHS_SEQ_NO,
+				PRCHS_USER_ID,
+				USER_NAME,
+				AGENCY_NAME,
+				FAMILY_ID,
+				GRADE,
+				GRADE_NAME,
+				RCMMD_ID,
+				RCMMD_NAME,
+				RCMMD_AGENCY_NAME,
+				RCMMD_FAMILY_ID,
+				RCMMD_GRADE,
+				RCMMD_GRADE_NAME,
+				PRCHS_DATE,
+				PRCHS_STAT_CD,
+				PRCHS_STAT_NAME,
+				CSMT_ID,
+				CSMT_KIND_CD,
+				CSMT_NAME,
+				CSMT_IMG,
+				CSMT_DESC,
+				CSMT_REG_YMD,
+				PUB_COMP,
+				PUB_DATE,
+				CSMT_PRICE,
+				PRCHS_CNT,
+				CSMT_NAME||CHR(13)||REPLACE(PRCHS_DET, ':', CHR(13)) AS PRCHS_DET,
+				PRCHS_PRICE,
+				PAY_ACC,
+				DLVR_NAME,
+				DLVR_PHONE,
+				DLVR_ADDR,
+				DLVR_DATE,
+				DLVR_COMP_DATE,
+				PRCHS_COMP_DATE,
+				PRCHS_CNCL_DATE,
+				RMRKS,
+				AGENCY_ACCM_PNT,
+				SUBAGENCY_ACCM_PNT,
+				SUPAGENCY_ACCM_PNT,
+				ROW_NUMBER() OVER(ORDER BY PRCHS_DATE DESC) AS RN
+			FROM 
+				VPRCHS_ACCM
+			WHERE
+				PRCHS_STAT_CD = #prchs_stat_cd#
+				<dynamic>
+					<isNotEmpty property="prchs_seq_no">
+						AND PRCHS_SEQ_NO like '%'||#prchs_seq_no#||'%'
+					</isNotEmpty>
+					<isNotEmpty property="prchs_date_start">
+						AND PRCHS_DATE >= #prchs_date_start#
+					</isNotEmpty>
+					<isNotEmpty property="prchs_date_end">
+						AND PRCHS_DATE <![CDATA[<]]>= #prchs_date_end#
+					</isNotEmpty>
+					<isNotEmpty property="agency_name">
+						AND AGENCY_NAME LIKE '%'|| #agency_name# ||'%'
+					</isNotEmpty>
+				</dynamic>
+			)
+		WHERE RN BETWEEN #start# AND #end#
+	</select>
+	<select id="selectAgencyName" resultClass="string">
+		/*prchs.selectAgencyName adPrchsStatListR.jsp - selectBox 의 List(가맹점리스트) 취득 */
+		SELECT AGENCY_NAME FROM TUSER
+	</select>
+	<select id="selectUserPrchsCsvList" parameterClass="java.util.Map" resultClass="org.apache.commons.collections.map.ListOrderedMap">
+		/*prchs.selectUserPrchsCsvList 상품구매리스트 검색 (CSV출력용) */
+		SELECT
+			'구매일련번호' as PRCHS_SEQ_NO,
+			'구매자아이디' as PRCHS_USER_ID,
+			'구매자명' as USER_NAME,
+			'가맹점명' as AGENCY_NAME,
+			'계층아이디' as FAMILY_ID,
+			'등급' as GRADE_NAME,
+			'구매날짜' as PRCHS_DATE,
+			'구매상태' as PRCHS_STAT_NAME,
+			'상품명' AS CSMT_NAME,
+			'수량' as PRCHS_CNT,
+			'총액' as PRCHS_PRICE,
+			'구매상세' AS PRCHS_DET,
+			'은행계좌' as PAY_ACC,
+			'배송인' as DLVR_NAME,
+			'배송인전화번호' as DLVR_PHONE,
+			'배송지' as DLVR_ADDR,
+			'배송날짜' as DLVR_DATE,
+			'배송완료날짜' as DLVR_COMP_DATE
+		FROM
+			dual
+		UNION ALL
+		SELECT
+			PRCHS_SEQ_NO,
+			PRCHS_USER_ID,
+			USER_NAME,
+			AGENCY_NAME,
+			FAMILY_ID,
+			GRADE_NAME,
+			TO_CHAR(PRCHS_DATE),
+			PRCHS_STAT_NAME,
+			CSMT_NAME,
+			TO_CHAR(PRCHS_CNT),
+			TO_CHAR(PRCHS_PRICE),
+			PRCHS_DET,
+			PAY_ACC,
+			DLVR_NAME,
+			DLVR_PHONE,
+			DLVR_ADDR,
+			TO_CHAR(DLVR_DATE),
+			TO_CHAR(DLVR_COMP_DATE)
+		FROM
+			VPRCHS_ACCM
+		WHERE
+		  1 = 1
+		  <dynamic>
+		  	<isNotEmpty property="prchs_seq_no">
+		  	AND PRCHS_SEQ_NO like '%'||#prchs_seq_no#||'%'
+		  	</isNotEmpty>
+		  	<isNotEmpty property="agency_name">
+		  	AND AGENCY_NAME = #agency_name#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="grade">
+		  	AND GRADE = #grade#
+		  	</isNotEmpty>
+		  	<isNotEmpty property="prchs_stat_cd">
+		  	and PRCHS_STAT_CD = #prchs_stat_cd#
+		  	</isNotEmpty>
+		  </dynamic>
+	</select>
+</sqlMap>

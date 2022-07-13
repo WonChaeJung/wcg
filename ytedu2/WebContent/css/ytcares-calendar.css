@@ -1,0 +1,65 @@
+.bscal-table, .bscal-year-table {border-width:1px;border-color:#cececf;border-collapse:collapse;border:1px solid #E3F5F3;border-radius:4px;text-align:center;font-size:11px;font-family:"verdana", "tahoma";margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;text-overflow:ellipsis;
+background: rgb(255,255,255);
+background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1)));
+background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+background: linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 );
+}
+.bscal-year-table {border:1px solid black;}
+.bscal-year-table td {font-size:11px;text-align:center;vertical-align:middle;padding:0px 0px 0px 0px;}
+.bscal-holiday-date {font-weight:bold;color:#ff0000;background-color:#ffffff;}
+.bscal-memorial-date {font-weight:bold;color:#000000;background-color:#ffffff;}
+.bscal-user-define-date {font-weight:bold;color:#ffffff;background-color:#FFA311;}
+.bscal-today {color:#7F7F7F;background-color:#ffff66;}
+.bscal-onmouse-over {color:#ffffff;background-color:#adadff;padding:0px 1px 1px 0px;text-decoration:underline;}
+.bscal-table th {font-size:11px;height:25px;text-align:center;}
+.bscal-year-table th {font-size:11px;height:25px;text-align:center;background-color:#f0f0f5;}
+.bscal-table th img, .bscal-year-table th img {width:12px;height:12px;vertical-align:middle;}
+
+.bscal-year-header {}
+.bscal-year-header th {color:#7F7F7F;font-weight:bold;font-size:11px;height:18px;background-color:#F2F2F2;text-align:center;vertical-align:middle;border:1px solid #00248f;}
+.bscal-year-right-border {border-right:1px solid #00248f;}
+.bscal-year-left-border {border-left:1px solid #00248f;}
+.bscal-year-bottom-border {border-bottom:1px solid #00248f;}
+.bscal-table select {border:1px solid #cececf;height:20px;margin:0px 0px 0px 0px;}
+.bscal-table td {font-size:11px;line-height:12px;border:1px solid #E3F5F3;
+/*
+text-align:right;vertical-align:bottom;
+*/
+padding:0px 2px 2px 0px;}
+.bscal-prev-year {font-size:11px;background-color:#f5e6fa;}
+.bscal-this-year {background-color:#d6d6eb;font-size:11px;}
+.bscal-next-year {font-size:11px;background-color:#f5e6fa;}
+.bscal-sunday {color:#ff0000;}
+.bscal-saturday {color:#0000ff;}
+.bscal-not-this-month {color:#cececf;}
+.bscal-invalid-range {color:#cececf;}
+.bscal-popup-div {margin:1px;position:absolute;background-color:#ffffff;display:none;overflow:hidden;}
+.bacal-inner-div {position:absolute;}
+.bacal-inner-base {position:relative;left:0px;top:0px;}
+.bacal-inner-div {position:absolute;background-color:#ffffff;}
+.bscal-today-row{}
+.bscal-table .bscal-day-header {color:#7F7F7F;font-weight:bold;font-size:11px;height:20px;background-color:#85a3e0;text-align:center;vertical-align:middle;
+background: rgb(242,242,242);
+background: -moz-linear-gradient(top,  rgba(179,220,237,1) 0%, rgba(41,184,229,1) 32%, rgba(41,184,229,1) 69%, rgba(180,225,237,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(179,220,237,1)), color-stop(32%,rgba(41,184,229,1)), color-stop(69%,rgba(41,184,229,1)), color-stop(100%,rgba(180,225,237,1)));
+background: -webkit-linear-gradient(top,  rgba(179,220,237,1) 0%,rgba(41,184,229,1) 32%,rgba(41,184,229,1) 69%,rgba(180,225,237,1) 100%);
+background: -o-linear-gradient(top,  rgba(179,220,237,1) 0%,rgba(41,184,229,1) 32%,rgba(41,184,229,1) 69%,rgba(180,225,237,1) 100%);
+background: -ms-linear-gradient(top,  rgba(179,220,237,1) 0%,rgba(41,184,229,1) 32%,rgba(41,184,229,1) 69%,rgba(180,225,237,1) 100%);
+background: linear-gradient(top,  rgba(179,220,237,1) 0%,rgba(41,184,229,1) 32%,rgba(41,184,229,1) 69%,rgba(180,225,237,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F2F2F2', endColorstr='#b4e1ed',GradientType=0 );
+/*
+
+background: #cedce7;
+background: -moz-linear-gradient(top,  #cedce7 0%, #596a72 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cedce7), color-stop(100%,#596a72));
+background: -webkit-linear-gradient(top,  #cedce7 0%,#596a72 100%);
+background: -o-linear-gradient(top,  #cedce7 0%,#596a72 100%);
+background: -ms-linear-gradient(top,  #cedce7 0%,#596a72 100%);
+background: linear-gradient(top,  #cedce7 0%,#596a72 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cedce7', endColorstr='#596a72',GradientType=0 );
+*/
+}

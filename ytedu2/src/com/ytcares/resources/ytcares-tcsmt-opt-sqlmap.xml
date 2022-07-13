@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="csmtopt">
+	<typeAlias alias="CsmtOpt" type="com.ytcares.bean.TCsmtOptBean" />
+	
+	<select id="selectCsmtOptList" parameterClass="string" resultClass="CsmtOpt">
+	/*csmtopt.selectCsmtOptList 선택한 상품에 달려있는 옵션 리스트를 가져오기*/
+		SELECT
+			CSMT_ID
+			, CSMT_OPT_CD
+			, RMRKS
+		FROM
+			TCSMT_OPT
+		WHERE
+			CSMT_ID = #csmt_id#
+	</select>
+	
+	<insert id="insertCsmtOptInfo" parameterClass="CsmtOpt">
+	/*csmt.insertCsmtOptInfo 상품의 옵션 정보를 삽입하기*/
+		INSERT INTO TCSMT_OPT (
+			  CSMT_ID
+			, CSMT_OPT_CD
+			, RMRKS
+		) VALUES (
+			  #csmt_id#
+			, #csmt_opt_cd#
+			, #rmrks#
+		)
+	</insert>
+	
+	<update id="updateCsmtOptInfo" parameterClass="CsmtOpt">
+	/*csmt.updateCsmtOptInfo 상품의 옵션 정보를 수정하기*/
+		UPDATE
+			TCSMT_OPT
+		SET
+			CSMT_ID = #csmt_id#
+			, CSMT_OPT_CD = #csmt_opt_cd#
+			, RMRKS = #rmrks#
+	</update>
+	
+	<delete id="deleteCsmtOpt" parameterClass="string">
+	/*csmt.deleteCsmtOpt 상품의 정보를 삭제하기*/
+		DELETE FROM 
+			TCSMT_OPT
+		WHERE
+			CSMT_ID = #csmt_id#
+	</delete>
+</sqlMap>

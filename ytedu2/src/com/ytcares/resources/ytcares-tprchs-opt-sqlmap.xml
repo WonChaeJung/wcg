@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="prchsopt">
+	<typeAlias alias="PrchsOpt" type="com.ytcares.bean.TPrchsOptBean" />
+	
+	<insert id="insertPrchsOptInfo" parameterClass="PrchsOpt">
+	/*prchsopt.insertPrchsOptInfo 상품 구매시 상품 상세에 대한 상세 옵션 데이터 삽입*/		
+		INSERT INTO TPRCHS_OPT (
+			  PRCHS_SEQ_NO
+			, PRCHS_GRP_NO
+			, PRCHS_OPT_MCD
+			, PRCHS_OPT_DCD
+		) VALUES (
+			  (SELECT
+				#prchs_seq_no#||'-'||TO_CHAR(SYSDATE, 'YYYYMMDD')||'-'||LPAD(NVL(MAX(SUBSTR(PRCHS_SEQ_NO, -5)), 0), 5, '0') AS PRCHS_ID
+			  FROM
+				TPRCHS
+			  WHERE
+				PRCHS_SEQ_NO LIKE #prchs_seq_no#||'-'||TO_CHAR(SYSDATE, 'YYYYMMDD')||'-'||'%')
+			, #prchs_grp_no#
+			, #prchs_opt_mcd#
+			, #prchs_opt_dcd#
+		)
+	</insert>
+
+</sqlMap>

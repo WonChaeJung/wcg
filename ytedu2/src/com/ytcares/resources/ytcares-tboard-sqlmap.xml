@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="board">
+	<typeAlias alias="Board" type="com.ytcares.bean.TBoardBean" />
+	
+	<select id="selectBoardListCount" parameterClass="java.util.Map" resultClass="int">
+		/* board.selectBoardListCount 게시판리스트 건수취득 */
+		SELECT
+			COUNT(*) AS TOTAL
+		FROM
+			TBOARD B
+		JOIN
+			TUSER U
+		ON
+			B.REG_ID = U.USER_ID
+		WHERE
+			B.CATEGORY		= #category#
+		<dynamic>
+			<isNotEmpty property="sub_category" prepend="AND">
+			B.SUB_CATEGORY	= #sub_category#
+			</isNotEmpty>
+			<isNotEmpty property="srchitem">
+				<isNotEmpty property="srchval" prepend="AND">
+				$srchitem$ LIKE '%$srchval$%'
+				</isNotEmpty>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="selectBoardList" parameterClass="java.util.Map" resultClass="board">
+		/* board.selectBoardList 게시판리스트취득 */
+		SELECT
+			  SEQ_NO
+			, CATEGORY
+			, SUB_CATEGORY
+			, TITLE
+			, CONTENT
+			, APPND_DATA1
+			, APPND_DATA2
+			, APPND_DATA3
+			, REG_ID
+			, REG_PASS
+			, REG_DATE
+			, READ_CNT
+			, REF_NO
+			, REF_USER_ID
+			, RE_STEP
+			, RE_LEVEL
+		FROM (
+			SELECT
+				  B.SEQ_NO
+				, B.CATEGORY
+				, B.SUB_CATEGORY
+				, B.TITLE
+				, B.CONTENT
+				, B.APPND_DATA1
+				, B.APPND_DATA2
+				, B.APPND_DATA3
+				, B.REG_ID
+				, B.REG_PASS
+				, B.REG_DATE
+				, B.READ_CNT
+				, B.REF_NO
+				, (SELECT REG_ID FROM TBOARD WHERE CATEGORY = B.CATEGORY AND SUB_CATEGORY = B.SUB_CATEGORY AND SEQ_NO = B.REF_NO) AS REF_USER_ID
+				, B.RE_STEP
+				, B.RE_LEVEL
+				<dynamic>
+				<isEmpty property="sub_category">
+				, ROW_NUMBER() OVER(ORDER BY B.SEQ_NO DESC, B.RE_STEP ASC) AS RN
+				</isEmpty>
+				<isNotEmpty property="sub_category">
+				, ROW_NUMBER() OVER(ORDER BY B.CATEGORY, B.SUB_CATEGORY, B.REF_NO DESC, B.RE_STEP ASC, B.RE_LEVEL ASC) AS RN
+				</isNotEmpty>
+			</dynamic>
+			FROM
+				TBOARD B
+			JOIN
+				TUSER U
+			ON
+				B.REG_ID = U.USER_ID
+			WHERE
+				B.CATEGORY		= #category#
+			<dynamic>
+				<isNotEmpty property="sub_category" prepend="AND">
+				B.SUB_CATEGORY	= #sub_category#
+				</isNotEmpty>
+				<isNotEmpty property="srchitem">
+					<isNotEmpty property="srchval" prepend="AND">
+					$srchitem$ LIKE '%$srchval$%'
+					</isNotEmpty>
+				</isNotEmpty>
+			</dynamic>
+		)
+		WHERE
+			RN BETWEEN #start# AND #end#	
+	</select>
+	
+	<insert id="insertBoard" parameterClass="Board">
+		/* board.insertBoard 글 등록 */
+		INSERT INTO TBOARD (
+			  SEQ_NO
+			, CATEGORY
+			, SUB_CATEGORY
+			, TITLE
+			, CONTENT
+			, APPND_DATA1
+			, APPND_DATA2
+			, APPND_DATA3
+			, REG_ID
+			, REG_PASS
+			, REG_DATE
+			, READ_CNT
+			, REF_NO
+			, RE_STEP
+			, RE_LEVEL
+		) VALUES (
+			  (SELECT NVL(MAX(SEQ_NO) + 1, 1) FROM TBOARD WHERE CATEGORY = #category# AND SUB_CATEGORY = #sub_category#)
+			, #category#
+			, #sub_category#
+			, #title#
+			, #content#
+			, #appnd_data1#
+			, #appnd_data2#
+			, #appnd_data3#
+			, #reg_id#
+			, #reg_pass#
+			, SYSDATE
+			, 0
+			, (SELECT NVL(MAX(SEQ_NO) + 1, 1) FROM TBOARD WHERE CATEGORY = #category# AND SUB_CATEGORY = #sub_category#)
+			, 0
+			, 0
+		)
+	</insert>
+	
+	<update id="updateReple" parameterClass="Board">
+		/* board.updateReple 답글달기 전 세팅 */
+		UPDATE 
+			TBOARD
+		SET
+			RE_STEP = RE_STEP + 1
+		WHERE
+			REF_NO 	= #ref_no#
+			AND CATEGORY = #category#
+			AND SUB_CATEGORY = #sub_category#
+			AND RE_STEP	> #re_step#
+	</update>
+	
+	<insert id="insertReple" parameterClass="Board">
+		/* board.insertReple 답글달기 */
+		INSERT INTO TBOARD (
+			  SEQ_NO
+			, CATEGORY
+			, SUB_CATEGORY
+			, TITLE
+			, CONTENT
+			, APPND_DATA1
+			, APPND_DATA2
+			, APPND_DATA3
+			, REG_ID
+			, REG_PASS
+			, REG_DATE
+			, READ_CNT
+			, REF_NO
+			, RE_STEP
+			, RE_LEVEL
+		) VALUES (
+			  (SELECT NVL(MAX(SEQ_NO) + 1, 1) FROM TBOARD WHERE CATEGORY = #category# AND SUB_CATEGORY = #sub_category#)
+			, #category#
+			, #sub_category#
+			, #title#
+			, #content#
+			, #appnd_data1#
+			, #appnd_data2#
+			, #appnd_data3#
+			, #reg_id#
+			, #reg_pass#
+			, SYSDATE
+			, 0
+			, #ref_no#
+			, #re_step#
+			, #re_level#
+		)
+	</insert>
+	
+	<select id="selectBoardInfo" parameterClass="java.util.Map" resultClass="Board">
+		/* board.selectBoardInfo 게시판 글 상세보기 */
+		SELECT
+			B.SEQ_NO
+			, B.CATEGORY
+			, B.SUB_CATEGORY
+			, B.TITLE
+			, B.CONTENT
+			, B.APPND_DATA1
+			, B.APPND_DATA2
+			, B.APPND_DATA3
+			, B.REG_ID
+			, B.REG_PASS
+			, B.REG_DATE
+			, B.READ_CNT
+			, B.REF_NO
+			, B.RE_STEP
+			, B.RE_LEVEL
+		FROM
+			TBOARD B
+		JOIN
+			TUSER U
+		ON
+			B.REG_ID = U.USER_ID
+		WHERE
+			B.SEQ_NO = #seq_no#
+			AND B.CATEGORY = #category#
+			AND B.SUB_CATEGORY = #sub_category#
+	</select>
+	<update id="updateReadCount" parameterClass="Board">
+		/* board.updateReadCount 게시판 글 조회성공 시 조회수 카운트 */
+		UPDATE
+			TBOARD
+		SET
+			READ_CNT = READ_CNT + 1
+		WHERE
+			SEQ_NO = #seq_no#
+			AND CATEGORY = #category#
+			AND SUB_CATEGORY = #sub_category#
+	</update>
+	
+	<update id="updateBoard" parameterClass="Board">
+		/* board.updateBoard 글 수정, EL게시물수정 */
+		UPDATE 
+			TBOARD
+		SET
+			TITLE = #title#, 
+			CONTENT = #content#
+			<dynamic>
+			<isNotEmpty property="appnd_data1" prepend=",">
+			APPND_DATA1 = #appnd_data1#
+			</isNotEmpty>
+			<isNotEmpty property="appnd_data2" prepend=",">
+			APPND_DATA2 = #appnd_data2#
+			</isNotEmpty>
+			</dynamic>
+		WHERE
+			CATEGORY		= #category# AND
+			SUB_CATEGORY	= #sub_category# AND
+			SEQ_NO			= #seq_no#
+	</update>
+	
+	<delete id="deleteBoard" parameterClass="Board">
+		/* board.deleteBoard 글 삭제 */
+		DELETE 
+		FROM 
+			TBOARD 
+		WHERE
+			SEQ_NO = #seq_no#
+			AND CATEGORY = #category#
+			AND SUB_CATEGORY = #sub_category#
+	</delete>
+	
+	<select id="selectAdminElearnCount" parameterClass="java.util.Map" resultClass="int">
+		/* board.selectAdminElearnCount 온라인강의 건수취득 */
+		SELECT
+			COUNT(*) AS TOTAL
+		FROM
+			TBOARD
+		WHERE
+			CATEGORY	= #category#
+		<dynamic>
+			<isNotEmpty property="sub_category" prepend="AND">
+			SUB_CATEGORY	= #sub_category#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<select id="selectAdminElearn" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* board.selectAdminElearn 	온라인강의 정보 셀렉트*/ 
+		SELECT
+			  SEQ_NO
+			, CATEGORY
+			, SUB_CATEGORY
+			, TITLE
+			, CONTENT
+			, APPND_DATA1
+			, APPND_DATA2
+			, APPND_DATA3
+			, REG_ID
+			, REG_PASS
+			, REG_DATE
+			, READ_CNT
+			, REF_NO
+			, RE_STEP
+			, RE_LEVEL
+			<dynamic>
+				<isEmpty property="sub_category">
+				, ROW_NUMBER() OVER(ORDER BY SEQ_NO DESC) AS RN
+				</isEmpty>
+				<isNotEmpty property="sub_category">
+				, ROW_NUMBER() OVER(ORDER BY CATEGORY, SUB_CATEGORY, REF_NO DESC, RE_STEP) AS RN
+				</isNotEmpty>
+			</dynamic>
+		FROM (
+			SELECT
+				  SEQ_NO
+				, CATEGORY
+				, SUB_CATEGORY
+				, TITLE
+				, CONTENT
+				, APPND_DATA1
+				, APPND_DATA2
+				, APPND_DATA3
+				, REG_ID
+				, REG_PASS
+				, REG_DATE
+				, READ_CNT
+				, REF_NO
+				, RE_STEP
+				, RE_LEVEL
+				<dynamic>
+					<isEmpty property="sub_category">
+					, ROW_NUMBER() OVER(ORDER BY SEQ_NO DESC) AS RN
+					</isEmpty>
+					<isNotEmpty property="sub_category">
+					, ROW_NUMBER() OVER(ORDER BY CATEGORY, SUB_CATEGORY, REF_NO DESC, RE_STEP) AS RN
+					</isNotEmpty>
+				</dynamic>
+			FROM
+				TBOARD
+			WHERE
+				CATEGORY	= #category#
+			<dynamic>
+				<isNotEmpty property="sub_category" prepend="AND">
+				SUB_CATEGORY	= #sub_category#
+				</isNotEmpty>
+			</dynamic>
+		)
+		WHERE
+			RN BETWEEN #start# AND #end#
+	</select>
+	<insert id="insertAdminElearn" parameterClass="java.util.Map">
+		/*tboard.insertAdminElearn 온라인강의 정보 등록*/
+		INSERT INTO TBOARD (
+			  SEQ_NO
+			, CATEGORY
+			, SUB_CATEGORY
+			, TITLE
+			, CONTENT
+			, APPND_DATA1
+			, APPND_DATA2
+			, APPND_DATA3
+			, REG_ID
+			, REG_PASS
+			, REG_DATE
+			, READ_CNT
+			, REF_NO
+			, RE_STEP
+			, RE_LEVEL
+		) VALUES (
+			  (SELECT 
+			  		NVL(MAX(SEQ_NO) + 1, 1) 
+			  	FROM 
+			  		TBOARD 
+			  	WHERE 
+			  		CATEGORY = #category# 
+		  		AND SUB_CATEGORY = #sub_category#)
+			, #category#
+			, #sub_category#
+			, #title#
+			, #content#
+			, #appnd_data1#
+			, #appnd_data2#
+			, #appnd_data3#
+			, #reg_id#
+			, #reg_pass#
+			, SYSDATE
+			, 0
+			, (SELECT 
+					NVL(MAX(SEQ_NO) + 1, 1) 
+				FROM 
+					TBOARD 
+				WHERE 
+					CATEGORY = #category# 
+				AND 
+					SUB_CATEGORY = #sub_category#)
+			, 0
+			, 0
+		)
+	</insert>
+	<select id="selectElearnUpdateInfoSrch" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/*tbaord.selectElearnUpdateInfoSrch 변경할 온라인강의 정보 취득*/
+		SELECT
+			  SEQ_NO
+			, CATEGORY
+			, SUB_CATEGORY
+			, TITLE
+			, CONTENT
+			, APPND_DATA1
+			, APPND_DATA2
+			, APPND_DATA3
+			, REG_ID
+			, REG_PASS
+			, REG_DATE
+			, READ_CNT
+			, REF_NO
+			, RE_STEP
+			, RE_LEVEL
+		FROM
+			TBOARD
+		WHERE
+			CATEGORY = #category#
+		AND SUB_CATEGORY = #sub_category#
+		AND SEQ_NO = #seq_no#
+	</select>
+	<update id="updateAdminElearn" parameterClass="java.util.Map">
+		/*tboard.updateAdminElearn 온라인강의 정보 변경*/
+		UPDATE 
+			TBOARD
+		SET
+			SUB_CATEGORY	=	#sub_category#
+			, TITLE			=	#title#
+			, CONTENT		=	#content#
+			, APPND_DATA1	=	#appnd_data1#
+			, APPND_DATA2	=	#appnd_data2#
+			, REG_DATE		= SYSDATE
+		WHERE
+			CATEGORY = #category#
+			AND SUB_CATEGORY = #sub_category#
+			AND SEQ_NO = #seq_no#
+	</update>
+	<delete id="deleteAdminElearn" parameterClass="java.util.Map">
+		/*tboard.deleteAdminElearn 온라인강의 정보 삭제*/
+		DELETE
+		FROM
+			TBOARD
+		WHERE
+			CATEGORY		= #category# AND 
+			SUB_CATEGORY	= #sub_category# AND 
+			SEQ_NO			= #seq_no#
+
+	</delete>
+</sqlMap>

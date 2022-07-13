@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="csmt">
+	<typeAlias alias="Csmt" type="com.ytcares.bean.TCsmtBean" />
+	<select id="selectCsmtInfos" parameterClass="java.util.Map" resultClass="Csmt">
+		SELECT
+			CSMT_ID, 
+			CSMT_STOCK
+		FROM
+			TCSMT
+		WHERE
+			CSMT_ID IN
+			<iterate property="csmt_ids" open="(" conjunction="," close=")">
+			#csmt_ids[]#
+			</iterate>
+	</select>
+	<select id="selectCsmtInfo" parameterClass="string" resultClass="Csmt">
+	/*csmt.selectCsmtInfo 상품 아이디를 이용하여 개별 상품에 대한 정보 취득*/
+		SELECT
+			CSMT_ID
+			, CSMT_KIND_CD
+			, CSMT_NAME
+			, CSMT_IMG
+			, CSMT_DESC
+			, CSMT_DESC_IMG1
+			, CSMT_DESC_IMG2
+			, CSMT_DESC_IMG3
+			, CSMT_REG_YMD
+			, PUB_COMP
+			, PUB_DATE
+			, PAY_DESC
+			, READ_CNT
+			, DLT_FLG
+			, PAY_DESC_IMG
+			, CSMT_PRICE
+			, CSMT_STOCK
+		FROM
+			TCSMT
+		WHERE
+			CSMT_ID=#csmt_id#
+	</select>
+	
+	<select id="selectCsmtList" parameterClass="java.util.Map" resultClass="Csmt">
+	/*csmt.selectCsmtList 분류별 상품 정보와 신제품에 대한 정보 리스트를 취득*/
+		SELECT
+			CSMT_ID
+			, CSMT_KIND_CD
+			, CSMT_NAME
+			, CSMT_IMG
+			, CSMT_DESC
+			, CSMT_DESC_IMG1
+			, CSMT_DESC_IMG2
+			, CSMT_DESC_IMG3
+			, CSMT_REG_YMD
+			, PUB_COMP
+			, PUB_DATE
+			, PAY_DESC
+			, READ_CNT
+			, DLT_FLG
+			, PAY_DESC_IMG
+			, CSMT_PRICE
+			, CSMT_STOCK
+		FROM
+			(SELECT 
+				CSMT_ID
+				, CSMT_KIND_CD
+				, CSMT_NAME
+				, CSMT_IMG
+				, CSMT_DESC
+				, CSMT_DESC_IMG1
+				, CSMT_DESC_IMG2
+				, CSMT_DESC_IMG3
+				, CSMT_REG_YMD
+				, PUB_COMP 
+				, PUB_DATE
+				, PAY_DESC
+				, READ_CNT	
+				, DLT_FLG
+				, PAY_DESC_IMG
+				, CSMT_PRICE
+				, CSMT_STOCK
+				<dynamic>
+				     <isNotEmpty property="csmt_kind_cd">
+                        <isEqual property="csmt_kind_cd" compareValue="NEW">
+			             , (ROW_NUMBER() OVER (PARTITION BY CSMT_KIND_CD ORDER BY CSMT_REG_YMD DESC)) AS RNS
+			             </isEqual>
+			             <isNotEqual property="csmt_kind_cd" compareValue="NEW">
+			             , (ROW_NUMBER() OVER (ORDER BY CSMT_REG_YMD DESC)) AS RNS
+			             </isNotEqual>
+			             <isNotEqual property="csmt_kind_cd" compareValue="ALL">
+			             , (ROW_NUMBER() OVER (ORDER BY CSMT_REG_YMD DESC)) AS RNS
+			             </isNotEqual>
+			         </isNotEmpty>
+			         <isEmpty property="csmt_kind_cd">
+			             , (ROW_NUMBER() OVER (ORDER BY CSMT_REG_YMD DESC)) AS RNS
+			         </isEmpty>
+			    </dynamic>
+			FROM 
+				TCSMT
+			WHERE
+			     DLT_FLG='0'
+			    <dynamic>
+                <isNotEmpty property="csmt_kind_cd">
+                    <isEqual property="csmt_kind_cd" compareValue="NEW" prepend="AND">
+                        CSMT_KIND_CD != 'AD'
+                    </isEqual>
+                    <isEqual property="csmt_kind_cd" compareValue="ALL" prepend="AND">
+                        CSMT_KIND_CD != 'AD'
+                    </isEqual>
+                    <isNotEqual property="csmt_kind_cd" compareValue="NEW" prepend="AND">
+                        CSMT_KIND_CD = #csmt_kind_cd#
+                    </isNotEqual>
+                </isNotEmpty>
+                </dynamic>
+			)
+		WHERE
+			<dynamic>
+			    <isNotEmpty property="csmt_kind_cd">
+					<isEqual property="csmt_kind_cd" compareValue="NEW">
+						2>=RNS
+					</isEqual>
+					<isEqual property="csmt_kind_cd" compareValue="ALL">
+                        RNS BETWEEN #start# AND #end#
+                    </isEqual>
+					<isNotEqual property="csmt_kind_cd" compareValue="NEW">
+						<isNotEqual property="csmt_kind_cd" compareValue="AD">
+						   RNS BETWEEN #start# AND #end#
+						</isNotEqual>
+						<isEqual property="csmt_kind_cd" compareValue="AD">
+						   CSMT_KIND_CD = #csmt_kind_cd#
+						</isEqual>
+					</isNotEqual>
+				</isNotEmpty>
+				<isEmpty property="csmt_kind_cd">
+				1=1
+				</isEmpty>
+			</dynamic>
+	</select>
+	
+	<select id="selectCsmtAllList" parameterClass="java.util.Map" resultClass="Csmt">
+    /*csmt.selectCsmtList 분류별 상품 정보와 신제품에 대한 정보 리스트를 취득*/
+        SELECT
+            CSMT_ID
+            , CSMT_KIND_CD
+            , CSMT_NAME
+            , CSMT_IMG
+            , CSMT_DESC
+            , CSMT_DESC_IMG1
+            , CSMT_DESC_IMG2
+            , CSMT_DESC_IMG3
+            , CSMT_REG_YMD
+            , PUB_COMP
+            , PUB_DATE
+            , PAY_DESC
+            , READ_CNT
+            , DLT_FLG
+            , PAY_DESC_IMG
+            , CSMT_PRICE
+            , CSMT_STOCK
+        FROM
+            (SELECT 
+                CSMT_ID
+                , CSMT_KIND_CD
+                , CSMT_NAME
+                , CSMT_IMG
+                , CSMT_DESC
+                , CSMT_DESC_IMG1
+                , CSMT_DESC_IMG2
+                , CSMT_DESC_IMG3
+                , CSMT_REG_YMD
+                , PUB_COMP 
+                , PUB_DATE
+                , PAY_DESC
+                , READ_CNT  
+                , DLT_FLG
+                , PAY_DESC_IMG
+                , CSMT_PRICE
+                , CSMT_STOCK
+                , (ROW_NUMBER() OVER (ORDER BY CSMT_REG_YMD DESC)) AS RNS
+               
+            FROM 
+                TCSMT
+            WHERE
+                 DLT_FLG='0'
+                <dynamic>
+                <isNotEmpty property="csmt_kind_cd">
+                    <isEqual property="csmt_kind_cd" compareValue="ALL" prepend="AND">
+                        CSMT_KIND_CD != 'AD'
+                    </isEqual>
+                </isNotEmpty>
+                </dynamic>
+            )
+        WHERE
+            1=1
+            <dynamic>
+                <isNotEmpty property="csmt_kind_cd">
+                    <isEqual property="csmt_kind_cd" compareValue="ALL" prepend="AND">
+                        RNS BETWEEN #start# AND #end#
+                    </isEqual>
+                    <isNotEqual property="csmt_kind_cd" compareValue="ALL" prepend="AND">
+                        CSMT_KIND_CD = #csmt_kind_cd#
+                    </isNotEqual>
+                </isNotEmpty>
+            </dynamic>
+    </select>
+	
+	
+	
+	<select id="selectCsmtId" resultClass="string">
+	/*csmt.selectCsmtId 분류별 가장 나중의 상품 아이디를 취득*/
+		SELECT
+			#csmt_kind_cd#||'-'||LPAD(NVL(MAX(SUBSTR(CSMT_ID, -4)), 0), 4, '0') AS COSMETIC_ID
+		FROM
+			TCSMT
+		WHERE
+			CSMT_ID LIKE #csmt_kind_cd#||'-'||'%'
+	</select>
+	<select id="selectCsmtCount" parameterClass="java.util.Map" resultClass="Integer">
+	/*csmt.selectCsmtCount 상품의 갯수에 대한 정보 취득*/
+            SELECT 
+                COUNT(*) as CNT    
+            FROM 
+                TCSMT
+            WHERE
+                 DLT_FLG='0'
+                 <dynamic>
+	                <isNotEmpty property="csmt_kind_cd">
+	                    <isEqual property="csmt_kind_cd" compareValue="ALL" prepend="AND">
+                            CSMT_KIND_CD != 'AD'
+                        </isEqual>
+	                    <isEqual property="csmt_kind_cd" compareValue="NEW" prepend="AND">
+	                        CSMT_KIND_CD != 'AD'
+	                    </isEqual>
+	                    <isNotEqual property="csmt_kind_cd" compareValue="NEW" prepend="AND">
+	                        CSMT_KIND_CD = #csmt_kind_cd#
+	                    </isNotEqual>
+	                </isNotEmpty>
+	             </dynamic>
+	</select>
+	
+	<select id="selectCsmtAllCount" resultClass="Integer">
+	        SELECT 
+                COUNT(*) as CNT    
+            FROM 
+                TCSMT
+            WHERE
+	            DLT_FLG='0'
+	            AND CSMT_KIND_CD != 'AD'
+	</select>
+	
+	<insert id="insertCsmt" parameterClass="Csmt">
+	/*csmt.insertCsmt 새로운 상품에 대한 정보를 삽입하는 부분*/
+		INSERT INTO TCSMT(
+			CSMT_ID
+			, CSMT_KIND_CD
+			, CSMT_NAME
+			, CSMT_IMG
+			, CSMT_DESC
+			, CSMT_DESC_IMG1
+			, CSMT_DESC_IMG2
+			, CSMT_DESC_IMG3
+			, CSMT_REG_YMD
+			, PUB_COMP
+			, PUB_DATE
+			, PAY_DESC
+			, READ_CNT
+			, DLT_FLG
+			, PAY_DESC_IMG
+			, CSMT_PRICE
+			, CSMT_STOCK
+		) VALUES (
+			(SELECT
+				#csmt_kind_cd#||'-'||LPAD(NVL(MAX(SUBSTR(CSMT_ID, -4)), 0) + 1, 4, '0') AS COSMETIC_ID
+			FROM
+				TCSMT
+			WHERE
+				CSMT_ID LIKE #csmt_kind_cd#||'-'||'%')
+			, #csmt_kind_cd#
+			, #csmt_name#
+			, #csmt_img#
+			, #csmt_desc#
+			, #csmt_desc_img1#
+			, #csmt_desc_img2#
+			, #csmt_desc_img3#
+			, SYSDATE
+			, #pub_comp#
+			, #pub_date#
+			, #pay_desc#
+			, 1
+			, '0'
+			, #pay_desc_img#
+			, #csmt_price#
+			, #csmt_stock#
+		)
+	
+	</insert>
+	
+	<update id="deleteCsmt" parameterClass="string">
+		/* csmt.deleteCsmt 관리자가 선택한 상품 삭제 */
+		UPDATE
+			TCSMT
+		SET
+			DLT_FLG = '1'
+		WHERE
+			CSMT_ID = #csmt_id#
+	</update>
+	
+	<update id="updateCsmt" parameterClass="Csmt">
+		/*csmt.updateCsmt 관리자가 선택한 상품을 수정*/
+		UPDATE
+			TCSMT
+		SET
+			CSMT_NAME = #csmt_name#
+			<dynamic>
+			<isNotNull property="csmt_img">
+			 , CSMT_IMG = #csmt_img#
+			</isNotNull>
+			</dynamic>
+			, CSMT_DESC = #csmt_desc#
+			, CSMT_DESC_IMG1 = #csmt_desc_img1#
+			, CSMT_DESC_IMG2 = #csmt_desc_img2#
+			, CSMT_DESC_IMG3 = #csmt_desc_img3#
+			, CSMT_REG_YMD = SYSDATE
+			, PUB_COMP = #pub_comp#
+			, PUB_DATE = #pub_date#
+			, PAY_DESC = #pay_desc#
+			, READ_CNT = 1
+			, PAY_DESC_IMG = #pay_desc_img#
+			, CSMT_PRICE = #csmt_price#
+			, CSMT_STOCK = #csmt_stock#
+		WHERE
+			CSMT_ID = #csmt_id#
+	</update>
+	
+	<update id="updateCsmtStock" parameterClass="java.util.Map">
+	/*csmt.updateCsmtStock 고객이 구매한 상품의 재고만큼 상품의 재고를 감소*/
+	       UPDATE
+	           TCSMT
+	       SET
+	           CSMT_STOCK = 
+	               CSMT_STOCK-#csmt_stock#
+	       WHERE
+	           CSMT_ID = #csmt_id# AND
+	           /* 현재재고수에서 구매수량을 뺏을 경우 0 이상인 경우만 업데이트 */
+	           (CSMT_STOCK -#csmt_stock#)  <![CDATA[>]]>= 0
+	</update>
+	<select id="selectMainCsmtList" resultClass="java.util.HashMap">
+	/*csmt.selectMainCsmtList 메인상품리스트  검색 */
+	SELECT 
+		CSMT_ID,
+		CSMT_NAME,
+		CSMT_IMG,
+		CSMT_PRICE,
+		CSMT_REG_YMD,
+		RN
+	FROM
+		(SELECT
+			CSMT_ID,	
+			CSMT_NAME,
+			CSMT_IMG,
+			CSMT_PRICE,
+			CSMT_REG_YMD,
+			ROW_NUMBER() OVER (ORDER BY CSMT_REG_YMD DESC) AS RN
+		FROM
+			TCSMT
+		WHERE
+			DLT_FLG = '0'
+			AND CSMT_KIND_CD != 'AD'
+		)
+	WHERE
+		RN <![CDATA[<]]> 4
+	</select>
+</sqlMap>

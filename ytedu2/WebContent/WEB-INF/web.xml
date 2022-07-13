@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	
+	<display-name>YTCares</display-name>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<context-param>
+        <param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext-web.xml</param-value>
+    </context-param>
+    
+	<context-param>
+        <param-name>firstPageImg</param-name>
+		<param-value>/images/board_page_first_bt.gif</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>prevPageImg</param-name>
+		<param-value>/images/board_page_left_bt.gif</param-value>
+    </context-param>
+	
+	<context-param>
+        <param-name>nextPageImg</param-name>
+		<param-value>/images/board_page_right_bt.gif</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>lastPageImg</param-name>
+		<param-value>/images/board_page_end_bt.gif</param-value>
+    </context-param>
+    
+	<servlet>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+	        <param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/applicationContext.xml</param-value>
+	    </init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	
+	<!-- 루트어플리케이션 컨텍스트 리스너 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<listener>
+         <listener-class>com.ytcares.common.YTCaresSessionListener</listener-class>
+    </listener>
+    
+	<servlet-mapping>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/error_404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/error_500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error/error_403.jsp</location>
+	</error-page>
+	<filter>
+		<description>YTCaresCommonFilter</description>
+		<filter-name>YTCaresCommonFilter</filter-name>
+		<filter-class>com.ytcares.common.YTCaresCommonFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>YTCaresCommonFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>YTCaresCommonFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+
+	<security-constraint> 
+		<web-resource-collection>
+			<web-resource-name>Lecture Movie Resource</web-resource-name>
+			<url-pattern>/ytcares/elearn/movie/*</url-pattern>
+		</web-resource-collection>
+
+		<auth-constraint/>
+	</security-constraint>
+	
+	<security-constraint> 
+		<web-resource-collection>
+			<web-resource-name>JspPage Resource</web-resource-name>
+			<url-pattern>/page/*</url-pattern>
+		</web-resource-collection>
+
+		<auth-constraint/>
+	</security-constraint>
+</web-app>

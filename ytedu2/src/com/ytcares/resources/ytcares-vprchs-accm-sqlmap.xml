@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="vprchs">
+	<typeAlias alias="Vprchs" type="com.ytcares.bean.VPrchsAccmBean" />
+	<select id="selectPrchsAccmCount" parameterClass="java.util.Map" resultClass="int">
+		/* vprchs.selectPrchsAccmCount 마이페이지 구매내역확인 */
+		SELECT
+			COUNT(*) AS COUNT
+		FROM
+			VPRCHS_ACCM
+		WHERE
+			1 = 1
+		<dynamic>
+			<isNotEmpty property="self_clsfy">
+				<isEqual property="self_clsfy" compareValue="1" prepend="AND">
+			PRCHS_USER_ID = #user_id#
+				</isEqual>
+				<isEqual property="self_clsfy" compareValue="2" prepend="AND">
+			FAMILY_ID LIKE #family_id#||'-'||'%'
+				</isEqual>
+			</isNotEmpty>
+			<isEmpty property="self_clsfy" prepend="AND">
+			FAMILY_ID LIKE #family_id#||'%'
+			</isEmpty>
+			<isNotEmpty property="prchs_start_date" prepend="AND">
+			PRCHS_DATE <![CDATA[>=]]> TO_DATE(#prchs_start_date#, 'YYYY-MM-DD')
+			</isNotEmpty>
+			<isNotEmpty property="prchs_end_date" prepend="AND">
+			PRCHS_DATE <![CDATA[<=]]> TO_DATE(#prchs_end_date#, 'YYYY-MM-DD')
+			</isNotEmpty>
+			<isNotEmpty property="prchs_stat_cd" prepend="AND">
+			PRCHS_STAT_CD = #prchs_stat_cd#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="selectPrchsAccmList" parameterClass="java.util.Map" resultClass="Vprchs">
+		/* vprchs.selectPrchsAccmList 마이페이지 구매내역확인 */
+		SELECT
+			PRCHS_SEQ_NO,
+			PRCHS_USER_ID,
+			USER_NAME,
+			AGENCY_NAME,
+			FAMILY_ID,
+			GRADE,
+			GRADE_NAME,
+			RCMMD_ID,
+			RCMMD_NAME,
+			RCMMD_AGENCY_NAME,
+			RCMMD_FAMILY_ID,
+			RCMMD_GRADE,
+			RCMMD_GRADE_NAME,
+			PRCHS_DATE,
+			PRCHS_STAT_CD,
+			PRCHS_STAT_NAME,
+			CSMT_ID,
+			CSMT_KIND_CD,
+			CSMT_NAME,
+			CSMT_IMG,
+			CSMT_DESC,
+			CSMT_REG_YMD,
+			PUB_COMP,
+			PUB_DATE,
+			CSMT_PRICE,
+			PRCHS_CNT,
+			PRCHS_PRICE,
+			CSMT_NAME||CHR(13)||REPLACE(PRCHS_DET, ':', CHR(13)) AS PRCHS_DET,
+			PAY_ACC,
+			DLVR_NAME,
+			DLVR_PHONE,
+			DLVR_ADDR,
+			DLVR_DATE,
+			DLVR_COMP_DATE,
+			PRCHS_COMP_DATE,
+			PRCHS_CNCL_DATE,
+			RMRKS,
+			AGENCY_ACCM_PNT,
+			SUBAGENCY_ACCM_PNT,
+			SUPAGENCY_ACCM_PNT
+		FROM (
+			SELECT
+				PRCHS_SEQ_NO,
+				PRCHS_USER_ID,
+				USER_NAME,
+				AGENCY_NAME,
+				FAMILY_ID,
+				GRADE,
+				GRADE_NAME,
+				RCMMD_ID,
+				RCMMD_NAME,
+				RCMMD_AGENCY_NAME,
+				RCMMD_FAMILY_ID,
+				RCMMD_GRADE,
+				RCMMD_GRADE_NAME,
+				PRCHS_DATE,
+				PRCHS_STAT_CD,
+				PRCHS_STAT_NAME,
+				CSMT_ID,
+				CSMT_KIND_CD,
+				CSMT_NAME,
+				CSMT_IMG,
+				CSMT_DESC,
+				CSMT_REG_YMD,
+				PUB_COMP,
+				PUB_DATE,
+				CSMT_PRICE,
+				PRCHS_CNT,
+				PRCHS_PRICE,
+				PRCHS_DET,
+				PAY_ACC,
+				DLVR_NAME,
+				DLVR_PHONE,
+				DLVR_ADDR,
+				DLVR_DATE,
+				DLVR_COMP_DATE,
+				PRCHS_COMP_DATE,
+				PRCHS_CNCL_DATE,
+				RMRKS,
+				AGENCY_ACCM_PNT,
+				SUBAGENCY_ACCM_PNT,
+				SUPAGENCY_ACCM_PNT,
+				<dynamic>
+					<isNotEmpty property="self_clsfy">
+						<isEqual property="self_clsfy" compareValue="1">
+				ROW_NUMBER() OVER(ORDER BY PRCHS_SEQ_NO DESC) AS RN
+						</isEqual>
+						<isEqual property="self_clsfy" compareValue="2">
+				ROW_NUMBER() OVER(ORDER BY FAMILY_ID, PRCHS_SEQ_NO DESC) AS RN
+						</isEqual>
+					</isNotEmpty>
+					<isEmpty property="self_clsfy">
+				ROW_NUMBER() OVER(ORDER BY PRCHS_SEQ_NO DESC) AS RN
+					</isEmpty>
+				</dynamic>
+				
+			FROM
+				VPRCHS_ACCM
+			WHERE
+				1 = 1
+			<dynamic>
+				<isNotEmpty property="self_clsfy">
+					<isEqual property="self_clsfy" compareValue="1" prepend="AND">
+				PRCHS_USER_ID = #user_id#
+					</isEqual>
+					<isEqual property="self_clsfy" compareValue="2" prepend="AND">
+				FAMILY_ID LIKE #family_id#||'-'||'%'
+					</isEqual>
+				</isNotEmpty>
+				<isEmpty property="self_clsfy" prepend="AND">
+				FAMILY_ID LIKE #family_id#||'%'
+				</isEmpty>
+				<isNotEmpty property="prchs_start_date" prepend="AND">
+				PRCHS_DATE <![CDATA[>=]]> TO_DATE(#prchs_start_date#, 'YYYY-MM-DD')
+				</isNotEmpty>
+				<isNotEmpty property="prchs_end_date" prepend="AND">
+				PRCHS_DATE <![CDATA[<=]]> TO_DATE(#prchs_end_date#, 'YYYY-MM-DD')
+				</isNotEmpty>
+				<isNotEmpty property="prchs_stat_cd" prepend="AND">
+				PRCHS_STAT_CD = #prchs_stat_cd#
+				</isNotEmpty>
+			</dynamic>
+		)
+			WHERE
+				RN BETWEEN #start# AND #end#
+	</select>
+	
+	<select id="selectStatSummaryCount" parameterClass="string" resultClass="java.util.HashMap">
+		/* vprchs.selectStatSummaryCount 상태별 건수 검색 */
+		SELECT
+			NVL(
+				MAX(
+				(SELECT
+						SUM(ACCM_PNT)
+					FROM
+						TACCM_PNT AC
+					JOIN
+						TUSER UR
+					ON
+						AC.USER_ID = UR.USER_ID
+					WHERE
+					1 = 1
+					AND AC.STLMNT_YN = '0'
+					<dynamic>
+					<isNotEmpty>
+						AND	AC.USER_ID = #user_id#
+					</isNotEmpty>
+					</dynamic>
+					AND UR.DLT_FLG = '0')
+				), 0) AS TOT_ACCM_PNT,
+			NVL(
+				MAX(
+				(SELECT
+						SUM(ACCM_PNT)
+					FROM
+						TACCM_PNT AC
+					JOIN
+						TUSER UR
+					ON
+						AC.USER_ID = UR.USER_ID
+					WHERE
+					1 = 1
+					<dynamic>
+					<isNotEmpty>
+						AND	AC.USER_ID = #user_id#
+					</isNotEmpty>
+					</dynamic>
+					AND UR.DLT_FLG = '0')
+				), 0) AS ALL_ACCM_PNT,
+				NVL(MAX(PRCHS_REQ_CNT), 0) AS PRCHS_REQ_CNT,
+				NVL(MAX(PAY_CNT), 0) AS PAY_CNT,
+				NVL(MAX(DLVR_CNT), 0) AS DLVR_CNT,
+				NVL(MAX(DLVR_COMP_CNT), 0) AS DLVR_COMP_CNT,
+				NVL(MAX(PRCHS_COMP_CNT), 0) AS PRCHS_COMP_CNT,
+				NVL(MAX(CNCL_CNT), 0) AS CNCL_CNT,
+				
+				(NVL(MAX(PRCHS_REQ_CNT), 0) + NVL(MAX(PAY_CNT), 0) + NVL(MAX(DLVR_CNT), 0) +
+				NVL(MAX(DLVR_COMP_CNT), 0) + NVL(MAX(PRCHS_COMP_CNT), 0) + NVL(MAX(CNCL_CNT), 0)) AS TOT_CNT,
+				NVL(MAX((SELECT COUNT(*) FROM TUSER WHERE GRADE = '4')), 0) AS AGENCY_CNT
+		FROM (
+			SELECT
+				PRCHS_STAT_CD,
+				SUM(CASE PRCHS_STAT_CD WHEN '1' THEN 1 ELSE 0 END) AS PRCHS_REQ_CNT,
+				SUM(CASE PRCHS_STAT_CD WHEN '2' THEN 1 ELSE 0 END) AS PAY_CNT,
+				SUM(CASE PRCHS_STAT_CD WHEN '3' THEN 1 ELSE 0 END) AS DLVR_CNT,
+				SUM(CASE PRCHS_STAT_CD WHEN '4' THEN 1 ELSE 0 END) AS DLVR_COMP_CNT,
+				SUM(CASE PRCHS_STAT_CD WHEN '5' THEN 1 ELSE 0 END) AS PRCHS_COMP_CNT,
+				SUM(CASE PRCHS_STAT_CD WHEN '9' THEN 1 ELSE 0 END) AS CNCL_CNT
+			FROM
+			VPRCHS_ACCM
+			WHERE
+				1 = 1
+				<dynamic>
+					<isNotEmpty prepend="AND">
+						FAMILY_ID LIKE (SELECT FAMILY_ID FROM TUSER WHERE USER_ID = #user_id#)||'%'
+					</isNotEmpty>
+				</dynamic>
+			GROUP BY
+				PRCHS_STAT_CD
+			)
+	</select>
+	
+	
+	<select id="selectAccmPntCount" parameterClass="java.util.Map" resultClass="int">
+	/* vprchs.selectAccmPntCount 적립금현황(관리자 적립금현황) 카운트 조회*/
+	SELECT
+		COUNT(*) AS COUNT
+	FROM
+		TACCM_PNT P
+	JOIN
+		TUSER	U
+	ON
+		P.USER_ID	= U.USER_ID AND
+		U.DLT_FLG	= '0'
+	JOIN
+		VPRCHS_ACCM V
+	ON
+		P.PRCHS_SEQ_NO = V.PRCHS_SEQ_NO
+	WHERE
+		1 = 1
+		
+	<dynamic>
+		<isEmpty property="include_stlmnt" prepend="AND">
+			P.STLMNT_YN = '0'
+		</isEmpty>
+		<isNotEmpty property="prchs_seq_no" prepend="AND">
+			P.PRCHS_SEQ_NO = #prchs_seq_no#
+		</isNotEmpty>
+		<isEmpty property="term">
+			<isNotEmpty property="prchs_date_start" prepend="AND">
+				V.PRCHS_DATE <![CDATA[>=]]> TO_DATE(#prchs_date_start#, 'YYYY-MM-DD')
+			</isNotEmpty>
+			<isNotEmpty property="prchs_date_end" prepend="AND">
+				V.PRCHS_DATE <![CDATA[<=]]> TO_DATE(#prchs_date_end#, 'YYYY-MM-DD')
+			</isNotEmpty>
+		</isEmpty>
+		<isNotEmpty property="term">
+			<isEqual property="term" compareValue="week" prepend="AND"> 
+				V.PRCHS_DATE BETWEEN TRUNC(SYSDATE, 'DD')-7 AND SYSDATE
+			</isEqual>
+			<isNotEqual property="term" compareValue="month" prepend="AND"> 
+				V.PRCHS_DATE BETWEEN ADD_MONTHS(TRUNC(SYSDATE, 'DD'), -1) AND SYSDATE
+			</isNotEqual>
+		</isNotEmpty>
+		<isNotEmpty property="user_id" prepend="AND">
+				V.FAMILY_ID LIKE (SELECT FAMILY_ID FROM TUSER WHERE USER_ID = #user_id#)||'%'
+		</isNotEmpty>
+	</dynamic>
+	</select>
+	
+	<select id="selectAccmPntList" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+	/* vprchs.selectAccmPntCount 적립금현황(관리자 적립금현황) 리스트 조회*/
+	SELECT
+		RN,
+		ACCM_USER_ID,
+		PRCHS_SEQ_NO,
+		ACCM_USER_NAME,
+		ACCM_AGENCY_NAME,
+		ACCM_RCMMD_ID,
+		ACCM_FAMILY_ID,
+		ACCM_CELL_PHONE,
+		ACCM_PHONE,
+		ACCM_EMAIL,
+		ACCM_ZIPCODE,
+		ACCM_ADDR,
+		ACCM_GRADE,
+		ACCM_REG_DATE,
+		ACCM_PNT,
+		ACCM_DATE,
+		ACCM_TYPE_CD,
+		STLMNT_YN,
+		STLMNT_DATE,
+		
+		PRCHS_USER_ID,
+		USER_NAME,
+		AGENCY_NAME,
+		FAMILY_ID,
+		GRADE,
+		GRADE_NAME,
+		RCMMD_ID,
+		RCMMD_NAME,
+		RCMMD_AGENCY_NAME,
+		RCMMD_FAMILY_ID,
+		RCMMD_GRADE,
+		RCMMD_GRADE_NAME,
+		PRCHS_DATE,
+		PRCHS_STAT_CD,
+		PRCHS_STAT_NAME,
+		CSMT_ID,
+		CSMT_KIND_CD,
+		CSMT_NAME,
+		CSMT_IMG,
+		CSMT_DESC,
+		CSMT_REG_YMD,
+		PUB_COMP,
+		PUB_DATE,
+		CSMT_PRICE,
+		PRCHS_PRICE,
+		PRCHS_CNT,
+		PRCHS_DET,
+		PAY_ACC,
+		DLVR_NAME,
+		DLVR_PHONE,
+		DLVR_ADDR,
+		DLVR_DATE,
+		DLVR_COMP_DATE,
+		PRCHS_COMP_DATE,
+		PRCHS_CNCL_DATE,
+		RMRKS,
+		AGENCY_ACCM_PNT,
+		SUBAGENCY_ACCM_PNT,
+		SUPAGENCY_ACCM_PNT
+	FROM (
+		SELECT
+			ROW_NUMBER() OVER(ORDER BY P.ACCM_DATE DESC) AS RN,
+			P.USER_ID		AS ACCM_USER_ID,
+			P.PRCHS_SEQ_NO,
+			U.USER_NAME		AS ACCM_USER_NAME,
+			U.AGENCY_NAME	AS ACCM_AGENCY_NAME,
+			U.RCMMD_ID		AS ACCM_RCMMD_ID,
+			U.FAMILY_ID		AS ACCM_FAMILY_ID,
+			U.CELL_PHONE	AS ACCM_CELL_PHONE,
+			U.PHONE			AS ACCM_PHONE,
+			U.EMAIL			AS ACCM_EMAIL,
+			U.ZIPCODE		AS ACCM_ZIPCODE,
+			U.ADDR			AS ACCM_ADDR,
+			U.GRADE			AS ACCM_GRADE,
+			C.CODE_NM1		AS ACCM_GRADE_NAME,
+			U.REG_DATE		AS ACCM_REG_DATE,
+			P.ACCM_PNT,
+			P.ACCM_DATE,
+			P.ACCM_TYPE_CD,
+			P.STLMNT_YN,
+			P.STLMNT_DATE,
+
+			V.PRCHS_USER_ID,
+			V.USER_NAME,
+			V.AGENCY_NAME,
+			V.FAMILY_ID,
+			V.GRADE,
+			V.GRADE_NAME,
+			V.RCMMD_ID,
+			V.RCMMD_NAME,
+			V.RCMMD_AGENCY_NAME,
+			V.RCMMD_FAMILY_ID,
+			V.RCMMD_GRADE,
+			V.RCMMD_GRADE_NAME,
+			V.PRCHS_DATE,
+			V.PRCHS_STAT_CD,
+			V.PRCHS_STAT_NAME,
+			V.CSMT_ID,
+			V.CSMT_KIND_CD,
+			V.CSMT_NAME,
+			V.CSMT_IMG,
+			V.CSMT_DESC,
+			V.CSMT_REG_YMD,
+			V.PUB_COMP,
+			V.PUB_DATE,
+			V.CSMT_PRICE,
+			V.PRCHS_PRICE,
+			V.PRCHS_CNT,
+			V.CSMT_NAME||CHR(13)||REPLACE(V.PRCHS_DET, ':', CHR(13)) AS PRCHS_DET,
+			V.PAY_ACC,
+			V.DLVR_NAME,
+			V.DLVR_PHONE,
+			V.DLVR_ADDR,
+			V.DLVR_DATE,
+			V.DLVR_COMP_DATE,
+			V.PRCHS_COMP_DATE,
+			V.PRCHS_CNCL_DATE,
+			V.RMRKS,
+			V.AGENCY_ACCM_PNT,
+			V.SUBAGENCY_ACCM_PNT,
+			V.SUPAGENCY_ACCM_PNT
+		FROM
+			TACCM_PNT P
+		JOIN
+			TUSER	U
+		ON
+			P.USER_ID	= U.USER_ID AND
+			U.DLT_FLG	= '0'
+		JOIN
+			VPRCHS_ACCM V
+		ON
+			P.PRCHS_SEQ_NO = V.PRCHS_SEQ_NO
+		LEFT JOIN
+			TCODE C
+		ON
+			U.GRADE		= C.DCODE_CD AND
+			C.MCODE_CD	= 'CM001'
+		WHERE
+			1 = 1
+		<dynamic>
+			<isEmpty property="include_stlmnt" prepend="AND">
+				P.STLMNT_YN = '0'
+			</isEmpty>
+			<isNotEmpty property="prchs_seq_no" prepend="AND">
+				P.PRCHS_SEQ_NO = #prchs_seq_no#
+			</isNotEmpty>
+			<isEmpty property="term">
+				<isNotEmpty property="prchs_date_start" prepend="AND">
+					V.PRCHS_DATE <![CDATA[>=]]> TO_DATE(#prchs_date_start#, 'YYYY-MM-DD')
+				</isNotEmpty>
+				<isNotEmpty property="prchs_date_end" prepend="AND">
+					V.PRCHS_DATE <![CDATA[<=]]> TO_DATE(#prchs_date_end#, 'YYYY-MM-DD')
+				</isNotEmpty>
+			</isEmpty>
+			<isNotEmpty property="term">
+				<isEqual property="term" compareValue="week" prepend="AND"> 
+					V.PRCHS_DATE BETWEEN TRUNC(SYSDATE, 'DD')-7 AND SYSDATE
+				</isEqual>
+				<isNotEqual property="term" compareValue="month" prepend="AND"> 
+					V.PRCHS_DATE BETWEEN ADD_MONTHS(TRUNC(SYSDATE, 'DD'), -1) AND SYSDATE
+				</isNotEqual>
+			</isNotEmpty>
+			<isNotEmpty property="user_id" prepend="AND">
+					V.FAMILY_ID LIKE (SELECT FAMILY_ID FROM TUSER WHERE USER_ID = #user_id#)||'%'
+			</isNotEmpty>
+		</dynamic>
+	)
+	WHERE
+		RN BETWEEN #start# AND #end#
+	ORDER BY
+		RN
+	</select>
+	
+	
+	<select id="selectPrchsDetailInfo" parameterClass="string" resultClass="Vprchs">
+		/* vprchs.selectPrchsDetailInfo 구매상세내역확인 */
+		SELECT
+			PRCHS_SEQ_NO,
+			PRCHS_USER_ID,
+			USER_NAME,
+			AGENCY_NAME,
+			FAMILY_ID,
+			GRADE,
+			GRADE_NAME,
+			RCMMD_ID,
+			RCMMD_NAME,
+			RCMMD_AGENCY_NAME,
+			RCMMD_FAMILY_ID,
+			RCMMD_GRADE,
+			RCMMD_GRADE_NAME,
+			PRCHS_DATE,
+			PRCHS_STAT_CD,
+			PRCHS_STAT_NAME,
+			CSMT_ID,
+			CSMT_KIND_CD,
+			CSMT_NAME,
+			CSMT_IMG,
+			CSMT_DESC,
+			CSMT_REG_YMD,
+			PUB_COMP,
+			PUB_DATE,
+			CSMT_PRICE,
+			PRCHS_CNT,
+			PRCHS_PRICE,
+			REPLACE(PRCHS_DET, ':', '<![CDATA[<br/>]]>') AS PRCHS_DET,
+			PAY_ACC,
+			DLVR_NAME,
+			DLVR_PHONE,
+			DLVR_ADDR,
+			DLVR_DATE,
+			DLVR_COMP_DATE,
+			PRCHS_COMP_DATE,
+			PRCHS_CNCL_DATE,
+			RMRKS,
+			AGENCY_ACCM_PNT,
+			SUBAGENCY_ACCM_PNT,
+			SUPAGENCY_ACCM_PNT
+		FROM
+			VPRCHS_ACCM
+		WHERE
+			PRCHS_SEQ_NO = #prchs_seq_no#
+	</select>
+</sqlMap>

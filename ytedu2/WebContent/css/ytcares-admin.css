@@ -1,0 +1,190 @@
+.ytcares-list, .ytcares-content {
+	margin:2px;
+	padding:0px;
+	width:745px;
+	overflow-x:hidden;
+	overflow-y:auto;
+	text-align:center;
+	position:relative;
+}
+.ytcares-list .item, .ytcares-list .header, .ytcares-list .paging, .ytcares-content .item, .ytcares-content .header{
+	margin:0px;
+	padding:1px;
+	list-style:none;
+	width:100%;
+	height:26px;
+	overflow:hidden;
+	clear:both;
+	vertical-align:middle;
+	text-align:left;
+	display:inline-block;
+	position:relative;
+}
+.ytcares-list .header {
+	padding:0px;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	font-weight:bold;
+	text-align:center;
+	height:34px;
+	background:url(/images/admin_header.gif) no-repeat;background-position:left top;
+}
+
+.ytcares-list .header li, .ytcares-content .header li {
+	font-size:11px;
+	font-family:"verdana", "tahoma";
+	font-weight:bold;
+	text-align:center;
+	display:inline-block;
+	vertical-align:middle;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.ytcares-content .header{
+	margin-top:0px;
+	margin-bottom:0px;
+	background-color:#e0e0ff;
+	border-bottom:5px groove #868699;
+	text-align: center;
+}
+.ytcares-content .item {background-color:#fffff5;height:26px;}
+.ytcares-content .item .label{
+	background-color:#e0e0ff;
+	border:1px solid #b8b8e6;
+	padding:0px 0px 0px 5px;
+	font-size:11px;
+}
+
+.ytcares-list .item {background-color:#ffffff;}
+.ytcares-list .item:nth-child(odd){
+	background-color:#ffffff;
+}
+
+.ytcares-list .item:nth-child(even){
+	background-color:#f5f5ff;
+}
+.ytcares-list .item:last-child {
+	border-bottom:1px solid #a6a6a6;
+}
+.ytcares-list .item:hover{background-color:#fffcf8;cursor:pointer;}
+.ytcares-list .item li, .ytcares-content .item li {
+	font-size:11px;
+	font-family:"verdana", "tahoma";
+	display:inline-block;
+	vertical-align:middle;
+	text-align:left;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+}
+
+.ytcares-list .paging {
+	width:100%;
+	list-style:none;
+	text-align:center;
+	border-top:3px double #b8b8b8;
+}
+.ytcares-list .paging li{display:inline;text-align:center;width:100%;}
+
+li.w20 {width:20px;}
+li.w30 {width:30px;}
+li.w40 {width:40px;}
+li.w50 {width:50px;}
+li.w60 {width:60px;}
+li.w70 {width:70px;}
+li.w80 {width:80px;}
+li.w90 {width:90px;}
+li.w100 {width:100px;}
+li.w110 {width:110px;}
+li.w120 {width:120px;}
+li.w130 {width:130px;}
+li.w140 {width:140px;}
+li.w150 {width:150px;}
+li.w160 {width:160px;}
+li.w170 {width:170px;}
+li.w180 {width:180px;}
+li.w190 {width:190px;}
+li.w200 {width:200px;}
+li.w210 {width:210px;}
+li.w220 {width:220px;}
+li.w230 {width:230px;}
+li.w240 {width:240px;}
+li.w250 {width:250px;}
+
+.ytcares-list .item li a {text-decoration:none;}
+.ytcares-list .item li a:hover {text-decoration:underline;}
+
+.ytcares-search {
+	margin:2px;
+	padding:0px;
+	width:748px;
+	text-align:left;
+	border:1px solid #c8c8c8;
+	border-radius:6px;
+	vertical-align:middle;
+	background-color:#f0f0f0;
+}
+
+.ytcares-search .search-condition {
+	margin:2px;
+	padding:0px;
+	list-style:none;
+	width:100%;
+	height:30px;
+	clear:both;
+	vertical-align:middle;
+	text-align:left;
+	display:inline-block;
+}
+
+.ytcares-search .search-condition li {
+	font-size:11px;
+	font-family:"verdana", "tahoma";
+	display:inline-block;
+	vertical-align:middle;
+	text-align:left;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+}
+
+li.search-name {
+	padding:0px 0px 0px 0px;
+	font-size:11px;
+	font-weight:bold;
+	background-color:#f0f0f0;
+	border:1px solid #f0f0f0;
+	color:#0F1F3D;
+}
+
+li.search-value {
+	font-size:11px;
+	text-align:left;
+}
+
+li.search-btn, li.clear-btn, li.action-btn {
+	display:inline;
+	text-align:right;
+	vertical-align:middle;
+	margin-right:5px;
+	float:right;
+
+}
+/*
+li.search-btn button, li.search-btn input[type=button], li.clear-btn button, li.clear-btn input[type=button]{
+	color:white;
+	font-weight:bold;
+	background-color:#336699;
+	border:1px outset #4775a3;
+	width:75px;
+}
+*/
+li.action-btn button, li.action-btn input[type=button] {}
+li.crud-btn {display:inline;text-align:center;vertical-align:middle;}
+/*
+li.search-btn button:hover, li.search-btn input[type=button]:hover, li.clear-btn button:hover, li.clear-btn input[type=button]:hover{
+	background-color:#7094b8;
+}
+*/
+.deleted-item {text-decoration:line-through;color:#cccccc;}

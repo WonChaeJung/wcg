@@ -1,0 +1,738 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="lecture">
+	<typeAlias alias="Lecture" type="com.ytcares.bean.TLectureBean"/>
+	<typeAlias alias="LectureApp" type="com.ytcares.bean.TLectureAppBean"/>
+	<typeAlias alias="LectureReq" type="com.ytcares.bean.TLectureReqBean"/>
+	<typeAlias alias="User" type="com.ytcares.bean.TUserBean"/>
+	
+	<select id="selectLecListCount" parameterClass="java.util.Map" resultClass="int">
+	/* lecture.selectLecListCount 교육일정건수조회 */
+		SELECT    COUNT(*) AS CNT
+		FROM
+			TLECTURE T
+		CROSS JOIN (
+			SELECT
+				TO_CHAR(TRUNC(NVL(TO_DATE(#defaultTime#, 'YYMM'), TRUNC(SYSDATE, 'MONTH')),'DAY'),'YYYYMMDD') AS STRT,
+				TO_CHAR(TRUNC(NVL(TO_DATE(#defaultTime#, 'YYMM'), TRUNC(SYSDATE, 'MONTH')),'DAY') + 41, 'YYYYMMDD') AS ED
+			FROM DUAL
+		) B
+		LEFT JOIN
+			TCODE C
+		ON
+			T.LEC_STAT_CD = C.DCODE_CD AND
+			C.MCODE_CD	= 'LT001'
+		WHERE
+			DLT_FLG = '0' AND
+			LEC_ST_DATE <![CDATA[<=]]> B.ED AND
+			LEC_ED_DATE <![CDATA[>=]]> B.STRT
+		ORDER BY
+			LEC_ST_DATE DESC,
+			LEC_ED_DATE DESC
+	</select>
+	
+	<select id="selectLecList" parameterClass="java.util.Map" resultClass="Lecture">
+	/* lecture.selectLecList 교육일정조회 */
+		SELECT
+			  LEC_SEQ_NO
+			, LEC_STAT_CD
+			, LEC_TITLE
+			, LEC_HOST
+			, TRIM(LEC_ST_DATE) AS LEC_ST_DATE
+			, TRIM(LEC_ED_DATE) AS LEC_ED_DATE
+			, LEC_TIME
+			, LEC_LOC
+			, LEC_MAN_CT
+			, LEC_SUBJ
+			, LEC_REQ_NO
+			, READ_CNT
+			, REG_DATE
+			, DLT_FLG
+		FROM
+			TLECTURE T
+		CROSS JOIN (
+		SELECT
+			TO_CHAR(TRUNC(NVL(TO_DATE(#defaultTime#, 'YYMM'), TRUNC(SYSDATE, 'MONTH')),'DAY'),'YYYYMMDD') AS STRT,
+			TO_CHAR(TRUNC(NVL(TO_DATE(#defaultTime#, 'YYMM'), TRUNC(SYSDATE, 'MONTH')),'DAY') + 41, 'YYYYMMDD') AS ED
+		FROM DUAL
+		) B
+		WHERE
+			DLT_FLG = '0' AND
+			LEC_ST_DATE <![CDATA[<=]]> B.ED AND
+			LEC_ED_DATE <![CDATA[>=]]> B.STRT
+		ORDER BY
+			LEC_SEQ_NO DESC,
+			LEC_ST_DATE DESC,
+			LEC_ED_DATE DESC
+	</select>
+	
+	<update id="updateLecListReadCount" parameterClass="java.util.Map">
+	/* lecture.updateLecListReadCount 교육상세 리드 카운트 증가*/
+	UPDATE
+		TLECTURE
+	SET
+		READ_CNT = READ_CNT + 1
+	WHERE
+		DLT_FLG = '0'
+	AND
+		LEC_SEQ_NO = #lec_seq_no#
+	</update>
+	
+	<select id="userSelectLectureInfo" parameterClass="java.util.Map" resultClass="Lecture">
+		/* lecture.userSelectLectureInfo 교육상세 */
+		SELECT
+			  LEC_SEQ_NO
+			, LEC_STAT_CD
+			, LEC_TITLE
+			, LEC_HOST
+			, LEC_ST_DATE
+			, LEC_ED_DATE
+			, LEC_TIME
+			, LEC_DESC
+			, LEC_DESC_IMG
+			, LEC_LOC
+			, LEC_MAN_CT
+			, LEC_SUBJ
+			, LEC_REQ_NO
+			, READ_CNT
+			, REG_DATE
+			, DLT_FLG
+		FROM
+			TLECTURE
+		WHERE
+			LEC_SEQ_NO	= #lec_seq_no# AND
+			DLT_FLG		= '0'
+
+	</select>
+	
+	<select id="selectLectureAppInfo" parameterClass="java.util.Map" resultClass="LectureApp">
+	/* lecture.selectLectureAppInfo 교육신청자 신청유무체크 */
+		SELECT
+			  LEC_SEQ_NO
+			, USER_ID
+		FROM
+			TLECTURE_APP
+		WHERE
+			LEC_SEQ_NO = #lec_seq_no#
+		AND
+			USER_ID LIKE #user_id#
+	</select>
+	
+	<insert id="memberInsertLecApp" parameterClass="java.util.Map">
+	/* lecture.memberInsertLecApp 교육상세 신청 */
+		INSERT INTO TLECTURE_APP(
+			  LEC_SEQ_NO
+			, USER_ID
+		)VALUES(
+			#lec_seq_no#
+			, #user_id#
+		)
+	</insert>
+	
+	<select id="selectLectureReqListCount" parameterClass="java.util.Map" resultClass="int">
+	/* lecture.selectLectureReqListCount 교육요청 리스트 건수조회*/
+	SELECT
+		COUNT(*) AS CNT
+	FROM
+		TLECTURE_REQ
+	WHERE
+		DLT_FLG = '0'
+	</select>
+	
+	<select id="selectLectureReqList" parameterClass="java.util.Map" resultClass="LectureReq">
+	/* lecture.selectLectureReqList 교육요청 리스트*/
+	SELECT
+		  LEC_REQ_NO
+		, LEC_REQ_TITLE
+		, LEC_REQ_DESC
+		, LEC_REQ_ID
+		, LEC_REQ_PASS
+		, LEC_REQ_DATE
+		, DLT_FLG
+		, CELL_PHONE
+		, EMAIL
+		, AGENCY_NAME
+	FROM
+		(SELECT
+			  LEC_REQ_NO
+			, LEC_REQ_TITLE
+			, LEC_REQ_DESC
+			, LEC_REQ_ID
+			, LEC_REQ_PASS
+			, LEC_REQ_DATE
+			, DLT_FLG
+			, ROW_NUMBER() OVER(ORDER BY LEC_REQ_NO DESC) AS RN
+		FROM
+			TLECTURE_REQ
+		) L
+		JOIN
+			(SELECT
+				  USER_ID
+				, USER_PASS
+				, USER_NAME
+				, AGENCY_NAME
+				, RCMMD_ID
+				, FAMILY_ID
+				, CELL_PHONE
+				, PHONE
+				, EMAIL
+				, ZIPCODE
+				, ADDR
+				, GRADE
+				, REG_DATE
+			FROM
+				TUSER
+			) U
+		ON
+			L.LEC_REQ_ID = U.USER_ID
+		WHERE
+			DLT_FLG = '0'
+		AND
+			RN BETWEEN #start# AND #end#
+		ORDER BY RN ASC
+	</select>
+	
+	<insert id="userInsertLecReq" parameterClass="java.util.Map">
+	/* lecture.userInsertLecReq 교육요청*/
+		INSERT INTO TLECTURE_REQ(
+			  LEC_REQ_NO
+			, LEC_REQ_TITLE
+			, LEC_REQ_DESC
+			, LEC_REQ_ID
+		)VALUES(
+			(SELECT
+				NVL(MAX(LEC_REQ_NO+1), 0)
+			FROM
+				TLECTURE_REQ)
+			, #lec_req_title#
+			, #lec_req_desc#
+			, #lec_req_id#
+		)
+	</insert>
+	
+	<select id="selectLectureReqInfo" resultClass="LectureReq">
+	/*lecture.selectLectureReqInfo 교육요청 상세*/
+	SELECT
+		  LEC_REQ_NO
+		, LEC_REQ_TITLE
+		, LEC_REQ_DESC
+		, LEC_REQ_ID
+		, LEC_REQ_PASS
+		, LEC_REQ_DATE
+		, DLT_FLG
+	FROM
+		TLECTURE_REQ
+	WHERE
+		DLT_FLG = '0'
+	AND
+		LEC_REQ_NO = #lec_req_no#
+	</select>
+	
+	<select id="adminSelectLectureListCount" resultClass="int">
+	/*lecture.adminSelectLectureListCount 교육등록 건수 조회*/
+	SELECT
+		COUNT(*) AS COUNT
+	FROM
+		TLECTURE
+	WHERE
+		DLT_FLG = '0'
+	</select>
+	
+	<select id="adminSelectLectureList" parameterClass="java.util.Map" resultClass="Lecture">
+	/*lecture.adminSelectLectureList 교육등록 리스트 조회*/
+	SELECT
+		  LEC_SEQ_NO
+		, LEC_STAT_CD
+		, LEC_TITLE
+		, LEC_HOST
+		, LEC_ST_DATE
+		, LEC_ED_DATE
+		, LEC_TIME
+		, LEC_DESC
+		, LEC_DESC_IMG
+		, LEC_LOC
+		, LEC_MAN_CT
+		, LEC_SUBJ
+		, LEC_REQ_NO
+		, READ_CNT
+		, REG_DATE
+		, DLT_FLG
+	FROM
+		(SELECT
+			  LEC_SEQ_NO
+			, LEC_STAT_CD
+			, LEC_TITLE
+			, LEC_HOST
+			, LEC_ST_DATE
+			, LEC_ED_DATE
+			, LEC_TIME
+			, LEC_DESC
+			, LEC_DESC_IMG
+			, LEC_LOC
+			, LEC_MAN_CT
+			, LEC_SUBJ
+			, LEC_REQ_NO
+			, READ_CNT
+			, REG_DATE
+			, DLT_FLG
+			, ROW_NUMBER() OVER(ORDER BY LEC_SEQ_NO DESC, LEC_ST_DATE DESC, LEC_ED_DATE DESC) AS RN
+		FROM
+			TLECTURE
+		WHERE
+			DLT_FLG = '0'
+		)
+	WHERE
+		RN BETWEEN #start# AND #end#
+	</select>
+	
+	<select id="adminSelectLecInfo" parameterClass="java.util.Map" resultClass="Lecture">
+	/*lecture.adminSelectLecInfo 교육등록 상세 조회*/
+	SELECT
+		  LEC_SEQ_NO
+		, LEC_STAT_CD
+		, LEC_TITLE
+		, LEC_HOST
+		, LEC_ST_DATE
+		, LEC_ED_DATE
+		, LEC_TIME
+		, LEC_DESC
+		, LEC_DESC_IMG
+		, LEC_LOC
+		, LEC_MAN_CT
+		, LEC_SUBJ
+		, LEC_REQ_NO
+		, READ_CNT
+		, REG_DATE
+		, DLT_FLG
+	FROM
+		TLECTURE
+	WHERE
+		LEC_SEQ_NO = #lec_seq_no#
+	AND
+		DLT_FLG = '0'
+	</select>
+	
+	<select id="adminSelectUserInfo" parameterClass="java.util.Map" resultClass="User">
+	/*lecture.adminSelectUserInfo 유저 가맹점명 획득(본사, 총판, 부총판)*/
+	SELECT
+		DISTINCT(AGENCY_NAME)
+	FROM
+		(SELECT
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+		FROM
+			TUSER
+		WHERE
+			GRADE BETWEEN 2 AND 4
+		)
+	</select>
+	
+	<insert id="adminInsertLecInfo" parameterClass="java.util.Map">
+	/*lecture.adminInsertLecInfo 교육등록 등록*/
+	INSERT INTO TLECTURE(
+		  LEC_SEQ_NO
+		, LEC_STAT_CD
+		, LEC_TITLE
+		, LEC_HOST
+		, LEC_ST_DATE
+		, LEC_ED_DATE
+		, LEC_TIME
+		, LEC_DESC
+		, LEC_LOC
+	<dynamic>
+		<isNotEmpty property="lec_desc_img">
+		, LEC_DESC_IMG
+		</isNotEmpty>
+	</dynamic>
+	)VALUES(
+		  (SELECT
+				NVL(MAX(LEC_SEQ_NO+1), 0)
+			FROM
+				TLECTURE)
+		, #lec_stat_cd#
+		, #lec_title#
+		, #lec_host#
+		, #lec_st_date#
+		, #lec_st_date#
+		, #lec_time#
+		, #lec_desc#
+		, #lec_loc#
+	<dynamic>
+		<isNotEmpty property="lec_desc_img">
+		, #lec_desc_img#
+		</isNotEmpty>
+	</dynamic>
+	)
+	</insert>
+	
+	<update id="adminUpdateLecInfo" parameterClass="java.util.Map">
+	/*lecture.adminUpdateLecInfo 교육등록 수정*/
+	UPDATE
+		TLECTURE
+	SET
+		  LEC_STAT_CD = #lec_stat_cd#
+		, LEC_TITLE = #lec_title#
+		, LEC_HOST = #lec_host#
+		, LEC_ST_DATE = #lec_st_date#
+		, LEC_ED_DATE = #lec_st_date#
+		, LEC_TIME = #lec_time#
+		, LEC_DESC = #lec_desc#
+		, LEC_LOC = #lec_loc#
+		<dynamic>
+			<isNotEmpty  property="lec_desc_img" prepend=", ">
+				LEC_DESC_IMG = #lec_desc_img#
+			</isNotEmpty>
+		</dynamic>
+	WHERE
+		LEC_SEQ_NO = #lec_seq_no#
+	</update>
+	
+	<delete id="adminDeleteLecInfo" parameterClass="java.util.Map">
+	/*lecture.adminDeleteLecInfo 교육등록 삭제*/
+	UPDATE
+		TLECTURE
+	SET
+		DLT_FLG = '1'
+	WHERE
+		LEC_SEQ_NO = #lec_seq_no#
+	</delete>
+	
+	<select id="adminSelectLecAppListCount" resultClass="int">
+	/*lecture.adminSelectLecAppListCount 교육신청자 수 조회*/
+	SELECT
+		COUNT(*) AS COUNT
+	FROM
+		TLECTURE_APP
+	WHERE
+		LEC_SEQ_NO = #lec_seq_no#
+	</select>
+	
+	<select id="adminSelectLecAppList" parameterClass="java.util.Map" resultClass="LectureApp">
+	/*lecture.adminSelectLecAppList 교육신청자 리스트 조회*/
+	SELECT
+		  LEC_SEQ_NO
+		, APP_DATE
+		, APP_STAT_CD
+		, RMRKS
+		, A.USER_ID AS USER_ID
+		, AGENCY_NAME
+		, CELL_PHONE
+		, EMAIL
+		, RN
+	FROM
+		(SELECT
+			  LEC_SEQ_NO
+			, USER_ID
+			, APP_DATE
+			, APP_STAT_CD
+			, RMRKS
+			, ROW_NUMBER() OVER(ORDER BY APP_DATE DESC) AS RN
+		FROM
+			TLECTURE_APP
+		WHERE
+			LEC_SEQ_NO = #lec_seq_no#
+		) A
+	JOIN
+		(SELECT
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+		FROM
+			TUSER
+		) U
+	ON
+		A.USER_ID = U.USER_ID
+	WHERE
+		RN BETWEEN #start# AND #end#
+	ORDER BY RN ASC
+	</select>
+	
+	<update id="adminUpdateLecAppInfo" parameterClass="java.util.Map">
+	/*lecture.adminUpdateLecAppInfo 교육 신청자 정보 수정*/
+	MERGE INTO TLECTURE_APP A
+	USING TLECTURE L
+	ON (
+		A.LEC_SEQ_NO = L.LEC_SEQ_NO AND
+		A.LEC_SEQ_NO = #lec_seq_no# AND
+		A.USER_ID = #user_id# AND
+		L.DLT_FLG = '0'
+	)
+	WHEN MATCHED THEN
+	UPDATE SET
+		A.APP_STAT_CD = #app_stat_cd#,
+		A.RMRKS = #rmrks#
+	</update>
+	
+	<select id="adminSelectLecReqInfo" parameterClass="java.util.Map" resultClass="LectureReq">
+	/*lecture.adminSelectLecReqInfo 교육 요청자 정보 조회*/
+	SELECT
+		  LEC_REQ_NO
+		, LEC_REQ_TITLE
+		, LEC_REQ_DESC
+		, LEC_REQ_ID
+		, LEC_REQ_PASS
+		, LEC_REQ_DATE
+		, DLT_FLG
+		, AGENCY_NAME
+		, CELL_PHONE
+		, EMAIL
+	FROM
+		(SELECT
+			  LEC_REQ_NO
+			, LEC_REQ_TITLE
+			, LEC_REQ_DESC
+			, LEC_REQ_ID
+			, LEC_REQ_PASS
+			, LEC_REQ_DATE
+			, DLT_FLG
+		FROM
+			TLECTURE_REQ
+		) R
+	JOIN
+		(SELECT
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+		FROM
+			TUSER
+		) U
+	ON
+		R.LEC_REQ_ID = U.USER_ID
+	WHERE
+		R.LEC_REQ_NO = #lec_req_no#
+	AND
+		DLT_FLG = '0'
+	</select>
+	
+	<update id="adminDeleteLecReq" parameterClass="java.util.Map">
+	/*lecture.adminDeleteLecReq 교육 요청 개설 삭제*/
+	UPDATE
+		TLECTURE_REQ
+	SET
+		DLT_FLG = '1'
+	WHERE
+		LEC_REQ_NO = #lec_req_no#
+	</update>
+	
+	
+	<select id="agencySelectLectureCount" parameterClass="string" resultClass="int">
+	/*lecture.agencySelectLectureCount 본인이 교육주체인 교육건수 조회(교육주체 eq 가맹점명)*/
+	SELECT
+		COUNT(*) AS COUNT
+	FROM
+		TLECTURE
+	WHERE
+		LEC_HOST	= #lec_host# AND
+		DLT_FLG		= '0'
+	</select>
+	
+	<select id="agencySelectLectureList" parameterClass="java.util.Map" resultClass="Lecture">
+	/*lecture.agencySelectLectureList 본인이 교육주체인 교육리스트 조회(교육주체 eq 가맹점명)*/
+	SELECT
+		L.LEC_SEQ_NO,
+		L.LEC_STAT_CD,
+		C.CODE_NM1 AS LEC_STAT_NM,
+		L.LEC_TITLE,
+		L.LEC_HOST,
+		TO_CHAR(TO_DATE(L.LEC_ST_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS LEC_ST_DATE,
+		TO_CHAR(TO_DATE(L.LEC_ED_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS LEC_ED_DATE,
+		L.LEC_TIME,
+		L.LEC_DESC,
+		L.LEC_DESC_IMG,
+		L.LEC_LOC,
+		L.LEC_MAN_CT,
+		L.LEC_SUBJ,
+		L.LEC_REQ_NO,
+		L.READ_CNT,
+		L.REG_DATE
+	FROM (
+		SELECT
+			LEC_SEQ_NO,
+			LEC_STAT_CD,
+			LEC_TITLE,
+			LEC_HOST,
+			TRIM(LEC_ST_DATE) AS LEC_ST_DATE,
+			TRIM(LEC_ED_DATE) AS LEC_ED_DATE,
+			LEC_TIME,
+			LEC_DESC,
+			LEC_DESC_IMG,
+			LEC_LOC,
+			LEC_MAN_CT,
+			LEC_SUBJ,
+			LEC_REQ_NO,
+			READ_CNT,
+			REG_DATE,
+			ROW_NUMBER() OVER(ORDER BY LEC_SEQ_NO DESC) AS RN
+		FROM
+			TLECTURE
+		WHERE
+			LEC_HOST	= #lec_host# AND
+			DLT_FLG		= '0'
+		) L
+	LEFT JOIN
+		TCODE C
+	ON
+		L.LEC_STAT_CD	= C.DCODE_CD AND
+		C.MCODE_CD		= 'LT001'
+	WHERE
+		L.RN BETWEEN #start# AND #end#
+	ORDER BY
+		L.RN
+	</select>
+	
+	<select id="agencySelectLecAppCount" parameterClass="java.util.Map" resultClass="int">
+	/* lecture.agencySelectLecAppCount 본인이 교육주체인 교육의 신청자 수 조회 */
+	/* (타유저가 파라미터를 임의변경하여 조회하는 것을 막기위해 lec_host조건추가,  lec_host는 세션값) */
+	SELECT
+		COUNT(*) AS COUNT
+	FROM
+		TLECTURE L
+	JOIN
+		TLECTURE_APP A
+	ON
+		L.LEC_SEQ_NO	= A.LEC_SEQ_NO
+	WHERE
+		L.LEC_SEQ_NO 	= #lec_seq_no# AND
+		L.LEC_HOST		= #lec_host# AND
+		L.DLT_FLG		= '0'
+	</select>
+	
+	<select id="agencySelectLecAppList" parameterClass="java.util.Map" resultClass="LectureApp">
+	/*lecture.agencySelectLecAppList 교육신청자 리스트 조회*/
+	/* (타유저가 파라미터를 임의변경하여 조회하는 것을 막기위해 lec_host조건추가,  lec_host는 세션값) */
+	SELECT
+		L.LEC_SEQ_NO,
+		L.USER_ID,
+		L.APP_DATE,
+		L.APP_STAT_CD,
+		L.RMRKS,
+		U.USER_NAME,
+		U.AGENCY_NAME,
+		U.RCMMD_ID,
+		U.FAMILY_ID,
+		U.CELL_PHONE,
+		U.PHONE,
+		U.EMAIL,
+		U.ZIPCODE,
+		U.ADDR,
+		U.GRADE,
+		C.CODE_NM1 AS GRADE_NM,
+		U.REG_DATE,
+		L.RN
+	FROM (
+		SELECT
+			A.LEC_SEQ_NO,
+			A.USER_ID,
+			A.APP_DATE,
+			A.APP_STAT_CD,
+			A.RMRKS,
+			ROW_NUMBER() OVER(ORDER BY A.APP_DATE DESC) AS RN
+		FROM
+			TLECTURE L
+		JOIN
+			TLECTURE_APP A
+		ON
+			L.LEC_SEQ_NO	= A.LEC_SEQ_NO
+		WHERE
+			L.LEC_SEQ_NO 	= #lec_seq_no# AND
+			L.LEC_HOST		= #lec_host# AND
+			L.DLT_FLG		= '0'
+	) L
+	LEFT JOIN
+		TUSER U
+	ON
+		L.USER_ID = U.USER_ID
+	LEFT JOIN
+		TCODE C
+	ON
+		U.GRADE		= C.DCODE_CD AND
+		C.MCODE_CD	= 'CM001'
+	WHERE
+		RN BETWEEN #start# AND #end#
+	ORDER BY
+		RN
+	</select>
+	
+	<update id="userUpdateLecApp" parameterClass="java.util.Map">
+		/*lecture.userUpdateLecApp 교육신청자 상태 갱신*/
+		MERGE INTO TLECTURE_APP A
+		USING TLECTURE L
+		ON (
+			A.LEC_SEQ_NO  = L.LEC_SEQ_NO AND
+			A.LEC_SEQ_NO  = #lec_seq_no# AND
+			A.USER_ID     = #user_id# AND
+			L.DLT_FLG     = '0' AND
+			L.LEC_HOST    = #lec_host#
+		)
+		WHEN MATCHED THEN
+		UPDATE SET
+			A.APP_STAT_CD = #app_stat_cd#,
+			A.RMRKS       = #rmrks#
+	</update>
+	
+	<select id="selectMainLectureList" parameterClass="java.util.Map" resultClass="Lecture">
+		/* lecture.selectMainLectureList 메인화면 캘린더 갱신용(AJAX) */
+		SELECT
+			LEC_SEQ_NO,
+			LEC_STAT_CD, 
+			LEC_TITLE,
+			LEC_HOST, 
+			LEC_ST_DATE, 
+			TO_CHAR(TO_DATE(LEC_ST_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS LEC_START, 
+			LEC_ED_DATE, 
+			TO_CHAR(TO_DATE(LEC_ED_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS LEC_END,
+			LEC_TIME,
+			LEC_LOC
+		FROM
+			TLECTURE T
+		CROSS JOIN (
+			SELECT
+				TO_CHAR(TRUNC(NVL(TO_DATE(#defaultTime#, 'YYMM'), TRUNC(SYSDATE, 'MONTH')),'DAY'),'YYYYMMDD') AS STRT,
+				TO_CHAR(TRUNC(NVL(TO_DATE(#defaultTime#, 'YYMM'), TRUNC(SYSDATE, 'MONTH')),'DAY') + 41, 'YYYYMMDD') AS ED
+			FROM DUAL
+		) B
+		WHERE
+			DLT_FLG = '0' AND
+			LEC_ST_DATE <![CDATA[<=]]>  B.ED AND
+			LEC_ED_DATE <![CDATA[>=]]>  B.STRT
+		ORDER BY
+			LEC_ST_DATE DESC,
+			LEC_ED_DATE DESC
+	
+	</select>
+</sqlMap>

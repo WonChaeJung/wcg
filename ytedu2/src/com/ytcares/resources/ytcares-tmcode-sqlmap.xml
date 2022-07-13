@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="mcode">
+	<typeAlias alias="Mcode" type="com.ytcares.bean.TMcodeBean" />
+	
+	<select id="selectMCodeList" parameterClass="string" resultClass="Mcode">
+		/* mcode.selectCodeList 마스터코드 선택 */
+		SELECT
+			MCODE_CD,
+			MCODE_NM,
+			RMRKS
+		FROM
+			TMCODE
+		WHERE
+			1 = 1
+		<dynamic>
+			<isEmpty prepend="AND">
+			MCODE_CD LIKE 'OP'||'%'
+			</isEmpty>
+		</dynamic>
+		ORDER BY
+			MCODE_CD
+	</select>
+	
+	<select id="selectMCodeMax">
+	/*mcode.selectMCodeMax 가장 최근에 삽입된 마스터 옵션의 코드 가져오는 부분*/
+	   SELECT
+        'OP'||LPAD(NVL(MAX(SUBSTR(MCODE_CD, -3)), 0), 3, '0') AS MCODE_ID
+       FROM
+        TMCODE
+       WHERE
+        MCODE_CD LIKE 'OP'||'%'
+	</select>
+	<insert id="insertMCode" parameterClass="java.util.Map">
+		INSERT INTO TMCODE (
+			MCODE_CD,
+			MCODE_NM,
+			RMRKS
+		) VALUES (
+			#mcode_cd#,
+			#mcode_nm#,
+			#rmrks#
+		)
+	</insert>
+	
+	<insert id="insertMCodeInfo" parameterClass="Mcode">
+        INSERT INTO TMCODE (
+            MCODE_CD,
+            MCODE_NM,
+            RMRKS
+        ) VALUES (
+            (SELECT
+                'OP'||LPAD(NVL(MAX(SUBSTR(MCODE_CD, -3)), 0) + 1, 3, '0') AS MCODE_ID
+              FROM
+                TMCODE
+              WHERE
+                MCODE_CD LIKE 'OP'||'%'),
+            #mcode_nm#,
+            #rmrks#
+        )
+    </insert>
+	<update id="updateMCode" parameterClass="java.util.Map">
+		UPDATE TMCODE
+		SET
+			MCODE_NM	= #mcode_nm#,
+			RMRKS		= #rmrks#
+		WHERE
+			MCODE_CD	= #mcode_cd#
+	</update>
+	
+	<delete id="deleteMCode" parameterClass="java.util.Map">
+		DELETE
+		FROM
+			TMCODE
+		WHERE
+			MCODE_CD = #mcode_cd#
+	</delete>
+</sqlMap>

@@ -1,0 +1,842 @@
+@charset "euc-kr";
+@import url("non_sign.css");
+/* NHN WebStandardization Team (http://html.nhndesign.com/), JCM 071130~080424 */
+
+/*
+URL 찾아바꾸기 정보
+로컬 UI 개발용 경로 : https://static.nid.naver.com/images/user/img/
+서버 실제 경로 : https://static.nid.naver.com/images/user/images/join2/
+html {
+    filter: expression(document.execCommand('BackgroundImageCache', false, true));
+}
+*/
+
+
+/* Default Type Selector */
+*{ margin:0; padding:0; font-size:12px; font-family:"돋움", Dotum, "굴림", Gulim, AppleGothic, Sans-serif;}
+img,
+fieldset{ border:none;}
+legend{ display:none;}
+a{ text-decoration:none;}
+a:hover{ text-decoration:underline;}
+li{ list-style:none;}
+em,
+address{ font-style:normal;}
+button{ cursor:pointer; _cursor /**/:hand;}
+.vm{vertical-align:middle !important}
+.t select {font-size:11px !important} 
+.t strong {font-weight:normal;-webkit-text-stroke-width:0.03em} 
+input[type=image],input[type=text],input[type=submit],input[type=password]{-webkit-appearance:none;-webkit-border-radius:0}
+
+/* Layout */
+#wrap{ text-align:center;}
+#header{ padding:63px 0 0 0; margin:0 auto; width:682px; height:37px; _height /**/:100px; position:relative; text-align:left;}
+#header h1 *{ vertical-align:top;}
+#gnb{ overflow:hidden; position:absolute; top:74px; right:-2px;}
+#gnb li{ background:url(https://static.nid.naver.com/images/user/images/join2/line_vr10_da.gif) no-repeat 0 1px; padding:0 6px 0 7px; float:left; position:relative; left:-1px;}
+#gnb a{ color:#444444; font-size:11px; letter-spacing:-1px;}
+#path{ background:#5bb342 url(https://static.nid.naver.com/images/user/images/join2/bg_path.gif) no-repeat center top; overflow:hidden; width:100%; height:100px;}
+#path ol{ width:750px; margin:0 auto; padding:23px 0 0 0;}
+#path li{ text-align:center; float:left; width:125px;}
+#path li img{behavior:url(../js/iepngfix.htc);}
+#content{ width:670px; padding:50px 0; margin:0 auto; text-align:left;}
+.path4 ol{ width:836px !important; margin:0 auto; padding:23px 0 0 0;}
+.path4 li{ text-align:center; float:left; width:209px !important;}
+.path5 ol{ width:785px !important; margin:0 auto; padding:23px 0 0 0;}
+.path5 li{ text-align:center; float:left; width:157px !important;}
+
+/* Footer */
+/* 090918 Footer CSS 전체 수정 */
+#footer {clear:both; margin:0 auto; padding:22px 0 30px 0; border-top:1px solid #dedede; text-align:center;} /* 091012 margin값 수정 */
+#footer * {margin:0; padding:0; color:#333; list-style:none; font-size:11px; font-style:normal; font-family:"나눔고딕", NanumGothic, "돋움", Dotum, "굴림", Gulim, AppleGothic, Sans-serif; line-height:normal;}
+#footer a {text-decoration:none; color:#333;}
+#footer a:visited {text-decoration:none; color:#666;}
+#footer a:hover {text-decoration:underline;}
+#footer ul {margin:0 0 9px 0;}
+#footer ul li {display:inline; position:relative; padding:0 5px 0 7px; font-size:11px; background:url(https://static.nid.naver.com/images/user/images/join2/bu_bar.gif) left 50% no-repeat; _background-position:left 10%; white-space:nowrap;}
+#footer ul li a:hover,
+#footer ul li a:hover strong {color:#438a01;}
+#footer ul li.first {background:none; padding:0 3px 0 0;}
+#footer .info {margin:0 0 11px 0; color:#7e7e7e; font-size:11px; line-height:15px;}
+#footer .info2 {margin:-3px 0 13px 0; font-size:11px; line-height:18px;}
+#footer .info2 span {display:inline-block; margin-left:2px; padding-left:7px; font-size:11px; background:url(https://static.nid.naver.com/images/user/images/join2/bu_bar.gif) 1px 50% no-repeat; _background-position:left 10%;}
+#footer address {font:9px/14px Verdana;}
+#footer address img {margin-right:6px; vertical-align:middle;}
+#footer address a {font:bold 9px Tahoma; color:#333;}
+#footer address a:hover {color:#009bc8;}
+#footer address span {padding-left:2px; font:9px/14px Verdana;}
+#footer address em {padding-left:6px; font:9px verdana;}
+#footer address .logo {display:inline-block; *display:inline; vertical-align:top; *vertical-align:baseline;}
+/* //090918 */
+/* 091012 */
+.w670{width:670px;}
+
+
+/* Common */
+.cnt_header{ border-bottom:2px solid #e5e5e5; clear:both; height:21px; position:relative; _top:-2px;}
+.cnt_header h2{ height:21px; float:left; clear:both; border-bottom:2px solid #4d4d4d; padding:0 1px; position:relative; _top:2px;}
+.cnt_header h2 img{ display:block;}
+.cnt_desc{padding:9px 0 38px 0;color:#666}
+.cnt_desc2{padding:9px 0 24px 0;color:#666}
+.cnt_desc *{ vertical-align:top;}
+.btn_area{ text-align:center;}
+.btn_area * { vertical-align:top;}
+.btn_area input{ margin:0 1px 0 0;}
+/* 100311 추가 */
+.btn_area .mkhome {margin:-5px 0 15px 0; text-align:left; color:#333}
+.btn_area .mkhome input {margin-right:5px; *margin:-5px 3px 5px 0}
+/* //100311 추가 */
+
+.cnt_footer{ border-top:1px solid #e5e5e5; height:51px; position:relative; background:url(https://static.nid.naver.com/images/user/images/join2/line_vr10_e5.gif) no-repeat 74px 0;}
+.cnt_footer .icon{ position:absolute; top:9px; left:20px;}
+.cnt_footer .desc{ position:absolute; top:20px; left:95px;}
+.caution{ position:relative; padding:30px 0 0 0; margin:0 0 45px 0; width:100%;}
+.caution h3{ color:#ff6c00; height:19px; position:static !important;}
+.caution p{ line-height:18px; color:#333333;}
+.caution p a {color:#3aa013;}
+.caution .certification{ position:absolute; right:-2px; bottom:-1px; padding:0 0 0 7px; text-decoration:none; color:#004790; background:url(https://static.nid.naver.com/images/user/images/join2/bu_arrow1.gif) no-repeat 0 6px; line-height:19px;}
+.caution .help{ position:absolute; right:-2px; bottom:2px; text-decoration:underline; color:#004790; font-size:11px;}
+.bx_certification{ display:none; border:1px solid #e5e5e5; background:#f9f9f9; text-align:center; letter-spacing:-1px; padding:30px 0 30px 0; margin:-38px 0 50px 0;}
+.bx_certification p{ margin:0 0 17px 0; color:#333333;}
+.bx_certification .help{ font-size:11px; text-decoration:underline; color:#004790; position:relative; left:2px; top:-1px;}
+.bx_certification a{ margin:0 2px 0 0;}
+.destination{ width:0; height:0; overflow:hidden; font-size:0; line-height:0;}
+.mb50{ margin-bottom:50px;}
+.mb0{ margin-bottom:0 !important;}
+.section{ position:relative; margin-bottom:50px; *zoom:1;}
+
+/* Content */
+#entry{ background:url(https://static.nid.naver.com/images/user/images/join2/bg_main.gif) repeat-x 0 399px;}
+#entry #header{ padding:19px 0 0 0; width:774px; height:258px; _height /**/:277px; position:relative;}
+#entry #gnb{ top:7px; right:21px;}
+#entry #header p{ padding:6px 0 0 29px;}
+#entry #footer{width:720px; margin:0 auto;}
+#entry #menu{ white-space:nowrap; padding:25px 0 0 0; text-align:center; height:97px; _height /**/:122px; background:#5cb342 url(https://static.nid.naver.com/images/user/images/join2/bg_menu.gif) no-repeat center top;}
+#entry #menu li{ display:inline; margin:0 -4px 0 0;}
+#entry #content{ position:relative; width:738px;padding:18px 0 0 0}
+#entry #content dd{ padding:5px 0 0 10px;}
+
+.joinintro_lst{padding:18px 0 51px} 
+.joinintro_lst .item1{padding-bottom:16px} 
+.joinintro_lst .item2{padding-bottom:45px}
+
+#agreement legend{ display:block; padding:0 0 8px 1px; _margin:0 0 0 -7px;}
+#agreement .field1{ margin:0 0 10px 0;}
+#agreement .field1 legend,
+#agreement .field2 legend{ display:block;}
+#agreement .bx{position:relative; height:111px; padding:20px 18px 0 20px; margin:0 0 8px 0; border:1px solid #e5e5e5; overflow:auto; scrollbar-base-color: #d9d9d9; scrollbar-3dlight-color: #d9d9d9; scrollbar-darkshadow-color: #d9d9d9; scrollbar-face-color: #d9d9d9; scrollbar-highlight-color: #d9d9d9; scrollbar-shadow-color: #d9d9d9; scrollbar-track-color: #f2f2f2;-webkit-overflow-scrolling:touch}
+.t .bx::-webkit-scrollbar{overflow:visible;width:6px;margin-right:10px;background:transparent}
+.t .bx::-webkit-scrollbar-thumb{background-color:rgba(45,70,97,0.3);-webkit-border-radius:5px; min-height:20px;margin:0 5px 0 0}
+.t .bx::-webkit-scrollbar-thumb:hover{background-color:rgba(45,70,97,0.3)}
+.t .bx::-webkit-scrollbar-corner{background:transparent}
+#agreement .bx h3,
+#agreement .bx h4{ font-weight:normal;}
+#agreement .bx h3{ height:31px;}
+#agreement .bx h4,
+#agreement .bx p,
+#agreement .bx li{ line-height:16px;}
+#agreement .bx p,
+#agreement .bx ol,
+#agreement .bx ul{ margin:0 0 16px 0;}
+#agreement .bx ul ul{margin-top:10px;}
+#agreement .bx ul ul ul{margin-top:0;}
+#agreement .check{ margin:0 0 20px 0;}
+#agreement .check input{ _margin:-4px; vertical-align:middle;}
+*:first-child+html #agreement .check input{ margin:-4px;}
+#agreement .check label{ position:relative; top:1px; _top:2px; padding:0 0 0 3px;}
+
+#realname #content{position:relative;z-index:10;padding-bottom:0;}
+#realname .tab{position:relative;width:666px;margin:0 0 0;padding:23px 0 0}
+#realname .tab li{ display:inline;}
+#realname .tab h3{ display:block; position:absolute; top:0; }
+#realname .tab h3 a{ display:block; background:url(https://static.nid.naver.com/images/user/images/join2/bu_radio_off.gif) no-repeat; padding:0 11px 0 17px;}
+#realname .tab h3 a#tab1_btn{ background:url(https://static.nid.naver.com/images/user/images/join2/bu_radio_on.gif) no-repeat;}
+#realname .tab #tab1 h3{ left:0;}
+#realname .jr .tab #tab2 h3{ left:137px;}
+#realname .jr .tab #tab2 h3.h_ipin,#realname .tab #tab2 h3.h_ipin{left:189px}
+#realname .tab .bx{ position:relative; display:none; clear:both; width:100%; padding:29px 0 30px 0; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom;}
+#realname .tab .bx#cnt_name{ display:block;}
+#realname .tab #cnt_name2_caution{ display:none !important;}
+#realname .tab #cnt_ipin2_caution{ display:block !important;}
+#realname .tab .bx#cnt_ipin2{ display:block;}
+#realname .tab .bx .help{ position:absolute; top:-26px; right:0px; font-size:11px; text-decoration:underline; color:#004790; letter-spacing:-1px;}
+#realname .tab .bx .help2{position:absolute;top:-24px;right:0;font-size:11px;color:#004790;letter-spacing:-1px;text-decoration:underline}
+#realname .tab .bx dl{ padding:0 0 30px 100px; background:url(https://static.nid.naver.com/images/user/images/join2/line_hr670.gif) no-repeat left bottom;}
+#realname .tab .bx dl *{ vertical-align:top;}
+#realname .tab .bx dt,#realname .tab .bx dd{display:inline}
+#realname .tab .bx dt{ margin:0 3px 0 0;}
+#realname .tab .bx dt img{ position:relative; top:6px;}
+#realname .tab .bx dd{ margin:0 21px 0 0;}
+#realname .tab .bx dd span{ margin:0 5px 0 4px; position:relative; top:7px; font-size:13px;}
+#realname .tab .bx dl input{ width:96px; padding:3px 0 2px 5px; border:2px solid #cccccc; font-size:14px; font-weight:bold; color:#333333;}
+.t #realname .tab .bx dl input {font-weight:normal;-webkit-text-stroke-width:0.03em}
+#realname .tab #tab1 .bx .desc{ padding:20px 20px 15px 46px; line-height:18px; background:url(https://static.nid.naver.com/images/user/images/join2/ico_caution.gif) no-repeat 17px 18px; color:#333333; text-align:justify}
+
+#realname .tab #tab1 .bx .desc em{ font-size:11px; color:#ff6c00;}
+#realname .tab #tab1 .bx .noti{padding:20px 20px 0 46px; line-height:18px; text-align:justify} 
+#realname .tab #tab1 .bx .noti strong{color:#ff6c00;} 
+#realname .tab #tab2 .bx .desc{ line-height:18px; text-align:center; padding:0 0 15px 0; margin:-1px 0 0 0;}
+#realname .tab #cnt_passport dd span{margin:0}
+
+#realname .fr .tab{margin:0 0 50px} 
+#realname .fr .tab #tab2 h3{left:108px} 
+#realname .fr .tab #tab1 .bx dl{ padding:0 0 30px 30px;}
+#realname .fr .tab #tab1 .bx dd{ margin:0 6px 0 0;}
+#realname .fr .tab #tab2 .bx dl{ padding:0 0 30px 84px;}
+#realname .fr .tab #tab1 .bx .desc, #realname .fr .tab #tab2 .bx .desc{clear:both;margin:0;padding:20px 20px 15px 46px;background:url(https://static.nid.naver.com/images/user/images/join2/ico_caution.gif) no-repeat 17px 18px;color:#333;line-height:18px;text-align:justify}
+#realname .fr .tab .bx .desc em{font-size:11px; color:#ff6c00;}
+#realname .fr .tab .bx dl .fr_w{ width:154px;}
+#realname .fr .tab .caution{ display:none;}
+#realname .fr .tab #tab1 .caution{ display:block;}
+
+#realname .fr .tab #tab2 .bx dl.foreigner_name {padding:0 0 22px 159px} 
+#realname .fr .tab #tab2 .bx dl.foreigner_name dt{display:block;position:absolute;width:115px;margin-bottom:9px} 
+#realname .fr .tab #tab2 .bx dl.foreigner_name dd{display:block;width:360px;margin-bottom:9px;padding-left:115px} 
+#realname .fr .tab #tab2 .bx dl.foreigner_name dd .fr_w {width:224px;}
+#realname .fr .tab #tab2 .bx dl.foreigner_name dd select {width:67px; height:22px; margin-right:2px}
+
+#realname .jr h3{ margin:0 0 10px 0}
+#realname .jr .bx{clear:both;position:relative;width:666px;margin:0 0 40px;padding:29px 0 30px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#realname .jr .bx .help{ position:absolute; top:-24px; right:-2px; font-size:11px; text-decoration:underline; color:#004790; letter-spacing:-1px;}
+#realname .jr .bx dl{ padding:0 0 30px 100px; background:url(https://static.nid.naver.com/images/user/images/join2/line_hr670.gif) no-repeat left bottom} 
+#realname .jr .bx dl *{ vertical-align:top} 
+#realname .jr .bx dt,
+#realname .jr .bx dd{ display:inline;}
+#realname .jr .bx dt{ margin:0 3px 0 0;}
+#realname .jr .bx dt img{ position:relative; top:6px;}
+#realname .jr .bx dd{ margin:0 21px 0 0;}
+#realname .jr .bx dd span{ margin:0 5px 0 4px; position:relative; top:7px; font-size:13px;}
+#realname .jr .bx dl input{ width:96px; padding:3px 0 2px 5px; border:2px solid #cccccc; font-size:14px; font-weight:bold; color:#333333;}
+.t #realname .jr .bx dl input{font-weight:normal;-webkit-text-stroke-width:0.03em}
+#realname .jr .bx .desc{ padding:20px 20px 15px 46px; line-height:18px; background:url(https://static.nid.naver.com/images/user/images/join2/ico_caution.gif) no-repeat 17px 18px; color:#333333; text-align:justify;}
+#realname .jr #tab2 .bx .desc{background:none;}
+#realname .jr .bx .desc em{ font-size:11px; color:#ff6c00;}
+#realname .cnt_footer{height:51px} 
+#realname .cnt_footer .icon{top:9px} 
+#realname .cnt_footer li{height:20px}
+
+#realname .jr .bx dl.rename_input{ padding:0 0 27px 130px; background:url(https://static.nid.naver.com/images/user/images/join2/line_hr670.gif) no-repeat left bottom}
+#realname .jr .bx .rename_input dt{float:left;width:158px;height:25px} 
+#realname .jr .bx .rename_input dd{display:block;margin-bottom:12px} 
+#realname .jr .bx .rename_input dd .re_name{width:165px}
+
+#realname .jr .bx .rename_input dd.nnumk{display:block;clear:both;margin-bottom:12px}
+#realname .jr .bx .rename_input dd.nnumk input{width:14px; height:14px; padding:0; border:0; vertical-align:top}
+#realname .jr .bx .rename_input dd.nnumk label{display:inline-block; margin:1px 0 0 5px; line-height:15px; vertical-align:top}
+#realname2 .bx{ position:relative; overflow:hidden; clear:both; width:666px; padding:28px 0 27px 0; margin:2px 0 0 0; text-align:center; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom;}
+#realname2 .bx .desc1{ line-height:18px; color:#333333; margin:0 0 15px 0;}
+#realname2 .bx .desc2{ color:#666666; font-size:11px; letter-spacing:-1px;}
+#realname2 .bx .desc2 .help{ position:relative; left:3px; color:#004790; text-decoration:underline; font-size:11px; letter-spacing:-1px;}
+#realname2 .bx .btn_area{ margin:0 0 30px 0;}
+#realname2 .bx .btn_area2{ margin:15px 0 0 0; text-align:center;}
+#realname2 .bx .desc p{line-height:18px;}
+
+#realname2 .jr{ padding-bottom:0;}
+#realname2 .jr .btn_area a{ margin:0 6px 0 0; position:relative; left:3px;}
+
+#realname2 .bx2{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 16px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%} 
+#realname2 .bx2 ul{overflow:hidden} 
+#realname2 .bx2 li{overflow:hidden;float:left;position:relative;left:-1px;width:181px;_width /**/:220px;height:169px;_height /**/:219px;padding:20px 20px 30px 21px;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr221.gif) no-repeat;letter-spacing:-1px;text-align:center} 
+#realname2 .bx2 li h3{margin:0 0 15px;padding:0 0 10px;border-bottom:4px solid #ededed} 
+#realname2 .bx2 li .desc1{margin:0 0 2px;color:#333;line-height:18px;white-space:nowrap} 
+#realname2 .bx2 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap} 
+#realname2 .bx2 li .btn_area{position:absolute;left:0;bottom:30px;width:222px} 
+#realname2 .bx2 li .btn_area a{position:relative;left:1px} 
+#realname2 .bx3{padding:20px 0 15px 19px;border:1px solid #e5e5e5;background:#f9f9f9;color:#333} 
+#realname2 .bx3 h4{padding-bottom:4px} 
+#realname2 .bx3 .desc{line-height:18px}
+
+#realname2 .bx4{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 16px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#realname2 .bx4 ul{overflow:hidden}
+#realname2 .bx4 li{overflow:hidden;float:left;position:relative;left:-1px;width:292px;height:152px;padding:20px 20px 30px 21px;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr185.gif) no-repeat;letter-spacing:-1px;text-align:center}
+#realname2 .bx4 li h3{width:183px;margin:0 auto 15px;padding:0 0 10px;border-bottom:4px solid #ededed}
+#realname2 .bx4 li .desc1{margin:0 0 2px;color:#333;line-height:18px;white-space:nowrap}
+#realname2 .bx4 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap}
+#realname2 .bx4 li .btn_area{position:absolute;left:0;bottom:20px;width:100%}
+#realname2 .bx4 li .btn_area a{position:relative;left:1px}
+#realname2 .bx4 .item1{border-bottom:1px solid #e5e5e5}
+#realname2 .bx4 .item2{border-bottom:1px solid #e5e5e5}
+
+
+/* box 안의 컨텐츠 갯수별 타입 */
+#realname2 .box1{overflow:hidden;clear:both;position:relative;width:334px;margin:0 auto 50px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#realname2 .box1 li{overflow:hidden;float:left;position:relative;width:204px;_width /**/:329px;height:169px;_height /**/:219px;padding:20px 64px 30px 65px;letter-spacing:-1px;text-align:center}
+#realname2 .box1 li h3{margin:0 0 15px;padding:0 0 10px;border-bottom:4px solid #ededed}
+#realname2 .box1 li .desc1{margin:0 0 9px;color:#333;line-height:18px;white-space:nowrap}
+#realname2 .box1 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap}
+#realname2 .box1 li .btn_area{position:absolute;left:64px;bottom:30px;width:204px}
+#realname2 .box1 li .btn_area a{position:relative;left:1px}
+ 
+#realname2 .box2{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 50px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#realname2 .box2 ul{overflow:hidden}
+#realname2 .box2 li{overflow:hidden;float:left;position:relative;left:-1px;width:204px;_width /**/:329px;height:169px;_height /**/:219px;padding:20px 64px 30px 65px;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr221.gif) no-repeat;letter-spacing:-1px;text-align:center}
+#realname2 .box2 li h3{margin:0 0 15px;padding:0 0 10px;border-bottom:4px solid #ededed}
+#realname2 .box2 li .desc1{margin:0 0 9px;color:#333;line-height:18px;white-space:nowrap}
+#realname2 .box2 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap}
+#realname2 .box2 li .btn_area{position:absolute;left:64px;bottom:30px;width:204px}
+#realname2 .box2 li .btn_area a{position:relative;left:1px}
+ 
+#realname2 .box3{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 16px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#realname2 .box3 ul{overflow:hidden}
+#realname2 .box3 li{overflow:hidden;float:left;position:relative;left:-1px;width:181px;_width /**/:220px;height:169px;_height /**/:219px;padding:20px 20px 30px 21px;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr221.gif) no-repeat;letter-spacing:-1px;text-align:center}
+#realname2 .box3 li h3{margin:0 0 15px;padding:0 0 10px;border-bottom:4px solid #ededed}
+#realname2 .box3 li .desc1{margin:0 0 2px;color:#333;line-height:18px;white-space:nowrap}
+#realname2 .box3 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap}
+#realname2 .box3 li .btn_area{position:absolute;left:0;bottom:30px;width:222px}
+#realname2 .box3 li .btn_area a{position:relative;left:1px}
+ 
+#realname2 .box4{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 16px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#realname2 .box4 ul{overflow:hidden}
+#realname2 .box4 li{overflow:hidden;float:left;position:relative;left:-1px;width:292px;height:152px;padding:20px 20px 30px 21px;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr185.gif) no-repeat;letter-spacing:-1px;text-align:center}
+#realname2 .box4 li h3{width:183px;margin:0 auto 15px;padding:0 0 10px;border-bottom:4px solid #ededed}
+#realname2 .box4 li .desc1{margin:0 0 2px;color:#333;line-height:18px;white-space:nowrap}
+#realname2 .box4 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap}
+#realname2 .box4 li .btn_area{position:absolute;left:0;bottom:20px;width:100%}
+#realname2 .box4 li .btn_area a{position:relative;left:1px}
+#realname2 .box4 .item1{border-bottom:1px solid #e5e5e5}
+#realname2 .box4 .item2{border-bottom:1px solid #e5e5e5}
+/* //box 안의 컨텐츠 갯수별 타입 */
+  
+.realname2_notice_section{padding-bottom:21px;color:#333} 
+.realname2_notice_section h3{padding-bottom:6px;color:#ff6c00} 
+.realname2_notice_section .link{color:#004790;text-decoration:underline} 
+
+
+#realname3 h3{ margin:0 0 10px 0;}
+#realname3 .cnt_desc{ padding-bottom:40px;}
+#realname3 .bx{ position:relative; clear:both; width:666px; padding:28px 0 25px 0; margin:2px 0 20px 0; text-align:center; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom;}
+#realname3 .bx .notice{ color:#666666; font-size:11px; position:absolute; top:-24px; right:-2px; letter-spacing:-1px;}
+#realname3 .bx .notice a{ color:#024792; font-size:11px; text-decoration:underline;}
+#realname3 .bx ul{ padding:2px 0 20px 0; background:url(https://static.nid.naver.com/images/user/images/join2/line_hr670.gif) no-repeat left bottom;}
+#realname3 .bx ul li{ margin:0 0 10px 0;}
+#realname3 .bx ul a{ font-weight:bold; color:#014691; text-decoration:underline;}
+.t #realname3 .bx ul a{font-weight:normal;-webkit-text-stroke-width:0.03em}
+#realname3 .bx .desc{ padding:18px 20px 0 46px; line-height:18px; background:url(https://static.nid.naver.com/images/user/images/join2/ico_caution.gif) no-repeat 17px 18px; color:#333333; text-align:left;}
+
+#idconfirm #content{ padding-bottom:0;}
+#idconfirm .cnt_desc{padding-top:12px}
+#idconfirm .cnt_desc p{font-size:11px;color:#a3a3a3;letter-spacing:-1px}
+#idconfirm .bx{clear:both;position:relative;width:666px;margin-bottom:50px;padding:30px 0;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%;text-align:center}
+#idconfirm .bx .notice{ color:#666666; font-size:11px; position:absolute; top:-18px; right:-2px; letter-spacing:-1px;}
+#idconfirm .bx dl{ width:265px; text-align:left; overflow:hidden; margin:0 auto; padding:2px 0 18px 0; color:#333333; _padding-top /**/:1px;}
+#idconfirm .bx dt{float:left;position:relative;top:-2px;width:137px;height:24px;padding-left:8px;background:url(https://static.nid.naver.com/images/user/images/join2/dot_rect.gif) no-repeat 0 7px;font-weight:bold;white-space:nowrap}
+.t #idconfirm .bx dt{font-weight:normal;-webkit-text-stroke-width:0.03em}
+#idconfirm .bx dt strong{ font-size:14px; padding:0 0 0 1px;}
+#idconfirm .bx dd{ float:right; height:24px; width:118px; text-align:left; white-space:nowrap;}
+#idconfirm .bx dd a{ color:#004790; font-size:11px; text-decoration:underline; letter-spacing:-1px;}
+#idconfirm .bx .desc{ clear:both; width:100%; padding:21px 0 17px 0; text-align:center; color:#333333; background:url(https://static.nid.naver.com/images/user/images/join2/line_hr670.gif) no-repeat left top;}
+#idconfirm .bx .desc input{ position:relative; top:1px;}
+#idconfirm .bx .desc a{ color:#004791; text-decoration:underline;}
+#idconfirm .bx dl.retire{ width:314px;}
+#idconfirm .bx dl.retire dd{ width:157px;}
+#idconfirm .bx dl.retire dd a{ margin:0 0 0 4px; position:relative; top:-1px;}
+
+#certification #content{ padding-bottom:0;}
+#certification .bx{ position:relative; overflow:hidden; clear:both; width:666px; margin:0 0 50px 0; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom}
+#certification .bx ul{overflow:hidden}
+
+#certification .bx li{width:181px; _width /**/:220px; height:212px; _height /**/:262px; float:left; overflow:hidden; background:url(https://static.nid.naver.com/images/user/images/join2/line_vr262.gif) no-repeat; position:relative; left:-1px; padding:20px 20px 30px 21px; text-align:center; letter-spacing:-1px;}
+#certification #jr.bx li{ width:181px; _width /**/:220px; padding:20px 20px 30px 21px;}
+#certification .bx li h3{ border-bottom:4px solid #ededed; padding:0 0 10px 0; margin:0 0 15px 0;}
+#certification .bx li .desc1{ line-height:18px; color:#333333; margin:0 0 9px 0; white-space:nowrap;}
+#certification .bx li .desc2{ line-height:15px; color:#666666; font-size:11px; white-space:nowrap;}
+
+#certification .bx li .btn_area{ position:absolute; bottom:30px; left:0; width:222px;}
+#certification .bx li .btn_area a{ position:relative; left:1px;}
+
+#certification .bx{ position:relative; overflow:hidden; clear:both; width:666px; margin:0 0 50px 0; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom;} 
+#certification .bx ul{overflow:hidden}
+
+#certification .fr .bx li{ width:204px; _width /**/:329px; padding:20px 64px 30px 65px;}
+#certification .fr .bx li .btn_area{ position:absolute; width:204px; left:64px;}
+
+#certification .btn_area3{margin:-50px 0 70px;text-align:center}
+#certification .confirm_original{ overflow:visible; padding:29px 0 30px 0; margin:2px 0 0 0;}
+#certification .confirm_original .help{ position:absolute; top:-19px; right:-2px; font-size:11px; text-decoration:underline; color:#004790; letter-spacing:-1px;}
+#certification .confirm_original dl{ height:26px; padding:0 0 30px 178px; background:url(https://static.nid.naver.com/images/user/images/join2/line_hr670.gif) no-repeat left bottom;}
+#certification .confirm_original dl *{ vertical-align:top;}
+#certification .confirm_original dt,
+#certification .confirm_original dd{ display:block; float:left;}
+#certification .confirm_original dt{ margin:0 7px 0 0;}
+#certification .confirm_original dt img{ position:relative; top:6px;}
+#certification .confirm_original dd{ margin:0 37px 0 0; position:relative;}
+#certification .confirm_original dd strong{font-size:14px; font-weight:bold; position:relative; top:6px; color:#333333; padding:0 0 0 1px;}
+#certification .confirm_original dl input{ width:96px; padding:3px 0 2px 5px; border:2px solid #cccccc; font-size:14px; font-weight:bold; color:#333333;}
+.t #certification .confirm_original dl input{font-weight:normal;-webkit-text-stroke-width:0.03em}
+#certification .confirm_original .desc{ text-align:center; padding:20px 0 17px 0;}
+
+#certification .cnt_footer{height:51px} 
+#certification .cnt_footer .icon{top:9px} 
+#certification .cnt_footer li{height:20px}
+
+#certification .cnt_footer_v1{height:73px}
+#certification .help2{ position:absolute; display:none;}
+#certification .help2.on{ display:block;}
+#certification .help2 .txt{ position:relative; z-index:3; border:1px solid #919191; color:#333333; letter-spacing:-1px; background:#ffffff;}
+#certification .help2 .txt p{ padding:8px 14px 6px 14px; line-height:16px; font-size:11px; white-space:nowrap;}
+#certification .help2 .txt p *{line-height:16px; font-size:11px; text-decoration:none !important;}
+#certification .help2 .txt p strong{ color:#ff6c00; padding:0; top:0;}
+#certification .help2 .txt p strong.black{ color:#333;}
+#certification .help2 .txt p .ex{ color:#808080;}
+#certification .left .arrow{ position:absolute; z-index:4; top:13px; left:-3px; display:block; width:4px; height:6px; background:url(https://static.nid.naver.com/images/user/images/join2/bu_help_left.gif) no-repeat; overflow:hidden;}
+#certification .help2 .shadow1{ display:block; position:absolute; z-index:2; top:1px; left:1px; background:#e3e3e3; _background:#919191; width:100%; filter:alpha(opacity=25);}
+*:first-child+html #certification .help2 .shadow1{ background:#919191;}
+#certification .help2 .shadow2{ display:block; position:absolute; z-index:1; top:2px; left:2px; background:#f6f6f6; _background:#919191; width:100%; filter:alpha(opacity=10);}
+*:first-child+html #certification .help2 .shadow2{ background:#919191;}
+#certification .h32 { height:32px;}
+#certification .h32 .shadow1{ height:32px;}
+#certification .h32 .shadow2{ height:32px;}
+#certification .tit_certification{_zoom:1; _height:1px; position:relative;}
+#certification .tit_certification .notice{position:absolute; bottom:1px; right:0;}
+
+/* 091120 */
+#certification .bx2{position:relative; overflow:hidden; clear:both; width:334px; margin:0 auto 50px; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom;}
+#certification .bx2 li{overflow:hidden; position:relative; width:181px; float:left; _width /**/:220px; height:212px; _height /**/:262px;  padding:20px 20px 30px 21px; text-align:center; letter-spacing:-1px;}
+#certification #jr.bx2 li{ width:145px; _width /**/:165px; padding:20px 10px 30px 11px;}
+#certification .bx2 li h3{ border-bottom:4px solid #ededed; padding:0 0 10px 0; margin:0 0 15px 0;}
+#certification .bx2 li .desc1{ line-height:18px; color:#333333; margin:0 0 9px 0; white-space:nowrap;}
+#certification .bx2 li .desc2{ line-height:15px; color:#666666; font-size:11px; white-space:nowrap;}
+#certification .bx2 li .btn_area{ position:absolute; bottom:30px; left:0; width:222px;}
+#certification #jr.bx2 li .btn_area{width:165px;}
+#certification .bx2 li .btn_area a{ position:relative; left:1px;}
+#certification .fr .bx2 li{ width:204px; _width /**/:329px; padding:20px 64px 30px 65px;}
+#certification .fr .bx2 li .btn_area{ position:absolute; width:204px; left:64px;}
+/* //091120 */
+
+#certification .bx3{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 70px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#certification .bx3 ul{overflow:hidden;width:672px}
+#certification .bx3 li{overflow:hidden;float:left;position:relative;left:-1px;width:167px;height:212px;padding:20px 0 30px 0;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr262.gif) no-repeat;letter-spacing:-1px;text-align:center}
+#certification .bx3 li h3{overflow:hidden;width:146px;margin:0 auto 15px;padding:0 0 10px;border-bottom:4px solid #ededed}
+#certification .bx3 li .desc1{margin:0 0 9px;color:#333;line-height:18px;white-space:nowrap;letter-spacing:-1px}
+#certification .bx3 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap;letter-spacing:-1px}
+#certification .bx3 li .btn_area{position:absolute;left:0;bottom:30px;width:167px}
+#certification .bx3 li .btn_area a{position:relative;left:1px}
+#certification .fr .bx3 li{width:204px;;padding:20px 64px 30px 65px}
+#certification .fr .bx3 li .btn_area{position:absolute;left:64px;width:204px}
+
+#certification .bx4{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 70px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%}
+#certification .bx4 ul{overflow:hidden;width:672px}
+#certification .bx4 li{overflow:hidden;float:left;position:relative;left:-1px;width:336px;height:212px;padding:20px 0 30px 0;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr262.gif) no-repeat;letter-spacing:-1px;text-align:center}
+#certification .bx4 li h3{overflow:hidden;width:274px;margin:0 auto 15px;padding:0 0 10px;border-bottom:4px solid #ededed}
+#certification .bx4 li .desc1{margin:0 0 9px;color:#333;line-height:18px;white-space:nowrap;letter-spacing:-1px}
+#certification .bx4 li .desc2{font-size:11px;color:#666;line-height:15px;white-space:nowrap;letter-spacing:-1px}
+#certification .bx4 li .btn_area{position:absolute;left:0;bottom:30px;width:336px}
+#certification .bx4 li .btn_area a{position:relative;left:1px}
+#certification .fr .bx4 li{width:204px;;padding:20px 64px 30px 65px}
+#certification .fr .bx4 li .btn_area{position:absolute;left:64px;width:204px}
+
+/* 110317 */ 
+#certification .bx5{ position:relative; overflow:hidden; clear:both; width:666px; margin:0 0 50px 0; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom;} 
+#certification .bx5 ul{overflow:hidden} 
+#certification .bx5 li{width:292px; height:212px; _height /**/:262px; float:left; overflow:hidden; background:url(https://static.nid.naver.com/images/user/images/join2/line_vr262.gif) no-repeat; position:relative; left:-1px; padding:20px 20px 30px 21px; text-align:center; letter-spacing:-1px;} 
+#certification .bx5 li h3{ border-bottom:4px solid #ededed; padding:0 0 10px 0; margin:0 0 15px 0;} 
+#certification .bx5 li .desc1{ line-height:18px; color:#333333; margin:0 0 9px 0; white-space:nowrap;} 
+#certification .bx5 li .desc2{ line-height:15px; color:#666666; font-size:11px; white-space:nowrap;} 
+#certification .bx5 li .btn_area{ position:absolute; bottom:30px; left:0; width:333px;} 
+#certification .bx5 li .btn_area a{ position:relative; left:1px;} 
+
+
+#personal .cnt_desc .first-child{ margin:0 0 6px 0;}
+#personal .cnt_desc a{ color:#004790; font-size:11px; letter-spacing:-1px; text-decoration:underline; margin:0 0 0 3px;}
+#personal .notice{text-align:right; color:#666666; font-size:11px; letter-spacing:-1px; margin:-15px 0 2px 0;}
+#personal table{ clear:both; border:2px solid #e5e5e5; margin:0 0 20px 0; border-left:none; border-right:none; width:100%;}
+#personal table th,
+#personal table td{ border:none; color:#333333;}
+#personal table th{ background:#f9f9f9; border-top:1px solid #ededed; padding:11px 0 8px 10px; vertical-align:top; width:136px; text-align:left; letter-spacing:-1px; line-height:18px;}
+#personal table th img{ position:absolute; top:2px; left:0; _left:-11px;}
+#personal table th label,
+#personal table th span{ padding:0 0 0 11px; display:block; position:relative;}
+#personal table td{ border-left:1px solid #ededed; border-top:1px solid #ededed; padding:6px 0 7px 20px; vertical-align:top;}
+#personal table tr.first-child th,
+#personal table tr.first-child td{ border-top:none;}
+#personal table .txt1{display:block; font-weight:normal; padding:5px 0 0 0;}/* 091019 padding 수정 */
+#personal table .txt1 img{margin-top:-3px; vertical-align:middle;}/* 091019 라인 추가 */
+#personal table .txt1 span{font-size:11px; letter-spacing:-1px; color:#999999;}/* 091019 라인 추가 */
+#personal table .txt1 span.ico{margin:0 5px 0 16px; font-size:12px;}/* 091019 라인 추가 */
+#personal table .txt1 .newname{margin-left:6px;}/* 091019 라인 추가 */
+#personal table .txt2{position:relative;padding:5px 0 0 0;_padding:3px 0 0 0;}
+#personal table .txt3{ padding:7px 0 6px 0;}
+#personal table .txt3 *{ vertical-align:bottom;}
+#personal table .txt3 img{ margin:0 10px 0 0;}
+#personal table .txt3 input{ position:relative; _top:1px;}
+#personal table .txt3 .check_txt{position:absolute; left:173px; top:12px;}/* 091019 라인 추가 */
+#personal table .txt4{ font-weight:bold; display:block; padding:7px 0 0 0;}
+.t #personal table .txt4{font-weight:normal;-webkit-text-stroke-width:0.03em}
+#personal table .txt5{display:block;padding:7px 0 0 0;}
+#personal table .txt6{ display:block; padding:9px 0 6px 0;}
+#personal table .txt7{padding:5px 0 5px;line-height:18px;color:#ff6c00}
+
+#personal table .input_text{ border:1px solid #cccccc; padding:3px 0 3px 5px; _height /**/:23px;}
+#personal table .w110{ width:103px;}
+#personal table .w130{ width:123px;}
+#personal table .w154{ width:147px;}
+#personal table .w157{ width:150px;}
+#personal table .w286{ width:279px;}
+#personal table .w431{width:431px}
+#personal table .w88{ width:81px;}
+#personal table .w138{ width:131px;}
+#personal table .input_radio{ margin:0 -1px 0 -4px; position:relative; top:-1px;}
+#personal table .input_check{ margin:0 -1px 0 -4px; position:relative; top:-1px;}
+#personal table td label{ position:relative; top:-3px;*top:-2px;}
+*:first-child+html #personal table td label{ top:-2px;}
+#personal table .mr14{ margin-right:14px;}
+#personal table td .link{ font-size:11px; margin:0 0 0 1px; _margin /**/:0; color:#004790; text-decoration:underline; position:relative; top:-3px; letter-spacing:-1px;}
+#personal table .mail1{ margin:0 0 5px 0;}
+#personal table .optin{ border-top:1px solid #ededed; padding:10px 0 2px 0; width:484px;}
+#personal table em{ color:#ff6c00; font-size:11px; display:block; padding:5px 0 7px 19px; letter-spacing:-1px;}
+#personal table .naver_select{ display:none; padding:13px 18px 12px 18px; background:#f9f9f9; border:1px solid #ededed; border-bottom:none; width:446px;}
+#personal table .naver_select p{ line-height:16px; color:#666666; font-size:11px; letter-spacing:-1px; margin:0 0 3px 0;}
+#personal table .help_wrap{_width /**/:100%; display:block; overflow:visible; position:relative; z-index:98}/* 090910 position:relative 추가되었습니다 */
+#personal table .help_wrap:after {content:""; display:block; clear:both;}
+#personal table .help_wrap .reset_img{position:absolute; right:84px; top:52px; color:#999; text-decoration:underline;}
+#personal table .help_wrap p.info{margin:6px 0 9px 0; padding:0; line-height:18px; font-size:11px; color:#999; letter-spacing:-1px;}
+#personal table .help_wrap2{_width /**/:100%; display:block; overflow:visible; position:relative; z-index:99}
+#personal table .help_wrap2:after {content:""; display:block; clear:both;}
+#personal table .help_wrap2 p.info{margin:1px 0 1px -1px; padding:0; line-height:18px; font-size:11px; color:#999; letter-spacing:-1px;}
+#personal table .help_wrap.type1{z-index:150 !important}
+#personal table .help_wrap.type2{z-index:100 !important}
+
+#personal table .nic_wrap{display:block;overflow:visible;position:relative;z-index:140;_width /**/:100%}
+#personal table .nic_wrap span{margin-left:5px; color:#999;}
+#personal table .nic_wrap p.info{margin:6px 0 9px 0; padding:0; line-height:18px; font-size:11px; color:#999; letter-spacing:-1px;}
+#personal table .nic_wrap p.info em{margin:0; padding:0;}
+#personal table .nic_wrap label{margin-left:3px;}
+#personal table .nic_wrap .help{width:291px; margin-left:3px}
+#personal table .nic_wrap .h32 {height:32px;}
+#personal table .nic_wrap .h32 .shadow1{width:280px; height:32px;}
+#personal table .nic_wrap .h32 .shadow2{width:280px; height:32px;}
+#personal table .nic_wrap .h32 .arrow{left:-8px; top:15px;}
+#personal table .checkbox {width:15px; height:15px; _width:13px; _height:13px; margin:0 0 7px; _margin:-2px 0 2px; vertical-align:middle;}
+
+#personal table .default_view{margin-top:7px;}
+*:first-child+html #personal table .help_wrap{ z-index:99;}
+#personal table .help_wrap.upw{ z-index:100;}
+*:first-child+html #personal table .help_wrap.upw{ z-index:100;}
+#personal table .help{ position:absolute; display:block; display:none;}
+#personal table .help.on{ display:block;}
+#personal table .help .txt{ position:relative; z-index:3; border:1px solid #919191; color:#333333; letter-spacing:-1px; background:#ffffff;}
+#personal table .help .txt p{padding:8px 10px 6px;line-height:16px;font-size:11px;white-space:nowrap}
+#personal table .help .txt p *{line-height:16px; font-size:11px;}
+#personal table .help .txt p strong{ color:#ff6c00;}
+#personal table .help .txt p strong.black{ color:#333;}
+#personal table .help .txt p .ex{ color:#808080;}
+#personal table .help .txt p .ex2{ display:block; padding:6px 0 0 0; margin:4px 0 0 0; border-top:1px solid #e5e5e5; color:#333; font-size:11px; letter-spacing:-1px;}
+#personal table .help .txt p .ex2 strong{ color:#333;}
+#personal table .help .txt p .vr{ color:#e5e5e5; margin:0 2px 0 3px;}
+#personal table .help .txt p .level1{ padding:0 52px 0 0; background:url(https://static.nid.naver.com/images/user/images/help/ico_pw_level1.gif) no-repeat right 4px;}
+#personal table .help .txt p .level2{ padding:0 52px 0 0; color:#417c01; background:url(https://static.nid.naver.com/images/user/images/help/ico_pw_level2.gif) no-repeat right 4px;}
+#personal table .help .txt p .level3{ padding:0 52px 0 0; color:#417c01; background:url(https://static.nid.naver.com/images/user/images/help/ico_pw_level3.gif) no-repeat right 4px;}
+#personal table .help .txt em{ display:inline; padding:0;}
+#personal table .left .arrow{ position:absolute; z-index:4; top:13px; left:-3px; display:block; width:5px; height:6px; background:url(https://static.nid.naver.com/images/user/images/join2/bu_help_left2.gif) no-repeat; overflow:hidden;}
+#personal table .top .arrow{ position:absolute; z-index:4; top:-3px; left:11px; display:block; width:6px; height:4px; background:url(https://static.nid.naver.com/images/user/images/join2/bu_help_top.gif) no-repeat; overflow:hidden;}
+#personal table .bottom .arrow{ position:absolute; z-index:4; bottom:-5px; left:11px; display:block; width:7px; height:6px; background:url(https://static.nid.naver.com/images/user/images/join2/bu_help_bottom.gif) no-repeat; overflow:hidden;}
+#personal table .help .shadow1{ display:block; position:absolute; z-index:2; top:1px; left:1px; background:#e3e3e3; _background:#919191; width:100%; filter:alpha(opacity=25);}
+*:first-child+html #personal table .help .shadow1{ background:#919191;}
+#personal table .help .shadow2{ display:block; position:absolute; z-index:1; top:2px; left:2px; background:#f6f6f6; _background:#919191; width:100%; filter:alpha(opacity=10);}
+*:first-child+html #personal table .help .shadow2{ background:#919191;}
+#personal table .help_wrap .h32 { height:32px;}
+#personal table .help_wrap .h32 .shadow1{ height:32px;}
+#personal table .help_wrap .h32 .shadow2{ height:32px;}
+#personal table .help_wrap .h48 { height:48px;}
+#personal table .help_wrap .h48 .shadow1{ height:48px;}
+#personal table .help_wrap .h48 .shadow2{ height:48px;}
+#personal table .help_wrap .h64 { height:64px;}
+#personal table .help_wrap .h64 .shadow1{ height:64px;}
+#personal table .help_wrap .h64 .shadow2{ height:64px;}
+#personal table .help_wrap .h64 iframe{ display:none; _display:block; width:100%; height:64px; overflow:hidden; position:absolute; left:2px; top:2px; border:none; filter:alpha(opacity=0);}
+#personal table .help_wrap .h75 { height:75px;}
+#personal table .help_wrap .h75 .shadow1{ height:75px;}
+#personal table .help_wrap .h75 .shadow2{ height:75px;}
+#personal table .overlap{ position:relative; top:1px; left:1px;}
+#personal table .overlap img{ vertical-align:top;}
+#personal table .certification_box{padding:6px 0} 
+#personal table .certification_box .input_text{vertical-align:7px;*vertical-align:4px;_vertical-align:4px;background:url(https://static.nid.naver.com/images/user/images/join2/txt_certificationnum.gif) no-repeat 6px 50%}
+#personal table .certification_box .focus{background:none}
+#personal table .certification_box2{margin-top:-1px;padding-left:14px} 
+#personal table .certification_box2 .input_text{vertical-align:7px;*vertical-align:4px;_vertical-align:4px;background:url(https://static.nid.naver.com/images/user/images/join2/txt_certificationnum.gif) no-repeat 6px 50%} 
+#personal table .certification_box2 .focus{background:none} 
+#personal table .certification_box2 .desc_v2{padding-top:11px} 
+
+#personal table .btn_cmail{ display:block; float:left; clear:both; padding:0; margin:6px 0 6px 0;}
+#personal table br{ clear:both;}
+#personal table .help_v1{overflow:hidden;padding-top:3px}
+#personal table .help_v1 .shadow1{top:4px}
+#personal table .help_v1 .shadow2{top:6px}
+#personal table .help_v1 .arrow{top:0}
+
+#finish #content{ padding-bottom:0;}
+#finish .cnt_desc strong{ position:relative; top:1px; margin:0 1px 0 0;}
+#finish .cnt_desc .id_is{ color:#666; float:left; position:relative; top:3px;} 
+#finish .cnt_desc .id_is strong {color:#ff6c00; position:relative; top:1px;} 
+#finish .cnt_info{height:21px; margin-top:-12px;} 
+#finish .cnt_info .id_lock{position:relative; top:-1px; float:right; color:#666666; font-size:11px; letter-spacing:-1px;}
+#finish .cnt_info .lock_off{ padding:1px 0 0 15px; background:url(https://static.nid.naver.com/images/user/images/join2/ico_id_lock_off.gif) no-repeat;}
+#finish .cnt_info .lock_on{ padding:1px 0 0 13px; background:url(https://static.nid.naver.com/images/user/images/join2/ico_id_lock_on.gif) no-repeat;}
+#finish .bx{ position:relative; overflow:hidden; clear:both; width:666px; margin:0 0 20px 0; border:2px solid #e5e5e5; background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x left bottom;}
+#finish .bx li{ position:relative; width:131px; height:175px; float:left; overflow:hidden; background:url(https://static.nid.naver.com/images/user/images/join2/line_vr199.gif) no-repeat; position:relative; left:-1px; padding:25px 45px 30px 46px; text-align:center; letter-spacing:-1px;}/* 091026 height값 수정 _height값 삭제 _width값 삭제 */
+#finish .bx li h3{ border-bottom:4px solid #ededed; padding:0 0 9px 0; margin:0 0 15px 0;}
+#finish .bx li .desc{ line-height:18px; color:#333333; margin:0 0 9px 0; white-space:nowrap;}
+#finish .bx li .desc2 {width:205px; margin:-5px 0 0 -40px; font-size:11px; text-align:center;}
+#finish .bx li .desc2 a {display:block; margin-top:2px; font-size:11px; color:#999;} 
+#finish .bx li .sub_txt{margin:-5px 0 0 0; font-size:11px; color:#999; line-height:15px;} 
+#finish .bx li .btn_area{ position:absolute; bottom:34px; left:0; width:222px;} 
+#finish .bx li .btn_area a{ position:relative; left:1px;}
+#finish .cnt_footer{ margin:50px 0 0 0; height:100px; background-position:334px 0;}
+#finish .cnt_footer .desc{ position:relative; top:0; left:0;}
+#finish .cnt_footer .desc li{ position:absolute;}
+#finish .cnt_footer .desc .s1{ top:17px; left:20px;}
+#finish .cnt_footer .desc .s2{ top:40px; left:20px;}
+#finish .cnt_footer .desc .s3{ top:66px; left:20px;}
+#finish .cnt_footer .desc .s4{ top:17px; left:355px;}
+#finish .cnt_footer .desc .s5{ top:40px; left:355px;}
+#finish .cnt_footer .desc .s6{ top:66px; left:355px;}
+#finish .btn_area a{ margin:0 6px 0 0; position:relative; left:3px;}
+
+#finish .fr .bx{ padding:28px 0 27px 0; text-align:center; margin:0;}
+#finish .fr .bx h3{ font:bold 14px Dotum; margin:0 0 8px 0;}
+#finish .fr .bx .desc1{ line-height:18px; color:#333333; margin:0 0 15px 0;}
+#finish .fr .bx .desc2{ color:#666666; font-size:11px; letter-spacing:-1px;}
+#finish .fr .bx .desc2 .help{ position:relative; left:3px; color:#004790; text-decoration:underline; font-size:11px; letter-spacing:-1px;}
+
+.bg_f0{background:#f0f0f0;}
+.bg_f1{background:#ffffff;}
+
+.pwqa01{position:relative;z-index:130 !important;width:487px;margin:2px 0 0 -3px;padding:15px 0 3px 14px;border:1px solid #f4f4f4;border-bottom:0;background:#f9f9f9} 
+.pwqa02{position:relative;z-index:120 !important;width:487px;margin:0 0 0 -3px;padding:15px 0 4px 14px;border:1px solid #f4f4f4;background:#f9f9f9;border-width:0 1px} 
+.pwqa03{position:relative;z-index:110 !important;width:487px;margin:0 0 5px -3px;padding:15px 0 15px 14px;border:1px solid #f4f4f4;border-top:0;background:#f9f9f9} 
+
+.pwqa01 .title01, .pwqa02 .title01{font-size:11px} 
+.pwqa01 .pw_question{position:relative;padding-top:11px} 
+.pwqa01 .pw_question span{position:absolute;top:14px;*top:16px;color:#666} 
+.pwqa01 .pw_answer{position:relative} 
+.pwqa01 .pw_answer span{position:absolute;top:4px;*top:6px;margin-right:1px;color:#666} 
+.pwqa01 .pw_answer input{height:14px;margin-left:29px} 
+.pwqa01 .self_input{margin:8px 0 15px 29px} 
+.pwqa02 .alert_notice{margin:3px 0 0 18px;font-size:11px;color:#8d8d8d;letter-spacing:0;line-height:15px} 
+.pwqa02 .pw_mail{margin:9px 0 0} 
+.pwqa02 .pw_mail *{vertical-align:middle} 
+.pwqa02 .pw_mail select{position:relative;top:1px !important;margin-right:3px;*margin-right:0} 
+.pwqa02 .pw_mail .mr14{position:relative;top:0 !important;vertical-align:middle} 
+.pwqa03 .alert_notice{margin:3px 0 0 18px;font-size:11px;color:#8d8d8d;letter-spacing:0;line-height:15px} 
+.pwqa03 .pw_mail{margin:9px 0 0} 
+.pwqa03 .pw_mail *{vertical-align:middle} 
+.pwqa03 .pw_mail select{position:relative;top:1px !important;margin-right:3px;*margin-right:0} 
+.pwqa03 .pw_mail .mr14{position:relative;top:0 !important;vertical-align:middle} 
+.pwqa03 .lab_type{top:1px !important;*top:2px !important} 
+
+
+.phone_notice {height:17px; padding:4px 0 0 0; margin:0;}
+.phone_notice em{font-size:11px; color:#ff6c00; padding:0; margin:0 0 0 -20px;}
+.password_issue01 {padding:9px 0 0 0;}
+.password_issue01 p {height:22px; color:#333;}
+.password_issue01 p.last {height:17px;}
+.password_issue01 p span {color:#999;}
+.password_issue01 p.desc2{padding-left:14px}
+
+.link_helps{overflow:hidden; width:100%; height:35px;}	/* 091001 width와 height값 추가 */
+
+
+/* Default Type Selector */
+#banword_wrap *, #banword_wrap1 *{ margin:0; padding:0; font-size:12px; font-family:돋움, Dotum, 굴림, Gulim, AppleGothic, Sans-serif; text-align:left;}
+#banword_wrap a, #banword_wrap1 a{ color:#004790;}
+#banword_wrap img, #banword_wrap1 img,
+#banword_wrap fieldset, #banword_wrap1 fieldset{ border:none;}
+#banword_wrap legend, #banword_wrap1 legend{ display:none;}
+#banword_wrap em, #banword_wrap1 em{ font-style:normal; color:#258102;}
+#banword_wrap strong, #banword_wrap1 strong{ color:#258102;}
+#banword_wrap li, #banword_wrap1 li{ list-style:none;}
+#banword_wrap h1, #banword_wrap1 h1{ font:bold 13px 굴림, Gulim, 돋움, Dotum, AppleGothic, Sans-serif; color:#333; padding:11px 0 0 19px; *padding:12px 0 0 19px; }
+/* Layout */
+#banword_wrap{ position:relative; width:410px; _width /**/:418px; overflow:hidden; border:4px solid #777; background:#fff;}
+#banword_wrap1{ position:relative; width:410px; _width /**/:418px;height:446px; overflow:hidden; border:4px solid #777; background:#fff;}
+#bw_header{ background:#f8f8f9; height:38px;}
+#bw_content{overflow:hidden;padding:14px 0 21px 0;margin:0 19px 0 18px;zoom:1}
+#bw_footer{ height:8px; _height:8px; text-align:center;}
+body:first-of-type #bw_footer{ height:7px;}
+#bw_footer, x:-moz-any-link, x:default { height:7px;}
+*:first-child+html #bw_footer{ height:8px;}
+#bw_btn_footer{ height:46px; _height /**/:45px; text-align:center; background:url(https://static.nid.naver.com/images/user/images/join2/bg_not_available_common.gif) no-repeat left 1px; padding:16px 0 0 0 ; _padding /**/:16px 0 20px 0 ;}
+
+/* Common */
+#bw_content .bw_bx1{border:1px solid #f1f1f1; margin:0 1px 9px 2px; height:100px; background:#f8f8f8; }
+#bw_content .bw_bx1_shadow{position:relative;  padding:13px 13px 12px 0; }
+#bw_content .bw_bx1_shadow strong { color:#282828; vertical-align:top; margin-left:13px; vertical-align:top;}
+#bw_content .bw_bx1_shadow a img {vertical-align:middle; margin:-1px 0 0 0; *margin:-2px 0 0 0;}
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0)
+{
+	#bw_content .bw_bx1_shadow a img {margin:-1px !important;}
+}
+body:first-of-type #bw_content .bw_bx1_shadow a img {vertical-align:middle; margin:-5px 0 0 0;}
+#bw_content .bw_bx1_shadow_in {height:35px; _height /**/:53px; margin:7px 0 0 13px; _margin:5px 0 0 13px; padding:8px 13px 7px 12px; _padding:9px 13px 8px 12px; border:#e3e3e3 1px solid; color:#666; line-height:20px; background:#fff; overflow:auto;}
+body:first-of-type #bw_content .bw_bx1_shadow_in {height:35px; _height /**/:53px; margin:5px 0 0 13px; padding:8px 13px 9px 12px; border:#e3e3e3 1px solid; color:#666; line-height:20px; background:#fff; overflow:auto;}
+#bw_content .bw_bx1_shadow_in, x:-moz-any-link, x:default {height:35px; _height /**/:53px; margin:5px 0 0 13px; padding:8px 13px 9px 12px; border:#e3e3e3 1px solid; color:#666; line-height:20px; background:#fff; overflow:auto;}
+*:first-child+html #bw_content .bw_bx1_shadow_in {height:33px; _height /**/:53px; margin:7px 0 0 13px; padding:8px 13px 9px 12px; border:#e3e3e3 1px solid; color:#666; line-height:20px; background:#fff; overflow:auto;}
+
+#bw_content .bw_bx1_v1{margin-top:16px;*margin-top:30px}
+#bw_content .bw_bx2{ border:1px solid #eeeeee; margin:0 0 6px 3px; background:#fbfbfb; line-height:18px;}
+#bw_content .bw_bx2 *{ color:#444444;}
+#bw_content .bw_desc1{ color:#444444; font-weight:bold; margin:0 0 4px 0;  letter-spacing:-1px;}
+.t #bw_content .bw_desc1{font-weight:normal;-webkit-text-stroke-width:0.03em}
+#bw_content .bw_desc2{ color:#444444; margin:0 0 13px 0;}
+
+#bw_content .bw_desc3{ position:relative; color:#696968; padding:9px 2px 9px 34px; font-size:11px; letter-spacing:-1px; background:url(https://static.nid.naver.com/images/user/images/join2/popup/bu_attention.gif) no-repeat 13px 12px;}
+body:first-of-type #bw_content .bw_desc3{ padding:10px 2px 8px 34px;}
+#bw_content .bw_desc3, x:-moz-any-link, x:default { padding:10px 2px 8px 34px;}
+*:first-child+html #bw_content .bw_desc3{ padding:9px 2px 9px 34px;}
+#bw_content .bw_desc3_v1{padding:13px 2px 10px 34px !important;font-size:12px;color:#888;letter-spacing:normal;background-position:13px 14px}
+#bw_content .bw_desc3_v1 .link{color:#1c9300}
+
+#bw_content .bw_desc4 { color:#6c6c6c; margin:10px 0 0 33px; font-size:11px; letter-spacing:-1px;}
+body:first-of-type #bw_content .bw_desc4 { margin:9px 0 0 33px;}
+#bw_content .bw_desc4, x:-moz-any-link, x:default { margin:9px 0 0 33px;}
+*:first-child+html #bw_content .bw_desc4 { margin:10px 0 0 33px;}
+#bw_content .bw_desc4 a {color:#258102; font-size:11px;}
+
+#bw_content .bw_desc5 { color:#333333; margin:16px 0 10px 0; _margin:16px 0 10px 0; padding:0 0 0 1px; letter-spacing:-1px;}
+body:first-of-type #bw_content .bw_desc5 { color:#333333; margin:14px 0 12px 0; padding:0 0 0 1px; letter-spacing:-1px;}
+#bw_content .bw_desc5, x:-moz-any-link, x:default { color:#333333; margin:14px 0 12px 0; padding:0 0 0 1px; letter-spacing:-1px;}
+*:first-child+html #bw_content .bw_desc5 { color:#333333; margin:16px 0 12px 0; _margin:16px 0 10px 0; padding:0 0 0 1px; letter-spacing:-1px;}
+#bw_content .bw_desc5 strong{ color:#333333;}
+
+#bw_content .bw_desc6{color:#333333; margin:21px 0 0 0; padding:0 0 5px 1px; _padding:0 0 3px 1px; letter-spacing:-1px; border-bottom:1px solid #ececec; line-height:20px;}
+/*html:first-child #bw_content .bw_desc6 {margin:46px 0 0 0; padding:0 0 8px 1px;}
+body:first-of-type #bw_content .bw_desc6 {margin:26px 0 0 0; padding:0 0 8px 1px;}
+#bw_content .bw_desc6, x:-moz-any-link, x:default {margin:26px 0 0 0; padding:0 0 8px 1px;}
+*:first-child+html #bw_content .bw_desc6 { margin:27px 0 0 0; padding:0 0 9px 1px;}*/
+#bw_content .bw_desc6 strong{ color:#333333;}
+
+/* Layer Bubble - If you want to fixed width or height, You can set the size to '.layer_content'. But use a inline style as possible as you can */
+#bw_content .layer_bubble{width:267px; height:80px; position:absolute; background:url(https://static.nid.naver.com/images/user/images/help/bg_bubble_lt.gif) no-repeat; _background /**/:url(https://static.nid.naver.com/images/user/images/help/bg_bubble_lt_ie5.gif) no-repeat; _width /**/:267px; _height /**/:80px;}/* 091014 width값 height값추가 */
+#bw_content .layer_bubble *{ margin:0; padding:0; font:12px 돋움, Dotum, 굴림, Gulim, AppleGothic, Sans-serif;}
+#bw_content .layer_bubble img{ border:none;}
+#bw_content .layer_bubble .rt,
+#bw_content .layer_bubble .lb,
+#bw_content .layer_bubble .rb{ display:block; position:absolute; overflow:hidden;}
+#bw_content .layer_bubble .layer_content{ position:relative; width:264px; right:-5px; overflow:hidden; float:left; _float /**/:none;}
+#bw_content .layer_bubble .rt{ top:0; right:-5px; _right /**/:-3px; width:5px; height:100%; font-size:500px; _font-size:0; background:url(https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_rt.png); _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_rt.png', sizingMethod='crop');}
+#bw_content .layer_bubble .rt_iefix{ display:none; _display:block; _display /**/:none; position:absolute; top:0; right:0; width:5px; height:298px; background:url(https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_rt.png); _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_rt.png', sizingMethod='crop');}
+#bw_content .layer_bubble .lb{margin:0; bottom:-5px; _bottom /**/:-2px; left:0; width:100%; _width:264px; height:5px; background:url(https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_lb.png); _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_lb.png', sizingMethod='crop');}
+#bw_content .layer_bubble .rb{ bottom:-5px; _bottom /**/:-2px; right:-5px; _right /**/:-3px; width:5px; height:5px; background:url(https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_rb.png); _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://static.nid.naver.com/images/user/images/join2/popup/bg_bubble_rb.png', sizingMethod='crop');}
+#bw_content .layer_bubble .arrow{ position:absolute;}
+#bw_content .layer_bubble .arrow.top {width:10px; height:10px; left:32px; top:-9px; background:url(https://static.nid.naver.com/images/user/images/join2/popup/arrow_bubble_top.png); _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://static.nid.naver.com/images/user/images/join2/popup/arrow_bubble_top.png', sizingMethod='crop');}
+#bw_content .layer_content p {font-size:11px; line-height:14px; color:#717171; letter-spacing:-1px;}
+#bw_content .layer_content p.bw_orange {margin-top:5px; color:#fd630a;}
+/* function button box */
+#bw_content .function_btn {overflow:hidden; height:53px; *height:57px; _height:60px; width:362px; margin:14px 0 21px 6px; padding-top:4px;}
+body:first-of-type #bw_content .function_btn { margin:14px 0 20px 6px;}
+#bw_content .function_btn, x:-moz-any-link, x:default  { margin:14px 0 20px 6px;}
+*:first-child+html #bw_content .function_btn { margin:14px 0 21px 6px;}
+
+#bw_content .function_btn .btn_wrap {float:left; width:174px; _width /**/:181px; padding:0 0 0 7px;}
+#bw_content .function_btn .btn_wrap p {margin-top:5px; font-size:11px; letter-spacing:-1px; color:#696968; background:url(https://static.nid.naver.com/images/user/images/join2/popup/bu_line.gif) no-repeat right top;}
+body:first-of-type #bw_content .function_btn .btn_wrap p {margin-top:6px;}
+#bw_content .function_btn .btn_wrap p, x:-moz-any-link, x:default  {margin-top:6px;}
+*:first-child+html #bw_content .function_btn .btn_wrap p {margin-top:5px;}
+
+#bw_content .function_btn .btn_wrap1 {float:left; width:179px; _width /**/:181px; text-align:center; padding-left:2px}
+#bw_content .function_btn .btn_wrap1 p {margin-top:5px; font-size:11px; letter-spacing:-1px; color:#696968; text-align:left; padding:0 0 0 4px;}
+body:first-of-type #bw_content .function_btn .btn_wrap1 p {margin-top:6px;}
+#bw_content .function_btn .btn_wrap1 p, x:-moz-any-link, x:default  {margin-top:6px;}
+*:first-child+html #bw_content .function_btn .btn_wrap1 p {margin-top:5px;}
+
+#bw_footer button.c_close{position:absolute; top:7px; right:6px; width:18px; height:17px; background:none; border:none;}
+#bw_footer button.c_close, x:-moz-any-link, x:default {top:5px; right:8px;}
+*:first-child+html #bw_footer button.c_close {top:7px; right:6px;}
+
+#bw_btn_footer button {width:55px; height:27px; text-align:center; font-size:12px;}
+@media all and (-webkit-min-device-pixel-ratio:10000), not all and (-webkit-min-device-pixel-ratio:0)
+{
+	#bw_btn_footer button {padding-top:6px;}
+}
+#bw_btn_footer button.c_close{position:absolute; top:7px; right:6px; width:18px; height:17px; background:none; border:none;}
+#bw_btn_footer button.c_close, x:-moz-any-link, x:default {top:5px; right:8px;}
+*:first-child+html #bw_btn_footer button.c_close {top:7px; right:6px;}
+
+/* //090828 */
+
+/* 090924 */
+#agreement .field3 legend{display:block; margin:10px 0 0 0;}
+#agreement .bx2{height:111px; padding:18px 0 0 20px; margin:0 0 8px 0; border:1px solid #e5e5e5; overflow:auto; scrollbar-base-color: #d9d9d9; scrollbar-3dlight-color: #d9d9d9; scrollbar-darkshadow-color: #d9d9d9; scrollbar-face-color: #d9d9d9; scrollbar-highlight-color: #d9d9d9; scrollbar-shadow-color: #d9d9d9; scrollbar-track-color: #f2f2f2;}
+#agreement .bx2 p{line-height:18px;}
+
+.sub_bx{width:627px; margin:15px 0 20px 1px; border-top:2px solid #dadada; border-bottom:1px solid #ccc}
+.tb_agreement{overflow:hidden; width:627px; margin:0; font-family:dotum,돋움; font-size:12px;}
+.tb_agreement th{padding:10px 0 6px 0; border-right:1px solid #e5e5e5; border-bottom:1px solid #e5e5e5; background:#f6f6f6; text-align:center; color:#444;}
+.tb_agreement th.end{border-right:0;}
+
+.tb_agreement2{overflow:hidden; width:622px; margin:-1px 0 0 5px; font-family:dotum,돋움; font-size:12px;}
+.tb_agreement2 thead{display:none;}
+.tb_agreement2 tr.first td{border-top:none;}
+.tb_agreement2 td{padding:10px 0 7px 0; border-right:1px solid #e5e5e5; border-top:1px solid #e5e5e5; line-height:18px;}
+.tb_agreement2 tr.gap td{height:3px; padding:0; background:none; border-right:1px solid #e5e5e5; line-height:0; font-size:0;}
+.tb_agreement2 tr.gap td.end{border-right:none;}
+.tb_agreement2 td span{font-size:11px;}
+.tb_agreement2 td.company{width:124px; padding-left:16px;}
+.tb_agreement2 td.commission{width:254px; padding-left:27px;}
+.tb_agreement2 td.day{width:169px; padding-left:30px; vertical-align:middle; border-right:none;}
+
+/* //090924 */
+
+/* 091019 */
+.tit_idlock{margin:-7px 0 0 0; font-size:12px; color:#555;}
+.idlock_info{margin:6px 0 25px 1px; color:#7c7c7c; line-height:18px;}
+.idlock_info a.myinfo{color:#398d22; text-decoration:underline;}
+
+/* 091026 */
+.w670{width:670px;}
+
+.blind{display:block;overflow:hidden;position:absolute;top:-5000px;left:0}
+.oversea_join{width:670px; height:95px; margin-top:30px; background:url(https://static.nid.naver.com/images/user/images/join2/oversea_join.gif) no-repeat}
+
+.ifr_blank{position:absolute;top:0;width:100%;height:2000px} 
+  
+.ly_notregister{overflow:hidden;position:absolute;width:319px} 
+.ly_notregister_bx{position:relative;z-index:10;padding:0 20px;border:1px solid #888;background:#fff} 
+.ly_notregister_top .btn_clse{position:absolute;top:9px;right:9px} 
+.ly_notregister_cont{padding:18px 0 17px} 
+.ly_notregister_cont .desc{color:#444;line-height:18px} 
+.ly_notregister_cont .desc2{padding:5px 0 0;font-size:11px;color:#888;letter-spacing:-1px;line-height:16px} 
+.ly_notregister_btm{padding:10px 0 6px;border-top:1px solid #e5e5e5;text-align:center} 
+  
+.finishtop_bx{margin-top:-10px;padding-bottom:27px;text-align:center} 
+.finishtop_bx h2{padding-bottom:7px;font-size:16px} 
+.finishtop_bx h2 em{font-size:16px;color:#1c9401} 
+.finishtop_bx .desc{color:#666;letter-spacing:-1px} 
+  
+.finishwel_bx{overflow:hidden;clear:both;position:relative;width:666px;margin:0 0 10px;border:2px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/bg_bx.gif) repeat-x 0 100%} 
+.finishwel_bx li{overflow:hidden;float:left;position:relative;width:262px;height:175px;padding:24px 35px 27px 36px;border-top:1px solid #e5e5e5;background:url(https://static.nid.naver.com/images/user/images/join2/line_vr199.gif) no-repeat;text-align:center} 
+.finishwel_bx li.fst{border-top:0} 
+.finishwel_bx li .desc{padding:7px 0 9px;border-bottom:1px solid #efefef;color:#333;font-weight:bold;font-size:14px;line-height:17px}
+.t .finishwel_bx li .desc{font-weight:normal;-webkit-text-stroke-width:0.03em}
+.finishwel_bx li .desc em{color:#1c9401;font-size:14px} 
+.finishwel_bx li .desc2{padding:9px 0 16px;color:#888;line-height:17px;text-align:center} 
+.finishwel_bx li .desc2 a{display:block;margin-top:2px;font-size:11px;color:#999} 
+.finishwel_bx li .sub_txt{margin:-5px 0 0;font-size:11px;color:#999;line-height:15px} 
+.finishwel_bx li .btn_area a{left:0;margin:0 !important} 
+  
+.finishtop_ctrl_bx{margin-bottom:18px} 
+  
+.foreigner_name .help_v1{display:none;position:absolute} 
+.foreigner_name .help_v1.on{display:block} 
+.foreigner_name .help_v1 .txt{position:relative;z-index:3;border:1px solid #919191;background:#fff;color:#333;letter-spacing:-1px;text-decoration:none !important} 
+.foreigner_name .help_v1 .txt p{padding:8px 10px 6px;font-size:11px;line-height:16px;white-space:nowrap} 
+.foreigner_name .help_v1 .txt p *{font-size:11px;line-height:16px} 
+.foreigner_name .help_v1 .txt p strong{color:#ff6c00} 
+.foreigner_name .help_v1 .txt p strong.black{color:#333} 
+.foreigner_name .help_v1 .txt p .ex{color:#808080} 
+.foreigner_name .help_v1 .txt p .ex2{display:block;margin:4px 0 0;padding:6px 0 0;border-top:1px solid #e5e5e5;font-size:11px;color:#333;letter-spacing:-1px} 
+.foreigner_name .help_v1 .txt p .ex2 strong{color:#333} 
+.foreigner_name .help_v1 .txt p .vr{margin:0 2px 0 3px;color:#e5e5e5} 
+.foreigner_name .help_v1 .txt p .level1{padding:0 52px 0 0;background:url(https://static.nid.naver.com/images/user/images/help/ico_pw_level1.gif) no-repeat 100% 4px} 
+.foreigner_name .help_v1 .txt p .level2{padding:0 52px 0 0;background:url(https://static.nid.naver.com/images/user/images/help/ico_pw_level2.gif) no-repeat 100% 4px;color:#417c01} 
+.foreigner_name .help_v1 .txt p .level3{padding:0 52px 0 0;background:url(https://static.nid.naver.com/images/user/images/help/ico_pw_level3.gif) no-repeat 100% 4px;color:#417c01} 
+.foreigner_name .help_v1 .txt em{display:inline;padding:0} 
+.foreigner_name .left .arrow{display:block;overflow:hidden;position:absolute !important;top:13px !important;left:-3px;z-index:4;width:4px;height:6px;margin:0 !important;background:url(https://static.nid.naver.com/images/user/images/join2/bu_help_left.gif) no-repeat} 
+.foreigner_name .help_v1 .shadow1{display:block;position:absolute !important;top:1px !important;left:1px;z-index:2;width:100%;margin:0 !important;background:#e3e3e3;_background:#919191;filter:alpha(opacity=25)} 
+*:first-child+html #personal table .help_v1 .shadow1{background:#919191} 
+.foreigner_name .help_v1 .shadow2{display:block;position:absolute !important;top:2px !important;left:2px;z-index:1;width:100%;margin:0 !important;background:#f6f6f6;_background:#919191;filter:alpha(opacity=10)} 
+*:first-child+html #personal table .help_v1 .shadow2{background:#919191} 
+.foreigner_name .help_v1.h32{height:32px} 
+.foreigner_name .help_v1.h32 .shadow1{height:32px} 
+.foreigner_name .help_v1.h32 .shadow2{height:32px}
+

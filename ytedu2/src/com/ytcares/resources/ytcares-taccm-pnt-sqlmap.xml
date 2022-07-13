@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="accm">
+	<typeAlias alias="AccmPnt" type="com.ytcares.bean.TAccmPntBean" />
+	<insert id="insertAccmPnt" parameterClass="java.util.Map">
+		/* accm.insertAccmPnt 적립금 등록(아이디, 구매일련번호, 적립금)*/
+		INSERT INTO TACCM_PNT (
+			USER_ID,
+			PRCHS_SEQ_NO,
+			ACCM_PNT,
+			ACCM_DATE,
+			ACCM_TYPE_CD,
+			STLMNT_YN,
+			STLMNT_DATE
+		) VALUES (
+			#user_id#,
+			#prchs_seq_no#,
+			#accm_pnt#,
+			TO_CHAR(SYSDATE, 'YYYYMM'),
+			'1'
+			'0'
+			null
+		)
+	</insert>
+
+	<update id="mergeAccmPnt" parameterClass="java.util.Map">
+		/* accm.mergeAccmPnt 구매완료한 유저에 대한 적립금 업데이트 및 삽입*/
+		MERGE INTO TACCM_PNT AC
+		USING (
+			SELECT
+				USER_ID,
+				#prchs_seq_no#	AS PRCHS_SEQ_NO,
+				#accm_pnt#		AS ACCM_PNT,
+				SYSDATE			AS ACCM_DATE,
+				'1' 			AS ACCM_TYPE_CD,
+				'0'				AS STLMNT_YN,
+				NULL			AS STLMNT_DATE
+			FROM
+				TUSER
+			WHERE
+				FAMILY_ID		= #family_id# AND
+				DLT_FLG			= '0'
+		) UR
+		ON (
+			AC.USER_ID			= UR.USER_ID AND
+			AC.PRCHS_SEQ_NO		= UR.PRCHS_SEQ_NO
+		)
+		WHEN NOT MATCHED THEN
+		INSERT (
+			USER_ID,
+			PRCHS_SEQ_NO,
+			ACCM_PNT,
+			ACCM_DATE,
+			ACCM_TYPE_CD,
+			STLMNT_YN,
+			STLMNT_DATE
+		) VALUES (
+			UR.USER_ID,
+			UR.PRCHS_SEQ_NO,
+			UR.ACCM_PNT,
+			UR.ACCM_DATE,
+			UR.ACCM_TYPE_CD,
+			UR.STLMNT_YN,
+			UR.STLMNT_DATE
+		)
+	</update>
+	
+	<update id="updateAccmPntStlmnt" parameterClass="java.util.Map">
+		UPDATE TACCM_PNT
+		SET 
+			STLMNT_YN	= '1',
+			STLMNT_DATE	= SYSDATE
+		WHERE
+			USER_ID		= #user_id# AND
+			PRCHS_SEQ_NO= #prchs_seq_no#
+	</update>
+	
+	
+	<select id="selectMonthlyAccm" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* accm.selectMonthlyAccm 일별(1일부터 말일까지의 적립금)*/
+		WITH PNT AS (
+			SELECT
+				TO_CHAR(P.ACCM_DATE, 'YYYY-MM-DD') AS YMD,
+				SUM(P.ACCM_PNT) AS ACCM_PNT
+			FROM
+				TACCM_PNT P
+			JOIN
+				TUSER U
+			ON
+				P.USER_ID = U.USER_ID
+			WHERE
+				<dynamic>
+					<isNotEmpty property="user_id">
+				P.USER_ID = #user_id# AND
+					</isNotEmpty>
+					<isEqual property="include_stlmnt_yn" compareValue="0">
+				P.STLMNT_YN = '0' AND
+					</isEqual>
+				</dynamic>
+				
+				U.DLT_FLG = '0'
+		  GROUP BY
+		    TO_CHAR(P.ACCM_DATE, 'YYYY-MM-DD')
+		)
+		SELECT
+		RN,
+		NVL((SELECT ACCM_PNT FROM PNT WHERE YMD = TO_CHAR(ADD_MONTHS(NVL(TO_DATE(#accm_ym#, 'YYYY-MM'), TRUNC(SYSDATE, 'MON')),-1),'YYYY-MM-')||LPAD(D.RN,2,0)),0) AS PM_PNT,
+		NVL((SELECT ACCM_PNT FROM PNT WHERE YMD = TO_CHAR(NVL(TO_DATE(#accm_ym#, 'YYYY-MM'), SYSDATE), 'YYYY-MM-')||LPAD(D.RN,2,'0')),0) AS CM_PNT
+		FROM (
+		  
+			SELECT
+				LEVEL AS RN
+			FROM
+				DUAL
+			CONNECT BY
+				LEVEL <![CDATA[<=]]> GREATEST(
+				TO_NUMBER(TO_CHAR(LAST_DAY(ADD_MONTHS(NVL(TO_DATE(#accm_ym#,'YYYY-MM'), TRUNC(SYSDATE,'MON')),-1)),'DD')),
+				TO_NUMBER(TO_CHAR(LAST_DAY(NVL(TO_DATE(#accm_ym#, 'YYYY-MM'), SYSDATE)),'DD'))
+				)
+		) D
+	</select>
+	
+	<select id="selectAccmPntByAgency" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* accm.selectAccmPntByAgency 가맹점별 포인트 TOP10 */
+		SELECT
+			AGENCY_NAME,
+			ACCM_PNT
+		FROM (
+		SELECT
+			UR2.AGENCY_NAME,
+			SUM(AC.ACCM_PNT) AS ACCM_PNT,
+			ROW_NUMBER() OVER(ORDER BY SUM(AC.ACCM_PNT)) AS RN
+		FROM
+			TACCM_PNT AC
+		JOIN
+			TUSER UR
+		ON
+			AC.USER_ID = UR.USER_ID
+		JOIN
+			TPRCHS PR
+		ON
+			AC.PRCHS_SEQ_NO = PR.PRCHS_SEQ_NO
+		JOIN
+			TUSER UR2
+		ON
+			PR.PRCHS_USER_ID = UR2.USER_ID
+		WHERE
+		<dynamic>
+			<isNotEmpty property="user_id">
+			AC.USER_ID		= #user_id# AND
+			</isNotEmpty>
+			<isNotEmpty property="accm_ym">
+			AC.ACCM_DATE	BETWEEN	TO_DATE(#accm_ym#, 'YYYY-MM') AND LAST_DAY(TO_DATE(#accm_ym#, 'YYYY-MM')) AND
+			</isNotEmpty>
+			<isEqual property="include_stlmnt_yn" compareValue="0">
+			AC.STLMNT_YN	= '0' AND
+			</isEqual>
+		</dynamic>
+			UR.DLT_FLG		= '0' AND
+			PR.DLT_FLG		= '0'
+		GROUP BY
+			UR2.AGENCY_NAME
+		) WHERE RN <![CDATA[<=]]> 10
+		ORDER BY RN
+	</select>
+	
+	<select id="selectAccmPntListByAgency" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* accm.selectAccmPntListByAgency 가맹점별 일별 포인트 */
+		SELECT
+			UR2.AGENCY_NAME						AS AGENCY_NAME,
+			TO_CHAR(AC.ACCM_DATE, 'YYYY-MM-DD') AS ACCM_DATE,
+			SUM(AC.ACCM_PNT)					AS ACCM_PNT
+		FROM
+			TACCM_PNT AC
+		JOIN
+			TUSER UR
+		ON
+			AC.USER_ID = UR.USER_ID
+		JOIN
+			TPRCHS PR
+		ON
+			AC.PRCHS_SEQ_NO = PR.PRCHS_SEQ_NO
+		JOIN
+			TUSER UR2
+		ON
+			PR.PRCHS_USER_ID = UR2.USER_ID
+		WHERE
+		<dynamic>
+			<isNotEmpty property="user_id">
+			AC.USER_ID		= #user_id# AND
+			</isNotEmpty>
+			<isEqual property="include_stlmnt_yn" compareValue="0">
+			AC.STLMNT_YN	= '0' AND
+			</isEqual>
+		</dynamic>
+			AC.ACCM_DATE	BETWEEN TRUNC(NVL(TO_DATE(#accm_ym#, 'YYYY-MM'), SYSDATE),'MON') AND LAST_DAY(NVL(TO_DATE(#accm_ym#, 'YYYY-MM'), SYSDATE)) AND
+			UR.DLT_FLG		= '0' AND
+			PR.DLT_FLG		= '0'
+		GROUP BY
+			TO_CHAR(AC.ACCM_DATE, 'YYYY-MM-DD'),
+			UR2.AGENCY_NAME
+			
+	</select>
+	<select id="selectAccmPntByCsmt" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* accm.selectAccmPntByCsmt 상품별 적립금(Pie Chart) */
+		SELECT
+			SUBSTR(PR.PRCHS_SEQ_NO,1,7) AS CSMT_ID,
+			SUM(AC.ACCM_PNT) AS ACCM_PNT
+		FROM
+			TACCM_PNT AC
+		JOIN
+			TUSER UR
+		ON
+			AC.USER_ID = UR.USER_ID
+		JOIN
+			TPRCHS PR
+		ON
+			AC.PRCHS_SEQ_NO = PR.PRCHS_SEQ_NO
+		JOIN
+			TUSER UR2
+		ON
+			PR.PRCHS_USER_ID = UR2.USER_ID
+		WHERE
+		<dynamic>
+			<isNotEmpty property="user_id">
+			AC.USER_ID		= #user_id# AND
+			</isNotEmpty>
+			<isNotEmpty property="accm_ym">
+			AC.ACCM_DATE	BETWEEN	TO_DATE(#accm_ym#, 'YYYY-MM') AND LAST_DAY(TO_DATE(#accm_ym#, 'YYYY-MM')) AND
+			</isNotEmpty>
+			<isEqual property="include_stlmnt_yn" compareValue="0">
+			AC.STLMNT_YN	= '0' AND
+			</isEqual>
+		</dynamic>
+			UR.DLT_FLG		= '0' AND
+			PR.DLT_FLG		= '0'
+		GROUP BY
+			SUBSTR(PR.PRCHS_SEQ_NO,1,7)
+	</select>
+	
+</sqlMap>

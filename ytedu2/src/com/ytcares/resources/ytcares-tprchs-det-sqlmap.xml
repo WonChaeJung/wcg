@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="prchsdet">
+	<typeAlias alias="PrchsDet" type="com.ytcares.bean.TPrchsDetBean" />
+	
+	<insert id="insertPrchsDetInfo" parameterClass="PrchsDet">
+	/*prchsdet.insertPrchsDetInfo 상품 구매시 상품 상세 사항에 대한 데이터 삽입*/		
+		INSERT INTO TPRCHS_DET (
+			  PRCHS_SEQ_NO
+			, PRCHS_GRP_NO
+			, PRCHS_GRP_CD
+			, CSMT_ID
+			, CSMT_CNT
+			, TTL_PRICE
+			, PRCHS_GRP_DESC
+		) VALUES (
+			  (SELECT
+				#prchs_seq_no#||'-'||TO_CHAR(SYSDATE, 'YYYYMMDD')||'-'||LPAD(NVL(MAX(SUBSTR(PRCHS_SEQ_NO, -5)), 0), 5, '0') AS PRCHS_ID
+			  FROM
+				TPRCHS
+			  WHERE
+				  PRCHS_SEQ_NO LIKE #prchs_seq_no#||'-'||TO_CHAR(SYSDATE, 'YYYYMMDD')||'-'||'%')
+			, #prchs_grp_no#
+			, #prchs_grp_cd#
+			, #csmt_id#
+			, #csmt_cnt#
+			, #ttl_price#
+			, #prchs_grp_desc#
+		)
+	</insert>
+</sqlMap>

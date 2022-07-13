@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="bank">
+	<typeAlias alias="Bank" type="com.ytcares.bean.TBankAccBean"/>
+
+	<insert id="insertAccInfo" parameterClass="Bank">
+		INSERT INTO BANK (
+			  SEQ_NO
+			, BANK_NM
+			, ACC_NO
+			, DPSTR
+			, RMRKS
+		) VALUES(
+			  TBANK_ACC_SEQ.NEXTVAL
+			, #bank_nm#
+			, #acc_no#
+			, #dpstr#
+			, #rmrks#
+		)
+	</insert>
+	
+	<select id="selectAccCnt" parameterClass="Bank" resultClass="int">
+		SELECT
+			COUNT(*) AS TOTAL
+		FROM BANK
+	</select>
+	
+	<select id="selectBankList" parameterClass="string" resultClass="Bank">
+		SELECT
+			  SEQ_NO
+			, BANK_NM
+			, ACC_NO
+			, DPSTR
+			, RMRKS
+		FROM
+			BANK
+	</select>
+	
+	<delete id="deleteAccInfo" parameterClass="Bank">
+		DELETE FROM BANK 
+		WHERE
+			SEQ_NO = #seq_no#
+	</delete>
+	
+	<select id="selectAccInfo" parameterClass="Bank" resultClass="Bank">
+		SELECT
+			  SEQ_NO
+			, BANK_NM
+			, ACC_NO
+			, DPSTR
+			, RMRKS
+		FROM
+			BANK
+		WHERE
+			SEQ_NO = #seq_no#
+	</select>
+	
+	<update id="updateAccInfo" parameterClass="Bank">
+		UPDATE BANK
+		SET
+			  BANK_NM	= #bank_nm#
+			, ACC_NO	= #acc_no#
+			, DPSTR		= #dpstr#
+			, RMRKS		= #rmrks#
+		WHERE
+			SEQ_NO = #seq_no#
+	</update>
+</sqlMap>

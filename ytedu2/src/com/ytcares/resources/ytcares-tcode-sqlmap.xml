@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="code">
+	<typeAlias alias="Code" type="com.ytcares.bean.TCodeBean" />
+	
+	<select id="selectCodeList" parameterClass="string" resultClass="Code">
+		/* code.selectCodeList 코드리스트 전체취득 */
+		SELECT
+			MCODE_CD,
+			DCODE_CD,
+			CODE_NM1,
+			CODE_NM2,
+			CODE_NM3,
+			CODE_NM4,
+			CODE_NM5,
+			CODE_NM6,
+			ORDER_NO
+		FROM
+			TCODE
+	</select>
+	
+	<select id="selectCodeListAjax" parameterClass="java.util.Map" resultClass="Code">
+		/* code.selectCodeListAjax 마스터코드에 해당하는 디테일코드 취득(Ajax, 관리자코드관리) */
+		SELECT
+			MCODE_CD,
+			DCODE_CD,
+			CODE_NM1,
+			CODE_NM2,
+			CODE_NM3,
+			CODE_NM4,
+			CODE_NM5,
+			CODE_NM6,
+			ORDER_NO
+		FROM
+			TCODE
+		WHERE
+			1 = 1
+		<dynamic>
+			<isNotEmpty property="mcode_cd" prepend="AND">
+			MCODE_CD = #mcode_cd#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			ORDER_NO,
+			DCODE_CD
+	</select>
+	
+	<select id="selectCode" parameterClass="java.util.Map" resultClass="Code">
+		/* code.selectCode */
+		SELECT
+			MCODE_CD
+			, DCODE_CD
+			, CODE_NM1
+			, CODE_NM2
+			, CODE_NM3
+			, CODE_NM4
+			, CODE_NM5
+			, CODE_NM6
+			, ORDER_NO
+		FROM
+			TCODE
+		WHERE
+			MCODE_CD=#mcode#
+			<dynamic>
+				<isPropertyAvailable property="dcode">
+				AND DCODE_CD=#dcode#
+				</isPropertyAvailable>
+			</dynamic>
+	</select>
+	
+	<delete id="deleteDcodeList" parameterClass="java.util.Map">
+		/* code.deleteDcodeList 마스터코드에 해당하는 디테일코드 전체삭제(관리자코드관리) */
+		DELETE
+		FROM
+			TCODE
+		WHERE
+			MCODE_CD = #mcode_cd#
+	</delete>
+	
+	<insert id="insertCodeInfo" parameterClass="Code">
+	/* code.insertDcode 상세코드등록(상품정보추가시) */
+	   INSERT INTO TCODE (
+	        MCODE_CD,
+            DCODE_CD,
+            CODE_NM1,
+            CODE_NM2,
+            CODE_NM3,
+            CODE_NM4,
+            CODE_NM5,
+            CODE_NM6,
+            ORDER_NO
+        ) VALUES (
+            (SELECT
+                'OP'||LPAD(NVL(MAX(SUBSTR(MCODE_CD, -3)), 0), 3, '0') AS MCODE_ID
+              FROM
+                TMCODE
+              WHERE
+                MCODE_CD LIKE 'OP'||'%'),
+            #dcode_cd#,
+            #code_nm1#,
+            #code_nm2#,
+            #code_nm3#,
+            #code_nm4#,
+            #code_nm5#,
+            #code_nm6#,
+            #order_no#
+        )
+	</insert>
+	
+	<insert id="insertDcode" parameterClass="java.util.Map">
+		/* code.insertDcode 상세코드등록(관리자코드관리) */
+		INSERT INTO TCODE (
+			MCODE_CD,
+			DCODE_CD,
+			CODE_NM1,
+			CODE_NM2,
+			CODE_NM3,
+			CODE_NM4,
+			CODE_NM5,
+			CODE_NM6,
+			ORDER_NO
+		) VALUES (
+			#mcode_cd#,
+			#dcode_cd#,
+			#code_nm1#,
+			#code_nm2#,
+			#code_nm3#,
+			#code_nm4#,
+			#code_nm5#,
+			#code_nm6#,
+			#order_no#
+		)
+	</insert>
+	
+	<update id="updateDcode" parameterClass="java.util.Map">
+		/* code.updateDcode 상세코드수정(관리자코드관리) */
+		UPDATE TCODE
+		SET
+			CODE_NM1	= #code_nm1#,
+			CODE_NM2	= #code_nm2#,
+			CODE_NM3	= #code_nm3#,
+			CODE_NM4	= #code_nm4#,
+			CODE_NM5	= #code_nm5#,
+			CODE_NM6	= #code_nm6#,
+			ORDER_NO	= #order_no#
+		WHERE
+			MCODE_CD	= #mcode_cd# AND
+			DCODE_CD	= #dcode_cd#
+	</update>
+
+	<delete id="deleteDcode" parameterClass="java.util.Map">
+		/* code.updateDcode 상세코드삭제(관리자코드관리) */
+		DELETE
+		FROM
+			TCODE
+		WHERE
+			MCODE_CD	= #mcode_cd# AND
+			DCODE_CD	= #dcode_cd#
+	</delete>
+</sqlMap>

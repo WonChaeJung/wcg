@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link 	href="/css/ytcares-calendar.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/js/ytcares-calendar.js"></script>
+<style type="text/css">
+body {
+	margin:0 0 0 0;
+}
+</style>
+
+<script type="text/javascript">
+
+var lecData = [
+    //타이틀, 데이터타입, 시작날짜, 끝날짜, 그외 내용
+	new BsCalData('교육내용:퍼머교육', 3, '2012-05-01', '20120502', '장소:상하이총판'+'\n'+'교육시간 아침 10시부터 저녁 7시까지'),
+	new BsCalData('교육내용:퍼머교육', 3, '2012/05/18', '05/19/2012', '장소:상하이총판'+'\n'+'교육시간 아침 10시부터 저녁 7시까지'),
+	new BsCalData('교육내용:퍼머교육', 3, '2012.05.19', '05.22.2012', '장소:상하이총판'+'\n'+'교육시간 아침 10시부터 저녁 7시까지')
+];
+
+var cal = null;
+$(document).ready(function(){
+	new BsCalendar('myInput1').showCal();
+	new BsCalendar('myInput2',{useTrigger:1, min:'2012-05-01', max:'now'}).showCal();
+	//디폴트옵션의 달력
+	
+	
+	//사용자 지정옵션 달력
+	cal = new BsCalendar('lecCal', {
+			calHeadType:2,
+			calData:lecData,
+			//년월변경전 체크함수 true, false 리턴
+			onChangeValid:function(year, month) {if(year < 2011) {alert('2011년 이전은 변경불가능');return false}; return true;},
+			//날짜변경시 실행함수
+			onYearChanged:function(year, month, cal){/* 년도 변경시 실행함수 내용  혹은 js 함수명*/},
+			//월변경시 실행함수
+			onMonthChanged:function(year, month, cal){/* 월 변경시 실행함수 내용 작성 혹은 js 함수명*/},
+			//날짜클릭시 실행함수
+			onDateClicked:function(dateStr, cal, td){
+				/* 날짜클릭시 실행함수 내용 작성 혹은 js 함수명*/
+				$('#clickedDate').html(dateStr);
+				$('#clickedData').html('');
+				var dataArr = cal.getCalData(dateStr);
+				if (dataArr != null) {
+					var html = new Array();
+					for (var i = 0; i < dataArr.length; i++) {
+						if (i != 0) {
+							html[html.length] = '<br/><br/>';
+						}
+						var calData = dataArr[i];
+						html[html.length] = calData.toString(true);
+					}
+					
+					$('#clickedData').html(html.join(''));
+				}
+			}
+		});
+	//달력표시
+	cal.showCal();
+	//달력데이터표시
+	cal.showCalData();
+
+});
+</script>
+</head>
+<body>
+<script>
+function changeOption(name, value) {
+	if (name == 'dayLegend') {
+		var arr = eval(value);
+		if (arr == null || arr == undefined || arr.length != 7) {
+			alert('입력값이 유효하지 않습니다.');
+			return;
+		}
+		cal.option(name, arr);
+	} else {
+		cal.option(name, value);	
+	}
+	cal.redraw();
+}
+
+</script>
+<table border="1" cellpadding="0" cellspacing="0" style="font-size:13px;">
+	<tr>
+		<td valign="top" colspan="2">
+			<table border="1" cellpadding="0" cellspacing="0" style="font-size:12px;border-collapse:collapse;">
+				<tr bgcolor="#cececf">
+					<td colspan="3">사용방법<br/><font color="red">2012-05-07현재 캘린더가 화면 최하단에 있는 경우 잘려보이는 문제 있음.</font></td>
+				</tr>
+				<tr>
+					<td colspan="3">
+<pre>
+0. 캘린더는 내부적으로 jquery를 일부 사용하고 있기 때문에 jquery-1.4.4.min.js를 임포트
+&lt;link 	href="/css/ytcares-calendar.css" rel="stylesheet" type="text/css"/&gt;
+&lt;script type="text/javascript" src="/js/jquery-1.4.4.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="/js/ytcares-calendar.js"&gt;&lt;/script&gt;
+
+1. &lt;input&gt; 태그를 캘린더와 연결할 경우
+	1.1. input 태그에 id속성을 부여하여 입력, 디폴트날짜가 있는 경우 value값에 설정
+	&lt;input type="text" id="bsCal1" name="bsCal1" value="2012-05-05"/&gt;
+	
+	1.2. 이미지버튼을 이용하여 달력을 표시하는 경우
+	var bsCal1 = new BsCalendar('bsCal1', {useTrigger:1});
+	bsCal1.showCal();
+	<input type="text" id="bsCal1" name="bsCal1" value="2012-05-05"/>
+	
+	1.3. onfocus시 자동으로 캘린더를 표시하는 경우
+	var bsCal2 = new BsCalendar('bsCal2');
+	bsCal2.showCal();
+	<input type="text" id="bsCal2" name="bsCal2" value="2012-05-05"/>
+	
+2. 화면내 직접표시하는 경우
+	2.1. 화면에서 캘린더를 표시할 부분에 div, 혹은 span태그를 삽입
+	&lt;div id="bsCal3"&gt;&lt;/div&gt;
+	
+	2.2. 스크립트 호출
+	var bsCa3 = new BsCalendar('bsCal3');
+	bsCal3.showCal();
+	<div id="bsCal3"></div>
+	
+	2.3. 크기조절
+	var bsCa4 = new BsCalendar('bsCal4', {width:300, height:300});
+	bsCal4.showCal();
+	<div id="bsCal4"></div>
+	
+3. 달력에 일정,공휴일데이터삽입
+	3.1. BaCalData를 요소로 가지는 배열생성
+	var testData = [
+		new BsCalData('타이틀1', 3, '2012-04-03', '2012-04-04', '비고, 그외내용'),
+		new BsCalData('타이틀2', 3, '2012-04-12', '2012-04-15', '두번째 파라미터는 데이터타입 1-공휴일 2-기념일, 3-유저정의'),
+		new BsCalData('날짜포맷1', 3, '2012-04-17', '2012/04/17', '날짜포맷은 여러가지 입력가능'),
+		new BsCalData('날짜포맷2', 3, '04/18/2012', '2012.04.18', '숫자8자리 입력가능')
+	];
+	var bsCa5 = new BsCalendar('bsCal5', {calData:testData});
+	bsCal5.showCal();
+	bsCal5.showCalData();
+	//new BsCalendar('bsCal5', {calData:testData}).showCal(new Date(2012, 3)).showCalData();
+	//new BsCalendar('bsCal5', {calData:testData}).showCal('2012-04-01').showCalData();
+	<div id="bsCal5"></div>
+	
+4. 날짜클릭시 유효성체크
+	4.1. min, max속성설정
+	//now, 혹은 today설정시 오늘날짜로 체크
+	new BsCalendar('bsCal6', {min:'2012-05-01', max:'now'}).showCal();
+	<div id="bsCal6"></div>
+	
+	4.2. onClickValid에 체크함수 설정
+	new BsCalendar('bsCal7', {
+		//캘린더에서 함수로 dateStr, 캘린더를 파라미터로 전달
+		onClickValid:function(dateStr, cal){
+			if (dateStr &gt; '2012-05-10') {
+				alert('2012-05-10이전 날짜를 입력하세요.');
+				return false;
+			}
+			
+			return true;
+		}
+	}).showCal();
+	<div id="bsCal7"></div>
+
+5. 년월변경시 유효성체크
+	5.1. onChangeValid에 유효성체크 함수 설정
+	function myCheck(year, month) {
+		if (year &lt; 2012) {
+			alert('2012년 이후 날짜를 입력해 주십시오.');
+			return false;
+		}
+		
+		return true;
+	}
+	//익명함수로 직접기술하거나 기작성 함수의 함수명
+	new BsCalendar('bsCal8', {onChangeValid:myCheck}).showCal();
+	<div id="bsCal8"></div>
+	
+6. 날짜클릭, 년월변경에 따른 사용측 처리에 대해서는
+	onDateClicked, onYearChanged, onMonthChanged 옵션에 해당처리 함수를 기술
+</pre>
+<script>
+$(document).ready(function() {
+	new BsCalendar('bsCal1', {calHeadType:2,useTrigger:1,todayBtn:1,animSpeed:'slow'}).showCal();
+	new BsCalendar('bsCal2',{geObjId:'bsCal1'}).showCal();
+	new BsCalendar('bsCal3').showCal();
+	new BsCalendar('bsCal4', {width:300, height:300}).showCal();
+	var testData = [
+	        		new BsCalData('타이틀1', 3, '2012-04-03', '2012-04-04', '비고, 그외내용'),
+	        		new BsCalData('타이틀2', 3, '2012-04-12', '2012-04-15', '두번째 파라미터는 데이터타입 1-공휴일 2-기념일, 3-유저정의'),
+	        		new BsCalData('날짜포맷1', 3, '2012-04-17', '2012/04/17', '날짜포맷은 여러가지 입력가능'),
+	        		new BsCalData('날짜포맷2', 3, '04/18/2012', '2012.04.18', '숫자8자리 입력가능')
+	];
+	new BsCalendar('bsCal5', {calData:testData}).showCal('2012-04-01').showCalData();
+	new BsCalendar('bsCal6', {min:'2012-05-01', max:'now'}).showCal('2012-05-01');
+	new BsCalendar('bsCal7', {
+		//캘린더에서 함수로 dateStr, 캘린더를 파라미터로 전달
+		onClickValid:function(dateStr, cal){
+			if (dateStr > '2012-05-10') {
+				alert('2012-05-10이전 날짜를 입력하세요.');
+				return false;
+			}
+			
+			return true;
+		}
+	}).showCal();
+
+	function myCheck(year, month) {
+		if (year < 2012) {
+			alert('2012년 이후 날짜를 입력해 주십시오.');
+			return false;
+		}
+		
+		return true;
+	}
+	
+	new BsCalendar('bsCal8', {onChangeValid:myCheck}).showCal();
+});
+
+</script>
+					
+					</td>
+				</tr>
+	<tr>
+		<td valign="top" colspan="2">
+			<input type="text" id="myInput2" name="myInput" value="2012-05-06"/><br/>
+			<input type="text" id="myInput1" name="myInput" value="2012-02-02"/><br/>
+			화면에직접표시<span id="lecCal"></span>
+		</td>
+		<td  width="250" align="left" valign="top">
+			<div style="font-size:12px;"><span style="font-size:12px">선택날짜 : </span><span id="clickedDate"></span></div>
+			<div style="font-size:12px;"><span style="font-size:12px">선택데이터</span><br/><span id="clickedData"></span></div>
+		</td>
+	</tr>
+				<tr bgcolor="#cececf">
+					<td width="100">옵션명</td>
+					<td width="80">옵션설명</td>
+					<td>옵션값</td>
+				</tr>
+				<tr>
+					<td>calType</td>
+					<td>달력타입</td>
+					<td>
+						1:<input type="radio" name="calType" value="1" onclick="changeOption(this.name, this.value);" checked="checked"/>년월일
+						2:<input type="radio" name="calType" value="2" onclick="changeOption(this.name, this.value)"/>년월
+					</td>
+				</tr>
+				<tr>
+					<td>calHeadType</td>
+					<td>달력헤더타입</td>
+					<td>
+						1:<input type="radio" name="calHeadType" value="1" onclick="changeOption(this.name, this.value);"/>콤보
+						2:<input type="radio" name="calHeadType" value="2" onclick="changeOption(this.name, this.value)" checked="checked"/>이미지
+					</td>
+				</tr>
+				<tr>
+					<td>animSpeed</td>
+					<td>에니메이션속도</td>
+					<td>
+						숫자<input type="text" name="animSpeed" value="slow" maxlength="6" size="6" onchange="changeOption(this.name, this.value);"/>밀리세컨드단위숫자, 혹은 'slow', 'normal', 'fast'
+					</td>
+				</tr>
+				<tr>
+					<td>width</td>
+					<td>달력너비</td>
+					<td>
+						숫자<input type="text" name="width" value="" size="3" maxlength="3" onchange="changeOption(this.name, this.value);"/>
+					</td>
+				</tr>
+				<tr>
+					<td>height</td>
+					<td>달력높이</td>
+					<td>
+						숫자<input type="text" name="height" value="" size="3" maxlength="3" onchange="changeOption(this.name, this.value);"/>
+					</td>
+				</tr>
+				<tr>
+					<td>min</td>
+					<td>최소날짜값</td>
+					<td>
+						날자포맷문자열 혹은 Date<input type="text" name="min" value="" size="10" maxlength="10" onchange="changeOption(this.name, this.value);"/><br/>
+						날짜클릭시의 최초 체크, 'now' 혹은 'today'를 설정시 오늘 날짜로 설정
+					</td>
+				</tr>
+				<tr>
+					<td>max</td>
+					<td>최대날짜값</td>
+					<td>
+						날자포맷문자열 혹은 Date<input type="text" name="max" value="" size="10" maxlength="10" onchange="changeOption(this.name, this.value);"/><br/>
+						날짜클릭시의 최초 체크, 'now' 혹은 'today'를 설정시 오늘 날짜로 설정
+					</td>
+				</tr>
+				<tr>
+					<td>ltObjId</td>
+					<td>날짜비교객체</td>
+					<td>
+						보다 작은지를 비교할 객체 아이디
+					</td>
+				</tr>
+				<tr>
+					<td>gtObjId</td>
+					<td>날짜비교객체</td>
+					<td>
+						보다큰지를 비교할 객체 아이디
+					</td>
+				</tr>
+				<tr>
+					<td>leObjId</td>
+					<td>날짜비교객체</td>
+					<td>
+						보다 작거나 같은지를 비교할 객체 아이디
+					</td>
+				</tr>
+				<tr>
+					<td>geObjId</td>
+					<td>날짜비교객체</td>
+					<td>
+						보다 크거나 같은지를 비교할 객체 아이디
+					</td>
+				</tr>
+				<tr>
+					<td>useTrigger</td>
+					<td>달력이미지버튼</td>
+					<td>
+						0:<input type="radio" name="useTrigger" value="0" onclick="changeOption(this.name, this.value);" checked="checked"/>사용안함
+						1:<input type="radio" name="useTrigger" value="1" onclick="changeOption(this.name, this.value)"/>사용함(input박스일때만유효)
+					</td>
+				</tr>
+				<tr>
+					<td>border</td>
+					<td>테이블경계</td>
+					<td>
+						0:<input type="radio" name="border" value="0" onclick="changeOption(this.name, this.value);" checked="checked"/>보더없음
+						1:<input type="radio" name="border" value="1" onclick="changeOption(this.name, this.value)"/>보더있음
+					</td>
+				</tr>
+				<tr>
+					<td>todayMark</td>
+					<td>오늘강조</td>
+					<td>
+						0:<input type="radio" name="todayMark" value="0" onclick="changeOption(this.name, this.value)" checked="checked"/>표시안함
+						1:<input type="radio" name="todayMark" value="1" onclick="changeOption(this.name, this.value)"/>표시함
+					</td>
+				</tr>
+				<tr>
+					<td>todayBtn</td>
+					<td>오늘로버튼표시</td>
+					<td>
+						0:<input type="radio" name="todayBtn" value="0" onclick="changeOption(this.name, this.value);" checked="checked"/>표시안함
+						1:<input type="radio" name="todayBtn" value="1" onclick="changeOption(this.name, this.value)"/>표시함
+					</td>
+				</tr>
+				<tr>
+					<td>todayLegend</td>
+					<td>오늘로버튼명</td>
+					<td>
+						문자<input type="text" name="todayLegend" value="" size="10" maxlength="10" onchange="changeOption(this.name, this.value);"/>
+						버튼표시가 참일 때만 유효
+					</td>
+				</tr>
+				<tr>
+					<td>yearLegend</td>
+					<td>년도표시</td>
+					<td>
+						문자<input type="text" name="yearLegend" value="" size="3" maxlength="3" onchange="changeOption(this.name, this.value);"/>
+					</td>
+				</tr>
+				<tr>
+					<td>monthLegend</td>
+					<td>월표시</td>
+					<td>
+						문자<input type="text" name="monthLegend" value="" size="3" maxlength="3" onchange="changeOption(this.name, this.value);"/>
+					</td>
+				</tr>
+				<tr>
+					<td>dayLegend</td>
+					<td>요일표시</td>
+					<td>
+						배열<input type="text" name="dayLegend" value="" onchange="changeOption(this.name, this.value);"/>['월','화']형태의 배열
+					</td>
+				</tr>
+				<tr>
+					<td>onYearChanged</td>
+					<td>년도변경시</td>
+					<td>
+						년도변경시 실행할 함수를 정의<br/>익명함수 혹은 기정의 함수명
+						year, month, cal파라미터 전달<br/>
+						cal.calStart, cal.calEnd으로 달력표시 시작,끝날짜취득<br/>
+						<font color="red">달력표시 데이터를 취득하여 cal.opt.calData에 설정<br/>혹은 cal.option('calData', 데이터)로 설정</font>
+					</td>
+				</tr>
+				<tr>
+					<td>onMonthChanged</td>
+					<td>월변경시</td>
+					<td>
+						월변경시 실행할 함수를 정의<br/>익명함수 혹은 기정의 함수명
+						year, month, cal파라미터 전달<br/>
+						cal.calStart, cal.calEnd으로 달력표시 시작,끝날짜취득<br/>
+						<font color="red">달력표시 데이터를 취득하여 cal.opt.calData에 설정<br/>혹은 cal.option('calData', 데이터)로 설정</font>
+					</td>
+				</tr>
+				<tr>
+					<td>onDateClicked</td>
+					<td>날짜클릭시</td>
+					<td>
+						날짜클릭시 실행할 함수를 정의<br/>
+						익명함수 혹은 기정의 함수명<br/>
+						dateStr, td를 파라미터로 전달
+					</td>
+				</tr>
+				<tr>
+					<td>onChangeValid</td>
+					<td>년월변경시</td>
+					<td>
+						년도, 혹은 월 변경시 실행할 사전 유효성체크 함수<br/>
+						year, month파라미터 전달<br/>
+						false 리턴시 변경없음<br/>
+						onYearChanged, onMonthChanged실행없음<br/>
+					</td>
+				</tr>
+				<tr>
+					<td>onClickValid</td>
+					<td>날짜클릭시</td>
+					<td>
+						날짜시 실행할 사전 유효성체크 함수<br/>
+						false 리턴시 onDateClicked에 정의한 내용 실행되지 않음
+					</td>
+				</tr>
+				<tr bgcolor="#cececf">
+					<td width="100">속성명</td>
+					<td width="80">타입</td>
+					<td>속성설명</td>
+				</tr>
+				<tr>
+					<td>today</td>
+					<td>Date</td>
+					<td>시스템날짜(클라이언트)</td>
+				</tr>
+				<tr>
+					<td>value</td>
+					<td>String</td>
+					<td>
+						캘린더에서 선택한 날짜, yyyy-MM-dd<br/>
+						초기값 시스템날짜(클라이언트)
+					</td>
+				</tr>
+				<tr>
+					<td>show</td>
+					<td>Date</td>
+					<td>달력이 표시하고 있는 년월정보들 가지는 Date</td>
+				</tr>
+				<tr>
+					<td>calStart</td>
+					<td>String</td>
+					<td>달력에서 표시하고 있는 시작 년월일 문자열<br/>
+						2012년05월 캘린더인 경우 2012-04-29
+					</td>
+				</tr>
+				<tr>
+					<td>calEnd</td>
+					<td>String</td>
+					<td>달력에서 표시하고 있는 끝 년월일 문자열<br/>
+						2012년05월 캘린더인 경우 2012-06-09
+					</td>
+				</tr>
+				<tr bgcolor="#cececf">
+					<td width="100">메소드명</td>
+					<td width="80">파라미터</td>
+					<td>메소드설명</td>
+				</tr>
+				<tr>
+					<td>getDateStr</td>
+					<td>date, delim</td>
+					<td>
+						Date타입의 date를 delim을 구분자로 하여 문자열로 변환
+					</td>
+				</tr>
+				<tr>
+					<td>showCal</td>
+					<td>date</td>
+					<td>
+						Date타입의 date를 초기표시 년월로 달력을 표시함<br/>
+						파라미터가 없을 경우, 시스템날짜를 디폴트로 출력
+					</td>
+				</tr>
+				<tr>
+					<td>showCalData</td>
+					<td></td>
+					<td>
+						달력표시 데이터를 달력에 표시함<br/>
+						년월 onchange시에는 자동으로 호출됨<br/>
+						년월변경시 달력 데이터를 갱신해야 하는 경우는<br/>
+						onchange함수내에서 데이터를 갱신할 것
+					</td>
+				</tr>
+				<tr>
+					<td>isCalData</td>
+					<td>String</td>
+					<td>
+						날짜문자열을 파라미터로 지정하여 해당 날짜가<br/>
+						달력데이터에 포함되는 날짜인지를 true, false로 리턴
+					</td>
+				</tr>
+				<tr>
+					<td>getCalData</td>
+					<td>String</td>
+					<td>
+						날짜문자열을 파라미터로 지정하여<br/>
+						해당 날짜를 포함하는 달력데이터를 <font color="red">배열</font>로 리턴<br/>
+						포함되지 않을 경우  <font color="red">null</font> 리턴
+					</td>
+				</tr>
+				<tr>
+					<td>redraw</td>
+					<td valign="top">dateStr<br/>date<br/>opt<br/>date(str), opt</td>
+					<td>
+						주어진 날짜 문자열로 다시 그림<br/>
+						주어일 date로 다시 그림<br/>
+						주어진 옵션으로 다시 그림<br/>
+						주어진 날짜, 옵션으로 다시 그림<br/>
+						파라미터가 없을 경우 혹은 적절하지 않은 옵션인 경우 그냥 다시 그림
+					</td>
+				</tr>
+				<tr>
+					<td>option</td>
+					<td></td>
+					<td>
+						option메소드<br/>
+						option()호출시 캘린더의 옵션 오브젝트를 리턴<br/>
+						option(옵션명) 옵션명에 해당하는 옵션값을 리턴<br/>
+						option(옵션명, 옵션값) 해당옵션에 값을 설정<br/>
+						option({옵션명:옵션값, ....}) 오브젝트 값을 옵션으로 설정<br/>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

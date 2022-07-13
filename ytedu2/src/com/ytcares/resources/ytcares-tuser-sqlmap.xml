@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="user">
+	<typeAlias alias="User" type="com.ytcares.bean.TUserBean" />
+
+	<select id="selectUserListByArr" parameterClass="java.util.Map" resultClass="User">
+		/* user.selectUserListByArr 유저정보조회 */
+		SELECT
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+		FROM
+			TUSER
+		WHERE
+			USER_ID IN
+			<dynamic>
+			<iterate property="user_id" open="(" conjunction="," close=")">
+			#user_id[]#
+			</iterate>
+			</dynamic>
+	</select>
+	
+	<select id="selectUserInfoAjax" parameterClass="java.util.Map" resultClass="User">
+		/* user.selectUserInfoAjax 유저정보조회 */
+		SELECT
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+		FROM
+			TUSER
+		WHERE
+			USER_ID = #user_id#	
+	</select>	
+	
+	<select id="selectUserInfo" parameterClass="string" resultClass="User">
+		/* user.selectUserInfo 유저정보조회 */
+		SELECT
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+		FROM
+			TUSER
+		WHERE
+			USER_ID = #user_id#	
+	</select>
+	
+	<select id="selectRcmmdIdList" parameterClass="string" resultClass="User">
+		/* user.selectRcmmdIdList 추천인아이디조회 */
+		SELECT
+			  USER_ID
+			, USER_NAME
+			, AGENCY_NAME
+			, FAMILY_ID
+		FROM
+			TUSER
+		WHERE
+			GRADE IN('2', '3') /* 총판, 부총판 */	
+	</select>
+	
+	<select id="selectUserCount" parameterClass="java.util.Map" resultClass="int">
+		/* user.selectUserCount 유저검색결과수 */
+			SELECT
+				COUNT(*) AS TOTAL
+			FROM
+				TUSER
+			WHERE
+				1 = 1
+			<dynamic>
+				<isNotEmpty property="user_id" prepend="AND">
+				USER_ID = #user_id#
+				</isNotEmpty>
+				<isNotEmpty property="user_name" prepend="AND">
+				USER_NAME = #user_name#
+				</isNotEmpty>
+				<isNotEmpty property="agency_name" prepend="AND">
+				AGENCY_NAME = #agency_name#
+				</isNotEmpty>
+				<isNotEmpty property="rcmmd_id" prepend="AND">
+				RCMMD_ID = #rcmmd_id#
+				</isNotEmpty>
+				<isNotEmpty property="family_id" prepend="AND">
+				FAMILY_ID = #family_id#
+				</isNotEmpty>
+			</dynamic>
+	</select>
+	<select id="selectUserList" parameterClass="java.util.Map" resultClass="User">
+		/* user.selectUserList 유저리스트조회 */
+		SELECT
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+			, RN
+		FROM (
+			SELECT
+				  USER_ID
+				, USER_PASS
+				, USER_NAME
+				, AGENCY_NAME
+				, RCMMD_ID
+				, FAMILY_ID
+				, CELL_PHONE
+				, PHONE
+				, EMAIL
+				, ZIPCODE
+				, ADDR
+				, GRADE
+				, REG_DATE
+				, ROW_NUMBER() OVER(ORDER BY USER_ID) AS RN
+			FROM
+				TUSER
+			WHERE
+				1 = 1
+			<dynamic>
+				<isNotEmpty property="user_id" prepend="AND">
+				USER_ID = #user_id#
+				</isNotEmpty>
+				<isNotEmpty property="user_name" prepend="AND">
+				USER_NAME = #user_name#
+				</isNotEmpty>
+				<isNotEmpty property="agency_name" prepend="AND">
+				AGENCY_NAME = #agency_name#
+				</isNotEmpty>
+				<isNotEmpty property="rcmmd_id" prepend="AND">
+				RCMMD_ID = #rcmmd_id#
+				</isNotEmpty>
+				<isNotEmpty property="family_id" prepend="AND">
+				FAMILY_ID = #family_id#
+				</isNotEmpty>
+			</dynamic>
+		)
+		WHERE
+			RN BETWEEN #start# AND #end#
+	</select>
+	
+	<insert id="insertUserInfo" parameterClass="java.util.Map">
+		/* user.insertUserInfo 유저정보등록 */
+		INSERT INTO TUSER (
+			  USER_ID
+			, USER_PASS
+			, USER_NAME
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, REG_DATE
+		) VALUES (
+			  #user_id#
+			, #user_pass#
+			, #user_name#
+			, #agency_name#
+			, #rcmmd_id#
+			,(SELECT
+					FAMILY_ID || '-' || (
+						SELECT
+							LPAD(NVL(MAX(SUBSTR(FAMILY_ID, -4, 4)), 0) + 1, 4, '0')
+						FROM
+							TUSER
+						WHERE
+							FAMILY_ID LIKE U.FAMILY_ID||'-____'
+					) AS FAMILY_ID
+				FROM
+					TUSER U
+				WHERE
+					USER_ID = #rcmmd_id#)
+			, #cell_phone#
+			, #phone#
+			, #email#
+			, #zipcode#
+			, #addr#
+			, '4'			/* 회원가입시 회원등급을 최저레벨로 설정 */
+			, SYSDATE
+		)
+	</insert>
+	
+	<update id="updateUserInfo" parameterClass="java.util.Map">
+		/* user.updateUserInfo 유저정보갱신(회원용, 마이페이지) */
+		UPDATE TUSER
+		SET
+			  USER_PASS		= #userNewPass#
+			, USER_NAME		= #user_name#
+			, AGENCY_NAME	= #agency_name#
+			, RCMMD_ID		= #rcmmd_id#
+			, CELL_PHONE	= #cell_phone#
+			, PHONE			= #phone#
+			, EMAIL			= #email#
+			, ZIPCODE		= #zipcode#
+			, ADDR			= #addr#
+		WHERE
+			USER_ID 		= #user_id#
+	</update>
+
+	<update id="updateUserGrde" parameterClass="User">
+		/* user.updateUserGrde 유저등급갱신(관리자) */
+		UPDATE TUSER
+		SET
+			GRADE		= #grade#
+		<dynamic>
+			<isNotEmpty property="family_id" prepend=",">
+			FAMILY_ID	= #family_id#
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			USER_ID 	= #user_id#
+	</update>
+	<select id="selectIdSrch" parameterClass="java.util.Map" resultClass="object">
+		/* user.selectIdSrch 아이디찾기 */
+		SELECT
+			USER_ID
+		FROM
+			TUSER
+		WHERE
+			USER_NAME	= #user_name# AND
+			AGENCY_NAME = #agency_name# AND
+			DLT_FLG		= '0'
+	</select>
+	<select id="selectPwSrch" parameterClass="java.util.Map" resultClass="string">
+		/* user.selectPwSrch 패스워드찾기(아이디패스워드찾기화면) */
+		SELECT
+			USER_PASS
+		FROM
+			TUSER
+		WHERE
+			USER_ID = #user_id# AND
+			EMAIL	= #email# AND
+			DLT_FLG = '0'
+	</select>
+	<select id="selectAgencyIdSrch" resultClass="java.util.HashMap">
+		/* user.selectPwSrch 패스워드찾기(아이디패스워드찾기화면) */
+		SELECT
+			USER_ID, 
+			AGENCY_NAME,
+			FAMILY_ID
+		FROM
+			TUSER
+		WHERE
+			GRADE IN('2','3') AND
+			DLT_FLG = '0'
+	</select>
+	<select id="selectAgencyIdDuplchk" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* user.selectAgencyIdDuplchk 가맹점명 중복확인(회원가입, Ajax) */
+		SELECT
+			COUNT(*) AS AGENCY_CNT
+		FROM
+			TUSER
+		WHERE
+			AGENCY_NAME = #agency_name# AND
+			DLT_FLG		= '0'
+	</select>
+	<select id="selectIdDuplchk" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* user.selectIdDuplchk 아이디 중복확인(회원가입, Ajax) */
+		SELECT
+			COUNT(*) AS USER_CNT
+		FROM
+			TUSER
+		WHERE
+			USER_ID = #user_id# AND
+			DLT_FLG = '0'
+	</select>
+	
+	<select id="selectSearchAgency" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		/* user.selectSearchAgency 가맹점검색관련 질의 (관리자) */
+		SELECT
+			  USER_ID
+			, USER_NAME
+			, USER_PASS
+			, AGENCY_NAME
+			, RCMMD_ID
+			, FAMILY_ID
+			, CELL_PHONE
+			, PHONE
+			, EMAIL
+			, ZIPCODE
+			, ADDR
+			, GRADE
+			, C.CODE_NM1 AS CASE_GRADE
+			, REG_DATE
+			, RN
+		FROM (
+			SELECT
+				  USER_ID
+				, USER_NAME
+				, USER_PASS
+				, AGENCY_NAME
+				, RCMMD_ID
+				, FAMILY_ID
+				, CELL_PHONE
+				, PHONE
+				, EMAIL
+				, ZIPCODE
+				, ADDR
+				, GRADE
+				, REG_DATE
+				, ROW_NUMBER() OVER(ORDER BY AGENCY_NAME) AS RN
+			FROM
+				TUSER
+			WHERE
+				1 = 1
+			<dynamic>
+				<isNotEmpty property="grade" prepend="AND">
+				GRADE = #grade#
+				</isNotEmpty>
+				<isNotEmpty property="agency_name" prepend="AND">
+				AGENCY_NAME = #agency_name#
+				</isNotEmpty>
+				<isNotEmpty property="reg_date1" prepend="AND">
+				REG_DATE >= #reg_date1# 
+				</isNotEmpty>
+				<isNotEmpty property="reg_date2" prepend="AND">
+				REG_DATE <![CDATA[<=]]>#reg_date2#
+				</isNotEmpty>
+				<isNotEmpty property="family_id" prepend="AND">
+				FAMILY_ID LIKE #family_id#||'-'||'%'
+				</isNotEmpty>
+			</dynamic>
+		) U
+		LEFT JOIN
+			TCODE C
+		ON
+			U.GRADE = C.DCODE_CD AND
+			C.MCODE_CD = 'CM001'
+		WHERE
+			RN BETWEEN #start# AND #end#
+	</select>
+	<select id="selectSearchAgencyTotCnt" parameterClass="java.util.Map" resultClass="int">
+		/* user.selectSearchAgency 가맹점검색 총건수 (관리자) */
+		SELECT
+			COUNT(*) AS TOTAL_CNT
+		FROM
+			TUSER
+		WHERE
+			1 = 1
+		<dynamic>
+			<isNotEmpty property="grade" prepend="AND">
+			GRADE = #grade#
+			</isNotEmpty>
+			<isNotEmpty property="agency_name" prepend="AND">
+			AGENCY_NAME = #agency_name#
+			</isNotEmpty>
+			<isNotEmpty property="reg_date1" prepend="AND">
+			REG_DATE >= #reg_date1# 
+			</isNotEmpty>
+			<isNotEmpty property="reg_date2" prepend="AND">
+			REG_DATE <![CDATA[<=]]>#reg_date2#
+			</isNotEmpty>
+			<isNotEmpty property="family_id" prepend="AND">
+			FAMILY_ID LIKE #family_id#||'-'||'%'
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<update id="updateAgencyInfo" parameterClass="java.util.Map">
+		/* user.updateAgencyInfo  가맹점등급갱신(관리자) */
+		UPDATE TUSER
+		SET
+			DLT_FLG = '0'
+		<dynamic>
+			<isNotEmpty property="user_pass">
+		  	,USER_PASS		= #user_pass#
+			</isNotEmpty>
+			<isNotEmpty property="addr">
+			,ADDR			= #addr#
+			</isNotEmpty>
+			<isNotEmpty property="grade">
+			,GRADE	 = #grade#
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			USER_ID  = #user_id#
+	</update>
+	
+	<select id="adminSelectUserTree" resultClass="java.util.HashMap">
+		SELECT
+			USER_ID,
+			USER_NAME,
+			AGENCY_NAME,
+			RCMMD_ID,
+			FAMILY_ID,
+			CELL_PHONE,
+			PHONE,
+			EMAIL,
+			ZIPCODE,
+			ADDR,
+			TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE,
+			GRADE,
+			C.CODE_NM1 AS GRADE_NM,
+			NVL((SELECT SUM(ACCM_PNT) FROM TACCM_PNT WHERE USER_ID = U.USER_ID AND STLMNT_YN = '0'), 0) AS ACCM_PNT,
+			DLT_FLG,
+			(SELECT COUNT(*) FROM TUSER WHERE RCMMD_ID = U.USER_ID) AS CHILD_CNT,
+			LEVEL AS FAMILY_LEVEL
+		FROM
+			TUSER U
+		LEFT JOIN
+			TCODE C
+		ON
+			U.GRADE = C.DCODE_CD AND
+			C.MCODE_CD = 'CM001'
+		START WITH RCMMD_ID = 'YTCares'
+		CONNECT BY PRIOR USER_ID = RCMMD_ID
+	</select>
+
+	<select id="adminSelectChildTree" parameterClass="java.util.Map" resultClass="java.util.HashMap">
+		SELECT
+			USER_ID,
+			USER_NAME,
+			AGENCY_NAME,
+			RCMMD_ID,
+			FAMILY_ID,
+			CELL_PHONE,
+			PHONE,
+			EMAIL,
+			ZIPCODE,
+			ADDR,
+			TO_CHAR(REG_DATE, 'YYYY-MM-DD') AS REG_DATE,
+			GRADE,
+			C.CODE_NM1 AS GRADE_NM,
+			NVL((SELECT SUM(ACCM_PNT) FROM TACCM_PNT WHERE USER_ID = U.USER_ID AND STLMNT_YN = '0'), 0) AS ACCM_PNT,
+			DLT_FLG,
+			(SELECT COUNT(*) FROM TUSER WHERE RCMMD_ID = U.USER_ID AND USER_ID != U.USER_ID) AS CHILD_CNT
+		FROM
+			TUSER U
+		LEFT JOIN
+			TCODE C
+		ON
+			U.GRADE = C.DCODE_CD AND
+			C.MCODE_CD = 'CM001'
+		WHERE
+			1 = 1
+		<dynamic>
+			<isEmpty property="user_id" prepend="AND">
+			GRADE IN('1', '2') /*관리자, 총판 선택*/
+			</isEmpty>
+			<isNotEmpty property="user_id" prepend="AND">
+			U.RCMMD_ID = #user_id# AND
+			U.USER_ID != #user_id#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY
+			DECODE(GRADE, '1', 0, TO_NUMBER(GRADE))
+	</select>
+</sqlMap>
